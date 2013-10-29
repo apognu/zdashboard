@@ -1,0 +1,14 @@
+h1 {
+  font-size: 1.5em;
+  font-weight: normal;
+}
+
+h2 {
+  font-size: 1.4em;
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+
+nav.top-bar {
+  border-radius: 10px;
+}

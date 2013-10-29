@@ -1,0 +1,25 @@
+<div class="row">
+<%= form_for @user, url: users_new_path do | form | %>
+  <p>
+    <%= form.label 'Username:' %>
+    <%= form.text_field :uid %>
+  </p>
+
+  <p>
+    <%= form.label 'Main email address:' %>
+    <%= form.text_field :mail %></p>
+  </p>
+    
+  <p>
+    <%= form.label 'First name:' %>
+    <%= form.text_field :givenName %></p>
+  </p>
+    
+  <p>
+    <%= form.label 'Last name:' %>
+    <%= form.text_field :surname %></p>
+  </p>
+
+  <p><%= form.submit "Save the new user" %>
+<% end %>
+</div>

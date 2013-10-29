@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ZDashboard - <%= @title %></title>
+
+  <%= stylesheet_link_tag    'foundation', media: 'screen' %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+  <header class="row">
+    <h1>ZDashboard</h1>
+  </header>
+
+  <nav class="row top-bar">
+    <section class="top-bar-section">
+      <ul>
+        <li><%= link_to('Home', root_path) %></li>
+        <li><%= link_to('Users', users_path) %></li>
+        <li><%= link_to('Groups', groups_path) %></li>
+      </ul>
+    </section>
+  </nav>
+
+<% if ! flash.empty? %>
+  <div class="row">
+  <% flash.each do | type, message | %>
+    <div class="alert-box <%= type %>"><%= message %></div>
+  <% end %>
+  </div>
+<% end %>
+
+  <header class="row">
+    <h2><%= @title %></h2>
+  </header>
+
+<%= yield %>
+
+  <footer class="row">
+    <p>Zarafa Dashboard by Antoine POPINEAU</p>
+  </footer>
+
+</body>
+</html>
