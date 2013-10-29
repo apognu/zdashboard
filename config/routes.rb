@@ -8,7 +8,8 @@ Zarafadashboard::Application.routes.draw do
   post '/users/new', to: 'users#save',
                      as: :users_save
   
-  get '/users/page/:page', to: 'users#index'
+  get '/users/page/:page', to: 'users#index',
+                           as: 'users_page'
 
   get '/users/:uid/edit', to: 'users#edit',
                           as: :users_edit,

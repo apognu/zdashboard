@@ -15,4 +15,9 @@
     </tr>
   <% end %>
   </table>
+
+  <p>Pages :
+<% @pages.each do | page | %>
+  <%= link_to(page, users_page_path({ :page => page })) %>
+<% end %></p>
 </div>

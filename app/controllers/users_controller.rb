@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include ApplicationHelper
+
   def index
     @title = 'User management'
 
@@ -7,6 +9,7 @@ class UsersController < ApplicationController
     users_per_page = 5
 
     @users = User.all
+    @pages = paginate(users_per_page, @users.length, page)
     @users = @users.slice(users_per_page * page, users_per_page)
   end
 
