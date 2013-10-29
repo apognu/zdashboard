@@ -25,9 +25,6 @@ class UsersController < ApplicationController
     user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
     user.commonName = user.displayName
 
-    logger.debug(user.valid?)
-    logger.debug(user.errors.full_messages)
-
     if user.save
       flash[:success] = "User '#{user.uid}' was successfully created."
       redirect_to users_path
