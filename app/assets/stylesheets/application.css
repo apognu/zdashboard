@@ -1,6 +1,10 @@
 h1 {
-  font-size: 1.5em;
+  font-size: 1.8em;
   font-weight: normal;
+}
+
+header p {
+  margin: 0;
 }
 
 h2 {

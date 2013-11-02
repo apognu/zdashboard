@@ -27,11 +27,12 @@
 </div>
 
 <div class="row">
-  <fieldset class="field ten columns">
-    <legend>Aliases:</legend>
-
-    <p class="small default btn right-button"><a href="#" data-aliastoggle>Add an alias</a></p>
-
+  <%= form.label 'Aliases:', :class => 'eight columns' %>
+  <p class="small default btn two columns"><a href="#" data-aliastoggle>Add an alias</a></p>
+</div>
+  
+<div class="row">
+  <div class="ten columns field">
     <ul>
     <% if @user.zarafaAliases.kind_of?(Array) %>
       <% @user.zarafaAliases.each do | mailalias | %>
@@ -45,7 +46,7 @@
         </li>
     <% end %>
     </ul>
-  </fieldset>
+  </div>
 </div>
 
 <div class="row">
