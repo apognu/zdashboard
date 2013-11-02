@@ -19,19 +19,24 @@ class UsersController < ApplicationController
   end
 
   def save
-    user = User.new(user_params[:uid])
+    @title = 'Create a new user'
+    @user = User.new(user_params[:uid])
     
-    user.mail = user_params[:mail]
-    user.givenName = user_params[:givenName]
-    user.surname = user_params[:surname]
+    @user.mail = user_params[:mail]
+    @user.givenName = user_params[:givenName]
+    @user.surname = user_params[:surname]
 
-    user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
-    user.commonName = user.displayName
+    @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
+    @user.commonName = @user.displayName
 
-    if user.save
-      flash[:success] = "User '#{user.uid}' was successfully created."
-      redirect_to users_path
+    if @user.valid?
+      if @user.save
+        flash[:success] = "User '#{@user.uid}' was successfully created."
+        redirect_to users_path and return
+      end
     end
+
+    render :new
   end
 
   def edit

@@ -17,3 +17,7 @@ h2 {
   float: right;
   margin-bottom: 10px;
 }
+
+span.field_with_errors input {
+  border-color: red !important;
+}
