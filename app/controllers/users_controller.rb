@@ -43,7 +43,6 @@ class UsersController < ApplicationController
   def update
     user = User.find(params[:uid])
 
-    user.uid = user_params[:uid]
     user.mail = user_params[:mail]
     user.zarafaAliases = user_params[:zarafaAliases]
     user.givenName = user_params[:givenName]
