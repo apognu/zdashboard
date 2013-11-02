@@ -27,7 +27,7 @@
 <% if ! flash.empty? %>
   <div class="row">
   <% flash.each do | type, message | %>
-    <div class="alert-box <%= type %>"><%= message %></div>
+    <div class="alert <%= type %>"><%= message %></div>
   <% end %>
   </div>
 <% end %>
