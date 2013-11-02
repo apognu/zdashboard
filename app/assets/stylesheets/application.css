@@ -21,3 +21,7 @@ h2 {
 span.field_with_errors input {
   border-color: red !important;
 }
+
+form li div.btn {
+  margin-top: 7px;
+}
