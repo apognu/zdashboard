@@ -21,4 +21,11 @@ $(function()
 
     input.closest('ul').append(newInput);
   });
+
+  $('a.aliasremove').click(function(event)
+  {
+    event.preventDefault();
+
+    $(this).closest('li').remove();
+  });
 });

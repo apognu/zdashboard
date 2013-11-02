@@ -32,20 +32,24 @@
 </div>
   
 <div class="row">
-  <div class="ten columns field">
+  <div class="twelve columns field">
     <ul>
     <% if @user.zarafaAliases.kind_of?(Array) %>
       <% @user.zarafaAliases.each do | mailalias | %>
-        <li>
-        <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input', 'data-aliasfield' => 'test' %>
+        <li class="row">
+          <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input ten columns', 'data-aliasfield' => 'test' %>
+          <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
         </li>
       <% end %>
     <% else %>
         <li>
-        <%= form.text_field :zarafaAliases, :multiple => true, :class => 'input', 'data-aliasfield' => 'true' %>
+          <%= form.text_field :zarafaAliases, :multiple => true, :class => 'input', 'data-aliasfield' => 'true' %>
         </li>
     <% end %>
     </ul>
+  </div>
+
+  <div class="two columns">
   </div>
 </div>
 
