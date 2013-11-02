@@ -9,6 +9,7 @@
         <th>Username</th>
         <th>Full name</th>
         <th>E-mail address</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -17,6 +18,7 @@
         <td><%= link_to(user.uid, users_edit_path(:uid => user.uid)) %></td>
         <td><%= user.displayName %></td>
         <td><%= user.mail %></td>
+        <td><div class="small danger btn icon-left entypo icon-cancel-circled"><a href="#">Delete</a></div></td>
       </tr>
   <% end %>
     </tbody>
