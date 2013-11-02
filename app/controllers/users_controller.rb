@@ -42,6 +42,14 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:uid])
 
+    if @user.zarafaSendAsPrivilege.kind_of?(Array)
+      @user.zarafaSendAsPrivilege = @user.zarafaSendAsPrivilege.map! { | sendas |
+        User.find(sendas).uid
+      }
+    else
+      @user.zarafaSendAsPrivilege = User.find(@user.zarafaSendAsPrivilege).uid
+    end
+
     @title = "Edit user #{@user.uid}"
   end
 
@@ -55,6 +63,11 @@ class UsersController < ApplicationController
 
     user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
     user.commonName = "#{user_params[:givenName]} #{user_params[:surname]}"
+
+    user.zarafaSendAsPrivilege = user_params[:zarafaSendAsPrivilege].map! { | sendas |
+      privilege_user = User.find(sendas)
+      'uid=' << privilege_user.uid << ',' << privilege_user.base
+    }
 
     if user.save
       flash[:success] = "User '#{user.uid}' was successfully edited."
@@ -79,7 +92,8 @@ class UsersController < ApplicationController
                                  :surname,
                                  :mail,
                                  :zarafaAdmin,
-                                 :zarafaAliases => []
+                                 :zarafaAliases => [],
+                                 :zarafaSendAsPrivilege => []
     )
   end
 end

@@ -11,18 +11,25 @@ $(function()
     input.closest('ul').append(newInput);
   });
 
-  $('a[data-membertoggle]').click(function(event)
+  $(document).on('click', 'a.aliasremove', function(event)
   {
     event.preventDefault();
 
-    var input = $($('input[data-memberfield]')[0]);
+    $(this).closest('li').remove();
+  });
+
+  $('a[data-sendastoggle]').click(function(event)
+  {
+    event.preventDefault();
+
+    var input = $($('input[data-sendasfield]')[0]);
     var newInput = input.parent('li').clone();
     newInput.find('input').val('');
 
     input.closest('ul').append(newInput);
   });
 
-  $('a.aliasremove').click(function(event)
+  $(document).on('click', 'a.sendasremove', function(event)
   {
     event.preventDefault();
 
