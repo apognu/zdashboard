@@ -28,4 +28,11 @@ $(function()
 
     $(this).closest('li').remove();
   });
+
+  $('a.memberremove').click(function(event)
+  {
+    event.preventDefault();
+
+    $(this).closest('li').remove();
+  });
 });
