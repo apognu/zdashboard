@@ -45,6 +45,7 @@ class UsersController < ApplicationController
 
     user.uid = user_params[:uid]
     user.mail = user_params[:mail]
+    user.zarafaAliases = user_params[:zarafaAliases]
     user.givenName = user_params[:givenName]
     user.surname = user_params[:surname]
 
@@ -61,8 +62,11 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:uid,
-                                 :mail,
                                  :givenName,
-                                 :surname)
+                                 :surname,
+                                 :mail,
+                                 :zarafaAdmin,
+                                 :zarafaAliases => []
+    )
   end
 end

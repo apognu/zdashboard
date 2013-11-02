@@ -1,3 +1,20 @@
 <div class="row">
-  <p>You are on the groups page!</p>
+  <p class="medium primary btn icon-left entypo icon-plus-circled right-button"><%= link_to 'Create a new group', '#' %></p>
+</div>
+
+<div class="row">
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @groups.each do | group | %>
+      <tr>
+        <td><%= group.cn %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

@@ -3,25 +3,24 @@
 <head>
   <title>ZDashboard - <%= @title %></title>
 
-  <%= stylesheet_link_tag    'foundation', media: 'screen' %>
+  <%= stylesheet_link_tag    'gumby', media: 'screen' %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="pure">
 
   <header class="row">
+    <%= image_tag 'zarafa.jpg' %>
     <h1>ZDashboard</h1>
   </header>
 
-  <nav class="row top-bar">
-    <section class="top-bar-section">
-      <ul>
-        <li><%= link_to('Home', root_path) %></li>
-        <li><%= link_to('Users', users_path) %></li>
-        <li><%= link_to('Groups', groups_path) %></li>
-      </ul>
-    </section>
+  <nav class="row navbar">
+    <ul class="twelve columns">
+      <li><%= link_to('Home', root_path) %></li>
+      <li><%= link_to('Users', users_path) %></li>
+      <li><%= link_to('Groups', groups_path) %></li>
+    </ul>
   </nav>
 
 <% if ! flash.empty? %>

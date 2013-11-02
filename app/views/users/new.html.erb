@@ -1,25 +1,21 @@
 <div class="row">
 <%= form_for @user, url: users_new_path do | form | %>
-  <p>
+  <p class="field">
     <%= form.label 'Username:' %>
-    <%= form.text_field :uid %>
+    <%= form.text_field :uid, :class => 'input wide' %>
   </p>
 
-  <p>
+  <p class="field">
+    <%= form.label 'Full name:' %>
+    <%= form.text_field :givenName, :class => 'input narrow', :placeholder => 'First name' %>
+    <%= form.text_field :surname, :class => 'input narrow', :placeholder => 'Last name' %>
+  </p>
+    
+  <p class="field">
     <%= form.label 'Main email address:' %>
-    <%= form.text_field :mail %></p>
+    <%= form.text_field :mail, :class => 'input wide' %></p>
   </p>
     
-  <p>
-    <%= form.label 'First name:' %>
-    <%= form.text_field :givenName %></p>
-  </p>
-    
-  <p>
-    <%= form.label 'Last name:' %>
-    <%= form.text_field :surname %></p>
-  </p>
-
-  <p><%= form.submit "Save the new user" %>
+  <p class="medium primary btn"><%= form.submit "Save the new user" %>
 <% end %>
 </div>

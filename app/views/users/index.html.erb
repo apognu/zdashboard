@@ -1,19 +1,25 @@
 <div class="row">
-  <p><%= link_to 'Create a new user', users_new_path %></p>
+  <p class="medium primary btn icon-left entypo icon-plus-circled right-button"><%= link_to 'Create a new user', users_new_path %></p>
+</div>
 
-  <table>
-    <tr>
-      <th>Username</th>
-      <th>Full name</th>
-      <th>E-mail address</th>
-    </tr>
+<div class="row">
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Full name</th>
+        <th>E-mail address</th>
+      </tr>
+    </thead>
+    <tbody>
 <% @users.each do | user | %>
-    <tr>
-      <td><%= link_to(user.uid, users_edit_path(:uid => user.uid)) %></td>
-      <td><%= user.displayName %></td>
-      <td><%= user.mail %></td>
-    </tr>
+      <tr>
+        <td><%= link_to(user.uid, users_edit_path(:uid => user.uid)) %></td>
+        <td><%= user.displayName %></td>
+        <td><%= user.mail %></td>
+      </tr>
   <% end %>
+    </tbody>
   </table>
 
   <p>Pages :
