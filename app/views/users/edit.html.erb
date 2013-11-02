@@ -1,64 +1,80 @@
-<%= form_for @user, url: users_update_path do | form | %>
-<div class="row">
-  <p class="field ten columns">
-    <%= form.label 'Username:' %>
-    <%= form.text_field :uid, :class => 'input', :readonly => true %>
-  </p>
-</div>
-
-<div class="row">
-  <p class="field ten columns">
-    <%= form.label 'Email address:' %>
-    <%= form.text_field :mail, :class => 'input' %>
-  </p>
-</div>
-
-<div class="row">
-  <%= form.label 'Full name:' %>
-</div>
-
-<div class="row">
-  <p class="field five columns">
-    <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
-  </p>
-  <p class="field five columns">
-  <%= form.text_field :surname, :class => 'input', :placeholder => 'Last name' %>
-  </p>
-</div>
-
-<div class="row">
-  <%= form.label 'Aliases:', :class => 'eight columns' %>
-  <p class="small default btn two columns"><a href="#" data-aliastoggle>Add an alias</a></p>
-</div>
-  
-<div class="row">
-  <div class="twelve columns field">
-    <ul>
-    <% if @user.zarafaAliases.kind_of?(Array) %>
-      <% @user.zarafaAliases.each do | mailalias | %>
-        <li class="row">
-          <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input ten columns', 'data-aliasfield' => 'test' %>
-          <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
-        </li>
-      <% end %>
-    <% else %>
-        <li class="row">
-          <%= form.text_field :zarafaAliases, :multiple => true, :class => 'input ten columns', 'data-aliasfield' => 'true' %>
-          <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
-        </li>
-    <% end %>
+<section class="tabs">
+  <div class="row">
+    <ul class="tab-nav">
+      <li class="active"><a href="#">Basic information</a></li>
+      <li><a href="#">Mail aliases</a></li>
+      <li><a href="#">Privileges</a></li>
     </ul>
   </div>
 
-  <div class="two columns">
-  </div>
-</div>
+  <%= form_for @user, url: users_update_path do | form | %>
+  <div class="tab-content active">
+    <div class="row">
+      <p class="field ten columns">
+        <%= form.label 'Username:' %>
+        <%= form.text_field :uid, :class => 'input', :readonly => true %>
+      </p>
+    </div>
 
-<div class="row">
-  <p>
-  <%= form.label 'Admin:', :class => 'inline' %>
-    <%= form.check_box :zarafaAdmin %>
-  </p>
+    <div class="row">
+      <p class="field ten columns">
+        <%= form.label 'Email address:' %>
+        <%= form.text_field :mail, :class => 'input' %>
+      </p>
+    </div>
+
+    <div class="row">
+      <%= form.label 'Full name:' %>
+    </div>
+
+    <div class="row">
+      <p class="field five columns">
+        <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
+      </p>
+      <p class="field five columns">
+      <%= form.text_field :surname, :class => 'input', :placeholder => 'Last name' %>
+      </p>
+    </div>
+  </div>
+
+  <div class="tab-content">
+    <div class="row">
+      <%= form.label 'Aliases:', :class => 'eight columns' %>
+      <p class="small default btn two columns"><a href="#" data-aliastoggle>Add an alias</a></p>
+    </div>
+      
+    <div class="row">
+      <div class="twelve columns field">
+        <ul>
+        <% if @user.zarafaAliases.kind_of?(Array) %>
+          <% @user.zarafaAliases.each do | mailalias | %>
+            <li class="row">
+              <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input ten columns', 'data-aliasfield' => 'test' %>
+              <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
+            </li>
+          <% end %>
+        <% else %>
+            <li class="row">
+              <%= form.text_field :zarafaAliases, :multiple => true, :class => 'input ten columns', 'data-aliasfield' => 'true' %>
+              <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
+            </li>
+        <% end %>
+        </ul>
+      </div>
+
+      <div class="two columns">
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content">
+    <div class="row">
+      <p>
+      <%= form.label 'Admin:', :class => 'inline' %>
+        <%= form.check_box :zarafaAdmin %>
+      </p>
+    </div>
+  </div>
 </div>
 
 <div class="row">
