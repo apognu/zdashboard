@@ -12,4 +12,10 @@ class GroupsController < ApplicationController
     @pages = paginate(groups_per_page, @groups.length, page)
     @groups = @groups.slice(groups_per_page * page, groups_per_page)
   end
+
+  def edit
+    @group = Group.find(params[:cn])
+
+    @title = "Edit group #{@group.cn}"
+  end
 end

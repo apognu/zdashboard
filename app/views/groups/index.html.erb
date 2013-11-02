@@ -12,7 +12,7 @@
     <tbody>
       <% @groups.each do | group | %>
       <tr>
-        <td><%= group.cn %></td>
+        <td><%= link_to(group.displayName, groups_edit_path(:cn => group.cn)) %></td>
       </tr>
       <% end %>
     </tbody>

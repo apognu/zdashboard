@@ -21,6 +21,10 @@ Zarafadashboard::Application.routes.draw do
 
   get '/groups', to: 'groups#index'
 
+  get '/groups/:cn/edit', to: 'groups#edit',
+                          as: :groups_edit,
+                          constraints: { cn: /[^\/]+/ }
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
