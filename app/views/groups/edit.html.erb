@@ -1,0 +1,22 @@
+<%= form_for @group, url: groups_edit_path do | form | %>
+  <div class="row">
+    <%= form.label 'Members:', :class => 'eight columns' %>
+    <p class="small default btn two columns"><a href="#" data-membertoggle>Add a member</a></p>
+  </div>
+
+  <div class="row">
+    <div class="ten columns field">
+      <ul>
+        <% @group.members.each do | member | %>
+          <li>
+            <%= form.text_field :members, :multiple => true, :value => member.uid, :class => 'input', 'data-memberfield' => 'true' %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <p class="medium primary btn"><%= form.submit "Save #{@group.cn}" %>
+  </div>
+<% end %>

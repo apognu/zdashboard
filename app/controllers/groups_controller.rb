@@ -18,4 +18,23 @@ class GroupsController < ApplicationController
 
     @title = "Edit group #{@group.cn}"
   end
+
+  def update
+    group = Group.find(params[:cn])
+
+    group.members = group_params[:members]
+
+    if group.save
+      flash[:success] = "Group '#{group.cn}' was successfully edited."
+      redirect_to groups_path
+    end
+  end
+
+  private
+
+  def group_params
+    params.require(:group).permit(:cn,
+                                  :members => []
+    )
+  end
 end

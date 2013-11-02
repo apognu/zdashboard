@@ -4,5 +4,5 @@ class Group < ActiveLdap::Base
                :classes => [ 'zarafa-group' ],
                :scope => :one
 
-  has_many :member, :class => 'User', :wrap => 'memberUid'
+  has_many :members, :class => 'User', :wrap => 'memberUid'
 end
