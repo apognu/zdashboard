@@ -30,16 +30,18 @@
   <fieldset class="field ten columns">
     <legend>Aliases:</legend>
 
+    <p class="small default btn right-button"><a href="#" data-aliastoggle>Add an alias</a></p>
+
     <ul>
     <% if @user.zarafaAliases.kind_of?(Array) %>
       <% @user.zarafaAliases.each do | mailalias | %>
         <li>
-          <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input' %>
+        <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input', 'data-aliasfield' => 'test' %>
         </li>
       <% end %>
     <% else %>
         <li>
-          <%= form.text_field :zarafaAliases, :multiple => true, :class => 'input' %>
+        <%= form.text_field :zarafaAliases, :multiple => true, :class => 'input', 'data-aliasfield' => 'true' %>
         </li>
     <% end %>
     </ul>
