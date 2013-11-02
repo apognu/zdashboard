@@ -1,23 +1,39 @@
-<div class="row">
 <%= form_for @user, url: users_update_path do | form | %>
-  <p class="field">
+<div class="row">
+  <p class="field ten columns">
     <%= form.label 'Username:' %>
     <%= form.text_field :uid, :class => 'input' %>
   </p>
+</div>
 
-  <p class="field">
+<div class="row">
+  <p class="field ten columns">
     <%= form.label 'Email address:' %>
     <%= form.text_field :mail, :class => 'input' %>
   </p>
+</div>
 
-  <fieldset class="field">
+<div class="row">
+  <%= form.label 'Full name:' %>
+</div>
+
+<div class="row">
+  <p class="field five columns">
+    <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
+  </p>
+  <p class="field five columns">
+  <%= form.text_field :surname, :class => 'input', :placeholder => 'Last name' %>
+  </p>
+</div>
+
+<div class="row">
+  <fieldset class="field ten columns">
     <legend>Aliases:</legend>
 
     <ul>
     <% if @user.zarafaAliases.kind_of?(Array) %>
       <% @user.zarafaAliases.each do | mailalias | %>
         <li>
-          <%= form.label :zarafaAliases, :class => 'inline' %>
           <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input' %>
         </li>
       <% end %>
@@ -28,22 +44,16 @@
     <% end %>
     </ul>
   </fieldset>
+</div>
 
-  <p class="field">
-    <%= form.label 'First name:' %>
-    <%= form.text_field :givenName, :class => 'input' %>
-  </p>
-
-  <p class="field">
-    <%= form.label 'Last name:' %>
-    <%= form.text_field :surname, :class => 'input' %>
-  </p>
-
+<div class="row">
   <p>
   <%= form.label 'Admin:', :class => 'inline' %>
     <%= form.check_box :zarafaAdmin %>
   </p>
-
-  <p class="medium primary btn"><%= form.submit "Save #{@user.uid}" %>
-<% end %>
 </div>
+
+<div class="row">
+  <p class="medium primary btn"><%= form.submit "Save #{@user.uid}" %>
+</div>
+<% end %>

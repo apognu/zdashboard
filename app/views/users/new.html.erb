@@ -1,21 +1,34 @@
-<div class="row">
 <%= form_for @user, url: users_new_path do | form | %>
-  <p class="field">
+<div class="row">
+  <p class="field ten columns">
     <%= form.label 'Username:' %>
-    <%= form.text_field :uid, :class => 'input wide' %>
+    <%= form.text_field :uid, :class => 'input' %>
+  </p>
+</div>
+
+<div class="row">
+    <%= form.label 'Full name:' %>
+</div>
+    
+<div class="row">
+  <p class="field five columns">
+    <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
   </p>
 
-  <p class="field">
-    <%= form.label 'Full name:' %>
-    <%= form.text_field :givenName, :class => 'input narrow', :placeholder => 'First name' %>
-    <%= form.text_field :surname, :class => 'input narrow', :placeholder => 'Last name' %>
+  <p class="field five columns">
+    <%= form.text_field :surname, :class => 'input', :placeholder => 'Last name' %>
   </p>
+</div>
     
-  <p class="field">
+<div class="row">
+  <p class="field ten columns">
     <%= form.label 'Main email address:' %>
-    <%= form.text_field :mail, :class => 'input wide' %></p>
+    <%= form.text_field :mail, :class => 'input' %></p>
   </p>
+</div>
     
+<div class="row">
   <p class="medium primary btn"><%= form.submit "Save the new user" %>
+</div>
 <% end %>
 </div>
