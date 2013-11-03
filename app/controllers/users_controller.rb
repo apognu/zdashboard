@@ -41,38 +41,34 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:uid])
-
-    if @user.zarafaSendAsPrivilege.kind_of?(Array)
-      @user.zarafaSendAsPrivilege = @user.zarafaSendAsPrivilege.map! { | sendas |
-        User.find(sendas).uid
-      }
-    else
-      @user.zarafaSendAsPrivilege = User.find(@user.zarafaSendAsPrivilege).uid
-    end
+    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege
 
     @title = "Edit user #{@user.uid}"
   end
 
   def update
-    user = User.find(params[:uid])
+    @user = User.find(params[:uid])
 
-    user.mail = user_params[:mail]
-    user.zarafaAliases = user_params[:zarafaAliases]
-    user.givenName = user_params[:givenName]
-    user.surname = user_params[:surname]
+    @user.mail = user_params[:mail]
+    @user.zarafaAliases = user_params[:zarafaAliases]
+    @user.givenName = user_params[:givenName]
+    @user.surname = user_params[:surname]
 
-    user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
-    user.commonName = "#{user_params[:givenName]} #{user_params[:surname]}"
+    @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
+    @user.commonName = "#{user_params[:givenName]} #{user_params[:surname]}"
 
-    user.zarafaSendAsPrivilege = user_params[:zarafaSendAsPrivilege].map! { | sendas |
-      privilege_user = User.find(sendas)
-      'uid=' << privilege_user.uid << ',' << privilege_user.base
-    }
+    @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege]
 
-    if user.save
-      flash[:success] = "User '#{user.uid}' was successfully edited."
-      redirect_to users_path
+    if @user.valid?
+      if @user.save
+        flash[:success] = "User '#{@user.uid}' was successfully edited."
+        redirect_to users_path and return
+      end
     end
+
+    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege
+
+    render :edit
   end
 
   def delete
@@ -95,5 +91,23 @@ class UsersController < ApplicationController
                                  :zarafaAliases => [],
                                  :zarafaSendAsPrivilege => []
     )
+  end
+
+  def dn_to_uid data
+    if data.kind_of?(Array)
+      data.map! { | dn |
+        User.find(dn).uid
+      }
+    else
+      User.find(data).uid
+    end
+  end
+
+  def uid_to_dn data
+    data.map! { | uid |
+      privilege_user = User.find(uid)
+
+      'uid=' << privilege_user.uid << ',' << privilege_user.base
+    }
   end
 end

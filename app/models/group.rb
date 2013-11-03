@@ -5,4 +5,7 @@ class Group < ActiveLdap::Base
                :scope => :one
 
   has_many :members, :class => 'User', :wrap => 'memberUid'
+
+  validates :cn, :presence => true
+  validates :mail, :presence => true
 end

@@ -20,20 +20,28 @@ class GroupsController < ApplicationController
   end
 
   def update
-    group = Group.find(params[:cn])
+    @group = Group.find(params[:cn])
 
-    group.members = group_params[:members]
+    group_params[:members].reject! { | x | x.empty? }
 
-    if group.save
-      flash[:success] = "Group '#{group.cn}' was successfully edited."
-      redirect_to groups_path
+    @group.mail = group_params[:mail]
+    @group.members = group_params[:members]
+
+    if @group.valid?
+      if @group.save
+        flash[:success] = "Group '#{@group.cn}' was successfully edited."
+        redirect_to groups_path and return
+      end
     end
+
+    render :edit
   end
 
   private
 
   def group_params
     params.require(:group).permit(:cn,
+                                  :mail,
                                   :members => []
     )
   end
