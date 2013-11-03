@@ -1,19 +1,23 @@
 development:
-  host: 127.0.0.1
-  base: dc=dedibox,dc=smile,dc=fr
-  bind_dn: cn=admin,dc=dedibox,dc=smile,dc=fr
-  password: sigipsr
+  host: localhost
+  base: dc=zarafa,dc=com
+  bind_dn: cn=admin,dc=zarafa,dc=com
+  password: secretpassword
 
-test:
-  host: 127.0.0.1
-  base: dc=test,dc=local,dc=net
-  bind_dn: cn=admin,dc=local,dc=net
-  password: secret
+development:
+  host: localhost
+  base: dc=zarafa,dc=com
+  bind_dn: cn=admin,dc=zarafa,dc=com
+  password: secretpassword
 
-production:
-  host: 127.0.0.1
+development:
+  host: localhost
   method: :tls
-  base: dc=production,dc=local,dc=net
-  bind_dn: cn=admin,dc=local,dc=net
-  password: secret
+  base: dc=zarafa,dc=com
+  bind_dn: cn=admin,dc=zarafa,dc=com
+  password: secretpassword
 
+bases:
+  development:
+    users: ou=users
+    groups: ou=groups
