@@ -38,6 +38,10 @@ Zarafadashboard::Application.routes.draw do
                              as: :groups_update,
                              constraints: { cn: /[^\/]+/ }
 
+  get '/groups/:cn/delete', to: 'groups#delete',
+                            as: :groups_delete,
+                            constraints: { cn: /[^\/]+/ }
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

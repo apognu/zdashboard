@@ -75,6 +75,15 @@ class GroupsController < ApplicationController
     render :edit
   end
 
+  def delete
+    group = Group.find(params[:cn])
+
+    if group.destroy
+      flash[:success] = "Group '#{group.cn}' was successfully deleted."
+      redirect_to groups_path
+    end
+  end
+
   private
 
   def group_params

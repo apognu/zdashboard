@@ -7,12 +7,16 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Group email address</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <% @groups.each do | group | %>
       <tr>
         <td><%= link_to(group.displayName, groups_edit_path(:cn => group.cn)) %></td>
+        <td><%= group.mail %></td>
+        <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', groups_delete_path(:cn => group.cn)) %></div></td>
       </tr>
       <% end %>
     </tbody>
