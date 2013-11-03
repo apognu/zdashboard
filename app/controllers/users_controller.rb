@@ -42,7 +42,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:uid])
-    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege unless @user.zarafaSendAsPrivilege.nil?
+    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
 
     @title = "Edit user #{@user.uid}"
   end
@@ -92,15 +92,11 @@ class UsersController < ApplicationController
   end
 
   def dn_to_uid data
-    if data.kind_of?(Array)
-      data.reject! { | x | x.nil? or x.empty? }
+    data.reject! { | x | x.nil? or x.empty? }
 
-      data.map! { | dn |
-        User.find(dn).uid
-      }
-    else
-      User.find(data).uid
-    end
+    data.map! { | dn |
+      User.find(dn).uid
+    }
   end
 
   def uid_to_dn data

@@ -14,7 +14,7 @@
   <div class="row">
     <div class="twelve columns field">
       <ul>
-        <% @group.members.each do | member | %>
+        <% @group.members(true).each do | member | %>
           <li class="row">
             <%= form.text_field :members, :multiple => true, :value => member.uid, :class => 'input ten columns', 'data-memberfield' => 'true' %>
             <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="memberremove">Remove member</a></div>
