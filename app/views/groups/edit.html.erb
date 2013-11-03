@@ -1,6 +1,13 @@
 <%= form_for @group, url: groups_edit_path do | form | %>
   <div class="row">
     <p class="field ten columns">
+      <%= form.label 'Identifier (read-only):' %>
+      <%= form.text_field :cn, :class => 'input', :readonly => true %>
+    </p>
+  </div>
+
+  <div class="row">
+    <p class="field ten columns">
       <%= form.label 'Display name:' %>
       <%= form.text_field :displayName, :class => 'input' %>
     </p>
