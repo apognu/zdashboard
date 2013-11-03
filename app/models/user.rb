@@ -1,6 +1,6 @@
 class User < ActiveLdap::Base
   ldap_mapping :dn_attribute => 'uid',
-               :prefix => 'ou=People',
+               :prefix => 'ou=users',
                :classes => [ 'inetorgperson', 'zarafa-user' ],
                :scope => :one
 

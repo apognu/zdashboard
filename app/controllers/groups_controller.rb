@@ -23,7 +23,6 @@ class GroupsController < ApplicationController
     @title = 'Create a new group'
 
     @group = Group.new(group_params[:cn])
-    @group.displayName = group_params[:displayName]
     @group.mail = group_params[:mail]
 
     if ! group_params[:members].nil?
@@ -35,8 +34,6 @@ class GroupsController < ApplicationController
     end
 
     # What to do with those fuckers?
-    @group.sambaGroupType = 2
-    @group.sambaSID = 'S-1-5-21-2337950881-1482310760-3023412312-2003'
     @group.gidNumber = 1000
 
     if @group.valid?
@@ -58,7 +55,6 @@ class GroupsController < ApplicationController
   def update
     @group = Group.find(params[:cn])
     @group.mail = group_params[:mail]
-    @group.displayName = group_params[:displayName]
 
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
