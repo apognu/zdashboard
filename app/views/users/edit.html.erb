@@ -71,6 +71,13 @@
     </div>
 
     <div class="row">
+      <p>
+      <%= form.label 'Hidden from addressbook:', :class => 'inline' %>
+        <%= form.check_box :zarafaHidden %>
+      </p>
+    </div>
+
+    <div class="row">
       <%= form.label '"Send as" privilege:', :class => 'eight columns' %>
       <p class="small default btn two columns"><a href="#" data-sendastoggle>Add privilege</a></p>
     </div>

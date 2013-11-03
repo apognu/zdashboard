@@ -29,6 +29,8 @@ class UsersController < ApplicationController
     @user.surname = user_params[:surname]
     @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
     @user.commonName = @user.displayName
+    @user.zarafaAdmin = user_params[:zarafaAdmin]
+    @user.zarafaHidden = user_params[:zarafaHidden]
 
     if @user.valid?
       if @user.save
@@ -56,6 +58,8 @@ class UsersController < ApplicationController
     @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
     @user.commonName = "#{user_params[:givenName]} #{user_params[:surname]}"
     @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil?
+    @user.zarafaAdmin = user_params[:zarafaAdmin]
+    @user.zarafaHidden = user_params[:zarafaHidden]
 
     if @user.valid?
       if @user.save
@@ -86,6 +90,7 @@ class UsersController < ApplicationController
                                  :surname,
                                  :mail,
                                  :zarafaAdmin,
+                                 :zarafaHidden,
                                  :zarafaAliases => [],
                                  :zarafaSendAsPrivilege => []
     )
