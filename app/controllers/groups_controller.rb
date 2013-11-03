@@ -21,11 +21,13 @@ class GroupsController < ApplicationController
 
   def update
     @group = Group.find(params[:cn])
-
-    group_params[:members].reject! { | x | x.empty? }
-
     @group.mail = group_params[:mail]
-    @group.members = group_params[:members]
+
+    if ! group_params[:members].nil?
+      group_params[:members].reject! { | x | x.nil? or x.empty? }
+
+      @group.members = group_params[:members]
+    end
 
     if @group.valid?
       if @group.save

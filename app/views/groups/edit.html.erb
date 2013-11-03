@@ -20,6 +20,11 @@
             <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="memberremove">Remove member</a></div>
           </li>
         <% end %>
+
+          <li class="row">
+          <%= form.text_field :members, :multiple => true, :value => '', :class => 'input ten columns', 'data-memberfield' => 'true' %>
+            <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="memberremove">Remove member</a></div>
+          </li>
       </ul>
     </div>
   </div>
