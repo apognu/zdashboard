@@ -23,7 +23,7 @@ class GroupsController < ApplicationController
     @title = 'Create a new group'
 
     @group = Group.new(group_params[:cn])
-    @group.displayName = group_params[:cn]
+    @group.displayName = group_params[:displayName]
     @group.mail = group_params[:mail]
 
     if ! group_params[:members].nil?
@@ -58,11 +58,14 @@ class GroupsController < ApplicationController
   def update
     @group = Group.find(params[:cn])
     @group.mail = group_params[:mail]
+    @group.displayName = group_params[:displayName]
 
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
 
-      @group.members = group_params[:members]
+      @group.members = group_params[:members].map! { | memberuid |
+        User.find(memberuid)
+      }
     end
 
     if @group.valid?
@@ -88,6 +91,7 @@ class GroupsController < ApplicationController
 
   def group_params
     params.require(:group).permit(:cn,
+                                  :displayName,
                                   :mail,
                                   :members => []
     )
