@@ -24,6 +24,12 @@
     </ul>
   </nav>
 
+  <% if ! @current_user.nil? %>
+    <div class="row">
+      <p>You are logged as <%= @current_user.displayName %> (<%= @current_user.uid %>) - <%= link_to 'Logout', logout_path %></p>
+    </div>
+  <% end %>
+
 <% if ! flash.empty? %>
   <div class="row">
   <% flash.each do | type, message | %>

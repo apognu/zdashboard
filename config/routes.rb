@@ -1,6 +1,10 @@
 Zarafadashboard::Application.routes.draw do
   root 'z_dashboard#index'
 
+  get '/auth', to: 'application#auth'
+  post '/auth', to: 'application#auth'
+  get '/logout', to: 'application#logout'
+
   get '/users', to: 'users#index'
 
   get '/users/new', to: 'users#new'
