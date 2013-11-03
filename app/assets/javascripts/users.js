@@ -15,7 +15,10 @@ $(function()
   {
     event.preventDefault();
 
-    $(this).closest('li').remove();
+    if ($(this).closest('ul').find('li').length > 1)
+    {
+      $(this).closest('li').remove();
+    }
   });
 
   $('a[data-sendastoggle]').click(function(event)
@@ -33,6 +36,9 @@ $(function()
   {
     event.preventDefault();
 
-    $(this).closest('li').remove();
+    if ($(this).closest('ul').find('li').length > 1)
+    {
+      $(this).closest('li').remove();
+    }
   });
 });

@@ -15,6 +15,9 @@ $(function()
   {
     event.preventDefault();
 
-    $(this).closest('li').remove();
+    if ($(this).closest('ul').find('li').length > 1)
+    {
+      $(this).closest('li').remove();
+    }
   });
 });
