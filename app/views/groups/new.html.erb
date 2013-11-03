@@ -1,0 +1,42 @@
+<%= form_for @group, url: groups_new_path do | form | %>
+<div class="row">
+  <p class="field ten columns">
+    <%= form.label 'Name:' %>
+    <%= form.text_field :cn, :class => 'input' %>
+  </p>
+</div>
+
+<div class="row">
+  <p class="field ten columns">
+    <%= form.label 'Group email address:' %>
+    <%= form.text_field :mail, :class => 'input' %></p>
+  </p>
+</div>
+
+<div class="row">
+  <%= form.label 'Members:', :class => 'eight columns' %>
+  <p class="small default btn two columns"><a href="#" data-membertoggle>Add a member</a></p>
+</div>
+
+<div class="row">
+  <div class="twelve columns field">
+    <ul>
+      <% @group.members.each do | member | %>
+        <li class="row">
+          <%= form.text_field :members, :multiple => true, :value => member.uid, :class => 'input ten columns', 'data-memberfield' => 'true' %>
+          <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="memberremove">Remove member</a></div>
+        </li>
+      <% end %>
+
+        <li class="row">
+        <%= form.text_field :members, :multiple => true, :value => '', :class => 'input ten columns', 'data-memberfield' => 'true' %>
+          <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="memberremove">Remove member</a></div>
+        </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <p class="medium primary btn"><%= form.submit "Save the new group" %>
+</div>
+<% end %>

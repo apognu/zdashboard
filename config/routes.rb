@@ -9,7 +9,7 @@ Zarafadashboard::Application.routes.draw do
                      as: :users_save
   
   get '/users/page/:page', to: 'users#index',
-                           as: 'users_page'
+                           as: :users_page
 
   get '/users/:uid/edit', to: 'users#edit',
                           as: :users_edit,
@@ -24,6 +24,11 @@ Zarafadashboard::Application.routes.draw do
                             constraints: { uid: /[^\/]+/ }
 
   get '/groups', to: 'groups#index'
+
+  get '/groups/new', to: 'groups#new'
+
+  post '/groups/new', to: 'groups#save',
+                     as: :groups_save
 
   get '/groups/:cn/edit', to: 'groups#edit',
                           as: :groups_edit,

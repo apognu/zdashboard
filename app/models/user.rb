@@ -4,7 +4,7 @@ class User < ActiveLdap::Base
                :classes => [ 'inetorgperson', 'zarafa-user' ],
                :scope => :one
 
-  belongs_to :groups, :class => 'Group', :many => 'memberUid'
+  belongs_to :groups, :class => 'Group', :many => 'memberUid', :foreign_key => 'uid'
 
   validates :uid, :presence => true
   validates :givenName, :presence => true
