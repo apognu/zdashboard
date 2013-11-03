@@ -1,6 +1,6 @@
 class Group < ActiveLdap::Base
   ldap_mapping :dn_attribute => 'cn',
-               :prefix => YAML.load_file("#{Rails.root}/config/ldap.yml")[Rails.env]['groups_base'],
+               :prefix => YAML.load_file("#{Rails.root}/config/ldap.yml")['bases'][Rails.env]['groups'],
                :classes => [ 'posixGroup', 'zarafa-group' ],
                :scope => :one
 

@@ -1,6 +1,6 @@
 class User < ActiveLdap::Base
   ldap_mapping :dn_attribute => 'uid',
-               :prefix => YAML.load_file("#{Rails.root}/config/ldap.yml")[Rails.env]['users_base'],
+               :prefix => YAML.load_file("#{Rails.root}/config/ldap.yml")['bases'][Rails.env]['users'],
                :classes => [ 'inetorgperson', 'zarafa-user' ],
                :scope => :one
 
