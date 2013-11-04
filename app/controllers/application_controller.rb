@@ -18,10 +18,12 @@ class ApplicationController < ActionController::Base
       user = User.find(params[:username])
 
       if '{sha256}' << Digest::SHA2.new.base64digest(params[:password]) == user.userPassword
-        session[:user] = user.uid
+        if user.zarafaAdmin
+          session[:user] = user.uid
 
-        redirect_to(session[:return_to]) and return
-        return
+          redirect_to(session[:return_to]) and return
+          return
+        end
       end
     end
 
