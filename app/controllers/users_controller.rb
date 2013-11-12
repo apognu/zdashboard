@@ -81,7 +81,11 @@ class UsersController < ApplicationController
   def delete
     user = User.find(params[:uid])
 
-    if user.destroy
+    group = user.groups
+
+    tmp = group[0].members.reject { |u| u == user }
+    group[0].members = tmp
+    if group[0].save and user.destroy
       flash[:success] = "User '#{user.uid}' was successfully deleted."
       redirect_to users_path
     end
