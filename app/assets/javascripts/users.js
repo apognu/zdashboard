@@ -1,5 +1,29 @@
 $(function()
 {
+  $("#user_zarafaSendAsPrivilege").select2({
+    multiple: true,
+    tokenSeparators: [','],
+    minimumInputLength: 1,
+    ajax: {
+      url:'/users/list/',
+      type: 'POST',
+      dataType: 'json',
+      data: function(term, page) {
+        return {
+          q: term,
+          authenticity_token: $('#user_authenticity_token').val()
+        };
+      },
+      results: function(data, page) {
+        return { results: data };
+      }
+    }
+  });
+
+  if ($("#user_zarafaSendAsPrivilege").val() != null) {
+    $("#user_zarafaSendAsPrivilege").select2('data', $.parseJSON($("#user_zarafaSendAsPrivilege").val()));
+  }
+
   $('a[data-aliastoggle]').click(function(event)
   {
     event.preventDefault();

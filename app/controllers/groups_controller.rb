@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
   include ApplicationHelper
+  include UsersHelper
 
   def index
     @title = 'Group management'
@@ -28,13 +29,16 @@ class GroupsController < ApplicationController
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
 
-      @group.members = group_params[:members].map! { | memberuid |
+      group_members = group_params[:members][0].split(',')
+      @group.members = group_members.map! { | memberuid |
         User.find(memberuid)
-      }
+      }  
+      test = uid_to_select @group.members
+      @group_members = test.to_json
     end
 
     # What to do with those fuckers?
-    @group.gidNumber = 1000
+    @group.gidNumber = get_next_gidNumber 
 
     if @group.valid?
       if @group.save
@@ -47,8 +51,11 @@ class GroupsController < ApplicationController
   end
 
   def edit
-    @group = Group.find(params[:cn])
 
+    @group = Group.find(params[:cn])
+#    raise @group.members[0].uid
+    test = uid_to_select @group.members
+    @group_members = test.to_json
     @title = "Edit group #{@group.cn}"
   end
 
@@ -59,7 +66,8 @@ class GroupsController < ApplicationController
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
 
-      @group.members = group_params[:members].map! { | memberuid |
+      group_members = group_params[:members][0].split(',')
+      @group.members = group_members.map! { | memberuid |
         User.find(memberuid)
       }
     end
@@ -91,5 +99,17 @@ class GroupsController < ApplicationController
                                   :mail,
                                   :members => []
     )
+  end
+
+  def get_next_gidNumber
+    groups = Group.find(:all, :attribute => 'gidNumber')
+
+    max = 0
+    groups.each do | g |
+      if g.gidNumber > max
+        max = g.gidNumber
+      end
+    end
+    return max+1
   end
 end

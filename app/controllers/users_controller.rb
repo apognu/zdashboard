@@ -31,6 +31,8 @@ class UsersController < ApplicationController
     @user.commonName = @user.displayName
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+    uidNumber = get_next_uidNumber
+    @user.uidNumber = uidNumber
 
     if @user.valid?
       if @user.save
@@ -44,8 +46,8 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:uid])
-    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
-
+    test = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
+    @user.zarafaSendAsPrivilege = test.to_json
     @title = "Edit user #{@user.uid}"
   end
 
@@ -60,7 +62,6 @@ class UsersController < ApplicationController
     @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil?
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
-
     if @user.valid?
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully edited."
@@ -68,7 +69,7 @@ class UsersController < ApplicationController
       end
     end
 
-    @user.zarafaSendAsPrivilege = user_params[:zarafaSendAsPrivilege]
+    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege
 
     render :edit
   end
@@ -80,6 +81,19 @@ class UsersController < ApplicationController
       flash[:success] = "User '#{user.uid}' was successfully deleted."
       redirect_to users_path
     end
+  end
+
+  def list
+    users_list = User.find(:all, :attributes => ['uid', 'cn'], :value => "*#{params[:q]}*")
+    list = []
+    users_list.each do | user |
+      tmp = {
+        'text' => user.cn,
+        'id' => user.uid
+      }
+      list.push(tmp)
+    end
+    render :json => list
   end
 
   private
@@ -99,18 +113,40 @@ class UsersController < ApplicationController
   def dn_to_uid data
     data.reject! { | x | x.nil? or x.empty? }
 
+    list = []
     data.map! { | dn |
-      User.find(dn).uid
+      u = User.find(dn)
+
+      tmp = {
+        "text" => u.cn,
+        "id" => u.uid
+      }
+      list.push(tmp)
     }
+    data = list
   end
 
   def uid_to_dn data
     data.reject! { | x | x.nil? or x.empty? }
-
+    data = data[0].split(",")
+ 
     data.map! { | uid |
       privilege_user = User.find(uid)
 
       'uid=' << privilege_user.uid << ',' << privilege_user.base
     }
   end
+
+  def get_next_uidNumber
+    users = User.find(:all, :attribute => 'uidNumber')
+
+    max = 0
+    users.each do | u |
+      if u.uidNumber > max
+        max = u.uidNumber
+      end
+    end
+    return max+1
+  end
+
 end

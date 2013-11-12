@@ -1,21 +1,8 @@
 development:
   host: localhost
-  base: dc=zarafa,dc=com
-  bind_dn: cn=admin,dc=zarafa,dc=com
-  password: secretpassword
-
-development:
-  host: localhost
-  base: dc=zarafa,dc=com
-  bind_dn: cn=admin,dc=zarafa,dc=com
-  password: secretpassword
-
-development:
-  host: localhost
-  method: :tls
-  base: dc=zarafa,dc=com
-  bind_dn: cn=admin,dc=zarafa,dc=com
-  password: secretpassword
+  base: dc=toto,dc=net
+  bind_dn: cn=admin,dc=toto,dc=net
+  password: sigipsr
 
 bases:
   development:

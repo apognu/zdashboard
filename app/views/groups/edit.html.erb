@@ -15,22 +15,14 @@
 
   <div class="row">
     <%= form.label 'Members:', :class => 'eight columns' %>
-    <p class="small default btn two columns"><a href="#" data-membertoggle>Add a member</a></p>
+    <%= form.hidden_field :authenticity_token, :value => form_authenticity_token %>
   </div>
 
   <div class="row">
     <div class="twelve columns field">
       <ul>
-        <% @group.members.each do | member | %>
           <li class="row">
-            <%= form.text_field :members, :multiple => true, :value => member.uid, :class => 'input ten columns', 'data-memberfield' => 'true' %>
-            <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="memberremove">Remove member</a></div>
-          </li>
-        <% end %>
-
-          <li class="row">
-          <%= form.text_field :members, :multiple => true, :value => '', :class => 'input ten columns', 'data-memberfield' => 'true' %>
-            <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="memberremove">Remove member</a></div>
+          <%= form.text_field :members, :multiple => true, :value => @group_members, :class => 'ten columns', 'data-memberfield' => 'true' %>
           </li>
       </ul>
     </div>

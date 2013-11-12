@@ -5,6 +5,8 @@
 
   <%= stylesheet_link_tag    'gumby', media: 'screen' %>
   <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= stylesheet_link_tag    params[:controller], media: 'all' %>
+  <%= stylesheet_link_tag    'select2', media: 'all' %>
   <%= javascript_include_tag 'jquery' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>

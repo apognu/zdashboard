@@ -9,6 +9,8 @@ Zarafadashboard::Application.routes.draw do
 
   get '/users/new', to: 'users#new'
 
+  post '/users/list', to: 'users#list'
+
   post '/users/new', to: 'users#save',
                      as: :users_save
   
