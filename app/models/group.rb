@@ -8,5 +8,5 @@ class Group < ActiveLdap::Base
 
   validates :cn, :presence => true, format: { with: /\A[a-zA-Z.-]+\z/, message: "only allows letters, numbers, dashes and dots" }
   validates :mail, :presence => true
-  validates :members, :presence => true
+#  validates :members, :presence => true
 end

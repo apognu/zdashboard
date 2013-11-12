@@ -1,6 +1,7 @@
 module UsersHelper
 
   def uid_to_select data
+    data.nil? { return nil}
     data.reject! { | x | x.nil? }
 
     list = []

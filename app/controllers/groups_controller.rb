@@ -28,17 +28,20 @@ class GroupsController < ApplicationController
 
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
-
-      group_members = group_params[:members][0].split(',')
-      @group.members = group_members.map! { | memberuid |
-        User.find(memberuid)
-      }  
-      test = uid_to_select @group.members
-      @group_members = test.to_json
+      unless group_params[:members][0].nil?
+        group_members = group_params[:members][0].split(',')
+        @group.members = group_members.map! { | memberuid |
+          User.find(memberuid)
+        }  
+        members_list = uid_to_select @group.members
+        @group_members = members_list.to_json
+      else
+        @group.members = []
+      end
     end
 
     # What to do with those fuckers?
-    @group.gidNumber = get_next_gidNumber 
+    @group.gidNumber = get_next_gidnumber 
 
     if @group.valid?
       if @group.save
@@ -53,9 +56,8 @@ class GroupsController < ApplicationController
   def edit
 
     @group = Group.find(params[:cn])
-#    raise @group.members[0].uid
-    test = uid_to_select @group.members
-    @group_members = test.to_json
+    members_list = uid_to_select @group.members
+    @group_members = members_list.to_json
     @title = "Edit group #{@group.cn}"
   end
 
@@ -101,7 +103,7 @@ class GroupsController < ApplicationController
     )
   end
 
-  def get_next_gidNumber
+  def get_next_gidnumber
     groups = Group.find(:all, :attribute => 'gidNumber')
 
     max = 0

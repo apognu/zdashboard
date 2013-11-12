@@ -31,8 +31,12 @@ class UsersController < ApplicationController
     @user.commonName = @user.displayName
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
-    uidNumber = get_next_uidNumber
+    uidNumber = get_next_uidnumber
     @user.uidNumber = uidNumber
+
+    defgroup = Group.find(:first, :attribute => "cn", :value => "all");
+
+    defgroup.members << @user
 
     if @user.valid?
       if @user.save
@@ -46,8 +50,8 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:uid])
-    test = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
-    @user.zarafaSendAsPrivilege = test.to_json
+    users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
+    @user.zarafaSendAsPrivilege = users_list.to_json
     @title = "Edit user #{@user.uid}"
   end
 
@@ -137,7 +141,7 @@ class UsersController < ApplicationController
     }
   end
 
-  def get_next_uidNumber
+  def get_next_uidnumber
     users = User.find(:all, :attribute => 'uidNumber')
 
     max = 0
