@@ -72,7 +72,7 @@ class UsersController < ApplicationController
       end
     end
 
-    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege
+    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege unless @user.zarafaSendAsPrivilege.nil?
 
     render :edit
   end
