@@ -92,7 +92,7 @@ class UsersController < ApplicationController
   end
 
   def list
-    users_list = User.find(:all, :attributes => ['uid', 'cn'], :value => "*#{params[:q]}*")
+    users_list = User.find(:all, :attribute => 'cn', :value => "*#{params[:q]}*")
     list = []
     users_list.each do | user |
       tmp = {
@@ -136,7 +136,10 @@ class UsersController < ApplicationController
 
   def uid_to_dn data
     data.reject! { | x | x.nil? or x.empty? }
-    data = data[0].split(",")
+
+    unless data.empty?
+      data = data[0].split(",")
+    end
  
     data.map! { | uid |
       privilege_user = User.find(uid)
