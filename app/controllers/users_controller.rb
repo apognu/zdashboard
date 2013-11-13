@@ -34,11 +34,10 @@ class UsersController < ApplicationController
     uidNumber = get_next_uidnumber
     @user.uidNumber = uidNumber
 
-    defgroup = Group.find(:first, :attribute => "cn", :value => "all");
-
-    defgroup.members << @user
-
     if @user.valid?
+      defgroup = Group.find(:first, :attribute => "cn", :value => "all");
+      defgroup.members << @user
+
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully created."
         redirect_to users_path and return
