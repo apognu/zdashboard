@@ -27,7 +27,8 @@ class UsersController < ApplicationController
     @user.mail = user_params[:mail]
     @user.givenName = user_params[:givenName]
     @user.surname = user_params[:surname]
-    @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
+    @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}" unless user_params[:givenName].empty? and user_params[:surname].empty?
+    @user.displayName= 'N/A'
     @user.commonName = @user.displayName
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
@@ -52,6 +53,7 @@ class UsersController < ApplicationController
     users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
     @user.zarafaSendAsPrivilege = users_list.to_json
     @title = "Edit user #{@user.uid}"
+    @message = :message
   end
 
   def update
@@ -61,10 +63,12 @@ class UsersController < ApplicationController
     @user.givenName = user_params[:givenName]
     @user.surname = user_params[:surname]
     @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
-    @user.commonName = "#{user_params[:givenName]} #{user_params[:surname]}"
+    @user.commonName = 'N/A'
+    @user.commonName = "#{user_params[:givenName]} #{user_params[:surname]}" unless user_params[:givenName].empty? and user_params[:surname].empty?
     @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil?
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+
     if @user.valid?
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully edited."

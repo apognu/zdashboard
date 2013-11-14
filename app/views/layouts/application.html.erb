@@ -40,6 +40,20 @@
   </div>
 <% end %>
 
+<% if ! @user.nil? and @user.errors.any? %>
+  <div class="row">
+    <div id="error_explanation">
+      <ul>
+      <% @user.errors.messages.each do | index, messages | %>
+        <% if ! messages.empty? %> 
+          <li class="danger alert"><%= messages.last %></li>
+        <% end %>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
   <header class="row">
     <h2><%= @title %></h2>
   </header>
