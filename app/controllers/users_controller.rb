@@ -28,11 +28,12 @@ class UsersController < ApplicationController
     @user.givenName = user_params[:givenName]
     @user.sn = user_params[:sn]
     @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}" unless user_params[:givenName].empty? and user_params[:sn].empty?
-    @user.displayName= 'N/A'
     @user.commonName = @user.displayName
     @user.zarafaAccount = 1;
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+    @user.gidNumber = 1000;
+    @user.homeDirectory = '/dev/null'
     @user.uidNumber = next_uidnumber
 
     if @user.valid?
@@ -65,8 +66,7 @@ class UsersController < ApplicationController
     @user.givenName = user_params[:givenName]
     @user.sn = user_params[:sn]
     @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}"
-    @user.commonName = 'N/A'
-    @user.commonName = "#{user_params[:givenName]} #{user_params[:sn]}" unless user_params[:givenName].empty? and user_params[:sn].empty?
+    @user.commonName = @user.displayName
     @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil?
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]

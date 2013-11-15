@@ -78,7 +78,7 @@ class GroupsController < ApplicationController
           User.find(memberuid)
         }
 
-        @group_members = uid_to_select(@group.members).to_jsonmembers_list.to_json
+        @group_members = uid_to_select(@group.members).to_json
       else
         @group.members = []
       end
