@@ -28,13 +28,14 @@ class GroupsController < ApplicationController
 
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
+
       unless group_params[:members][0].nil?
         group_members = group_params[:members][0].split(',')
         @group.members = group_members.map! { | memberuid |
           User.find(memberuid)
         }  
-        members_list = uid_to_select @group.members
-        @group_members = members_list.to_json
+
+        @group_members = uid_to_select(@group.members).to_jsonmembers_list.to_json
       else
         @group.members = []
       end
@@ -48,6 +49,8 @@ class GroupsController < ApplicationController
         flash[:success] = "Group '#{@group.cn}' was successfully created."
         redirect_to groups_path and return
       end
+    else
+      @messages[:danger] = 'Some fields are in error, unable to save the group.'
     end
 
     render :new
@@ -68,10 +71,17 @@ class GroupsController < ApplicationController
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
 
-      group_members = group_params[:members][0].split(',')
-      @group.members = group_members.map! { | memberuid |
-        User.find(memberuid)
-      }
+      unless group_params[:members][0].nil?
+        group_members = group_params[:members][0].split(',')
+
+        @group.members = group_members.map! { | memberuid |
+          User.find(memberuid)
+        }
+
+        @group_members = uid_to_select(@group.members).to_jsonmembers_list.to_json
+      else
+        @group.members = []
+      end
     end
 
     if @group.valid?
@@ -79,6 +89,8 @@ class GroupsController < ApplicationController
         flash[:success] = "Group '#{@group.cn}' was successfully edited."
         redirect_to groups_path and return
       end
+    else
+      @messages[:danger] = 'Some fields are in error, unable to save the group.'
     end
 
     render :edit
