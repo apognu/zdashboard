@@ -4,13 +4,19 @@ class ApplicationController < ActionController::Base
   before_filter :authorize
 
   def authorize
-    if session[:user]
-      if @current_user = User.find(session[:user])
-        return true
+    begin
+      if session[:user]
+        if @current_user = User.find(session[:user])
+          return true
+        end
       end
-    end
 
-    auth
+      auth
+    rescue ActiveLdap::ConnectionError
+      @messages ||= Hash.new
+      @messages[:danger] = 'We could not connect to the backend direcotry, try again later.' 
+      render 'application/auth' and return
+    end
   end
 
   def auth
