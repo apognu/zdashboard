@@ -1,7 +1,7 @@
 class User < ActiveLdap::Base
   ldap_mapping :dn_attribute => 'uid',
                :prefix => YAML.load_file("#{Rails.root}/config/ldap.yml")['bases'][Rails.env]['users'],
-               :classes => [ 'inetorgperson', 'zarafa-user' ],
+               :classes => [ 'inetorgperson', 'zarafa-user', 'posixaccount' ],
                :scope => :one
 
   belongs_to :groups, :class => 'Group', :many => 'memberUid', :foreign_key => 'uid'

@@ -33,8 +33,7 @@ class UsersController < ApplicationController
     @user.zarafaAccount = 1;
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
-    uidNumber = get_next_uidnumber
-    @user.uidNumber = uidNumber
+    @user.uidNumber = next_uidnumber
 
     if @user.valid?
       defgroup = Group.find(:first, :attribute => "cn", :value => "all");
@@ -156,7 +155,7 @@ class UsersController < ApplicationController
     }
   end
 
-  def get_next_uidnumber
+  def next_uidnumber
     users = User.find(:all, :attribute => 'uidNumber')
 
     max = 0
