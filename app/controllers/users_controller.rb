@@ -43,6 +43,8 @@ class UsersController < ApplicationController
         flash[:success] = "User '#{@user.uid}' was successfully created."
         redirect_to users_path and return
       end
+    else
+      @messages[:danger] = 'Some fields are in error, unable to save the user'
     end
 
     render :new
@@ -74,6 +76,8 @@ class UsersController < ApplicationController
         flash[:success] = "User '#{@user.uid}' was successfully edited."
         redirect_to users_path and return
       end
+    else
+      @messages[:danger] = 'Some fields are in error, unable to save the user'
     end
 
     @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege unless @user.zarafaSendAsPrivilege.nil?
@@ -162,5 +166,4 @@ class UsersController < ApplicationController
     end
     return max+1
   end
-
 end

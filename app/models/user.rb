@@ -6,8 +6,8 @@ class User < ActiveLdap::Base
 
   belongs_to :groups, :class => 'Group', :many => 'memberUid', :foreign_key => 'uid'
 
-  validates :uid, presence: { message: 'hihihi' }, format: { with: /\A[a-zA-Z.-]+\z/, message: "only allows letters, numbers, dashes and dots" }
-  validates :givenName, presence: { message: "Name must be filled." }, :allow_nil => false
-  validates :sn, presence: { message: "Surname must be filled." }, :allow_nil => false
+  validates :uid, :presence => true, format: { with: /\A[0-9a-zA-Z._-]+\z/ }
+  validates :givenName, :presence => true, :allow_nil => false
+  validates :sn, :presence => true, :allow_nil => false
   validates :mail, :presence => true, :allow_nil => false
 end
