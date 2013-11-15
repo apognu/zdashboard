@@ -26,8 +26,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params[:uid])
     @user.mail = user_params[:mail]
     @user.givenName = user_params[:givenName]
-    @user.surname = user_params[:surname]
-    @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}" unless user_params[:givenName].empty? and user_params[:surname].empty?
+    @user.sn = user_params[:sn]
+    @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}" unless user_params[:givenName].empty? and user_params[:sn].empty?
     @user.displayName= 'N/A'
     @user.commonName = @user.displayName
     @user.zarafaAdmin = user_params[:zarafaAdmin]
@@ -63,10 +63,10 @@ class UsersController < ApplicationController
     @user.mail = user_params[:mail]
     @user.zarafaAliases = user_params[:zarafaAliases]
     @user.givenName = user_params[:givenName]
-    @user.surname = user_params[:surname]
-    @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
+    @user.sn = user_params[:sn]
+    @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}"
     @user.commonName = 'N/A'
-    @user.commonName = "#{user_params[:givenName]} #{user_params[:surname]}" unless user_params[:givenName].empty? and user_params[:surname].empty?
+    @user.commonName = "#{user_params[:givenName]} #{user_params[:sn]}" unless user_params[:givenName].empty? and user_params[:sn].empty?
     @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil?
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
@@ -116,7 +116,7 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:uid,
                                  :givenName,
-                                 :surname,
+                                 :sn,
                                  :mail,
                                  :zarafaAdmin,
                                  :zarafaHidden,
