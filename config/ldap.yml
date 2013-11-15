@@ -1,0 +1,10 @@
+development:
+  host: localhost
+  base: dc=toto,dc=net
+  bind_dn: cn=admin,dc=toto,dc=net
+  password: sigipsr
+
+bases:
+  development:
+    users: ou=users
+    groups: ou=groups
