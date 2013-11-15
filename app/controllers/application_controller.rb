@@ -3,6 +3,9 @@ class ApplicationController < ActionController::Base
 
   before_filter :authorize
 
+  class InvalidCredentialsException < Exception
+  end
+
   def initialize
     @messages = Hash.new
     super
@@ -25,10 +28,11 @@ class ApplicationController < ActionController::Base
 
   def auth
     begin
-      raise RuntimeError, 'Both fields are mandatory, here.' if params.has_key?(:username) and
-                                                                (params[:username].empty? or params[:password].empty?)
+      if request.post?
+        raise RuntimeError, 'Both fields are mandatory, here.' if params.has_key?(:username) and (
+                                                                  params[:username].empty? or
+                                                                  params[:password].empty?)
 
-      if ! params[:username].nil? and ! params[:password].nil?
         user = User.find(params[:username])
 
         if '{sha256}' << Digest::SHA2.new.base64digest(params[:password]) == user.userPassword
@@ -36,8 +40,11 @@ class ApplicationController < ActionController::Base
             session[:user] = user.uid
 
             redirect_to(session[:return_to]) and return
-            return
+          else
+            raise InvalidCredentialsException, 'You are not authorized to access this part of ZDashboard.'
           end
+        else
+          raise InvalidCredentialsException, 'The fiven credentials are incorrect.'
         end
       end
 
@@ -45,6 +52,12 @@ class ApplicationController < ActionController::Base
       render 'application/auth' and return
     rescue RuntimeError => error
       @messages[:danger] = error
+    rescue ActiveLdap::EntryNotFound
+      @messages[:danger] = 'The given credentials are incorrect.'
+      render 'application/auth' and return
+    rescue InvalidCredentialsException => error
+      @messages[:danger] = error
+      render 'application/auth' and return
     end
   end
 
