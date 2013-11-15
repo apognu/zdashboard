@@ -71,6 +71,16 @@ class UsersController < ApplicationController
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
 
+    if ! user_params[:userPassword].empty?
+      require 'securerandom'
+
+      # salt = SecureRandom.urlsage_base64(12)
+      salt = 'azerty'
+      digest = Base64.encode64(Digest::SHA1.digest(user_params[:userPassword] + salt) + salt).chomp
+      
+      @user.userPassword = '{SSHA}' + digest
+    end
+
     if @user.valid?
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully edited."
@@ -118,6 +128,7 @@ class UsersController < ApplicationController
                                  :givenName,
                                  :sn,
                                  :mail,
+                                 :userPassword,
                                  :zarafaAdmin,
                                  :zarafaHidden,
                                  :zarafaAliases => [],
