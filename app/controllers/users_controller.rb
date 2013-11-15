@@ -30,6 +30,7 @@ class UsersController < ApplicationController
     @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}" unless user_params[:givenName].empty? and user_params[:sn].empty?
     @user.displayName= 'N/A'
     @user.commonName = @user.displayName
+    @user.zarafaAccount = 1;
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
     uidNumber = get_next_uidnumber
