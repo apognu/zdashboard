@@ -35,11 +35,7 @@ class ApplicationController < ActionController::Base
 
         user = User.find(params[:username])
 
-        ldap = LDAP::Conn.new YAML.load_file("#{Rails.root}/config/ldap.yml")[Rails.env]['host']
-        ldap.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
-        ldap.bind user.dn, params[:password]
-
-        if ldap.bound?
+        if '{sha256}' << Digest::SHA2.new.base64digest(params[:password]) == user.userPassword
           if user.zarafaAdmin
             session[:user] = user.uid
 
@@ -48,7 +44,7 @@ class ApplicationController < ActionController::Base
             raise InvalidCredentialsException, 'You are not authorized to access this part of ZDashboard.'
           end
         else
-          raise InvalidCredentialsException, 'The given credentials are incorrect.'
+          raise InvalidCredentialsException, 'The fiven credentials are incorrect.'
         end
       end
 
@@ -56,7 +52,7 @@ class ApplicationController < ActionController::Base
       render 'application/auth' and return
     rescue RuntimeError => error
       @messages[:danger] = error
-    rescue ActiveLdap::EntryNotFound, LDAP::ResultError
+    rescue ActiveLdap::EntryNotFound
       @messages[:danger] = 'The given credentials are incorrect.'
       render 'application/auth' and return
     rescue InvalidCredentialsException => error
