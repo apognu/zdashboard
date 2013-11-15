@@ -32,9 +32,12 @@
     </div>
   <% end %>
 
-<% if ! flash.empty? %>
+<% if ! flash.empty? or ! @messages.nil? %>
   <div class="row">
   <% flash.each do | type, message | %>
+    <div class="alert <%= type %>"><%= message %></div>
+  <% end %>
+  <% @messages.each do | type, message | %>
     <div class="alert <%= type %>"><%= message %></div>
   <% end %>
   </div>
