@@ -20,6 +20,24 @@ $(function()
     }
   });
 
+  $("#search_users input[name='search']").on('keyup', function() {
+    console.log("pass => "+$(this).val());
+    if ($(this).val().length > 0) {
+      console.log("request");
+      $.ajax({
+        url: '/users',
+        type: 'POST',
+        data: $("#search_users").serialize(),
+        success: function(res){
+          $("#users_list tbody").empty().html(res);
+        },
+        error: function(res) {
+          console.log("ERROR");
+        }
+      });
+    }
+  });
+
   if ($("#user_zarafaSendAsPrivilege").val() != null) {
     $("#user_zarafaSendAsPrivilege").select2('data', $.parseJSON($("#user_zarafaSendAsPrivilege").val()));
   }

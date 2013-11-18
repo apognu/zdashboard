@@ -1,0 +1,14 @@
+<% unless @users.nil? or @users.empty?
+  @users.each do | user | %>
+    <tr>
+      <td><%= link_to(user.uid, users_edit_path(:uid => user.uid)) %></td>
+      <td><%= user.displayName %></td>
+      <td><%= user.mail %></td>
+      <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', users_delete_path(:uid => user.uid)) %></div></td>
+    </tr>
+  <% end
+  else %>
+    <tr>
+      <td colspan="4">No result, try with another search</td>
+    </tr>
+<% end %>

@@ -1,8 +1,12 @@
 <div class="row">
+  <form id="search_users"><p class="field six columns" style="margin-top:16px;">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+    <input type="text" name="search" placeholder="username" class="input" />
+  </p></form>
   <p class="medium primary btn icon-left entypo icon-plus-circled right-button"><%= link_to 'Create a new user', users_new_path %></p>
 </div>
 
-<div class="row">
+<div class="row" id="users_list">
   <table class="striped">
     <thead>
       <tr>
@@ -13,19 +17,8 @@
       </tr>
     </thead>
     <tbody>
-<% @users.each do | user | %>
-      <tr>
-        <td><%= link_to(user.uid, users_edit_path(:uid => user.uid)) %></td>
-        <td><%= user.displayName %></td>
-        <td><%= user.mail %></td>
-        <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', users_delete_path(:uid => user.uid)) %></div></td>
-      </tr>
-  <% end %>
+      <%= render :partial => "users" %>
     </tbody>
   </table>
 
-  <p>Pages :
-<% @pages.each do | page | %>
-  <%= link_to(page, users_page_path({ :page => page })) %>
-<% end %></p>
 </div>

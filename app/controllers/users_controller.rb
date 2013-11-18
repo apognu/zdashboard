@@ -4,14 +4,21 @@ class UsersController < ApplicationController
   def index
     @title = 'User management'
 
-    page = 0
-    page = (params[:page].to_i - 1) if params[:page].present?
-    users_per_page = 5
+    if request.post?
+      page = 0
+      page = (params[:page].to_i - 1) if params[:page].present?
+      users_per_page = 5
 
-    # I DON'T WANT TO DO THIS
-    @users = User.all
-    @pages = paginate(users_per_page, @users.length, page)
-    @users = @users.slice(users_per_page * page, users_per_page)
+      # I DON'T WANT TO DO THIS
+      if params[:search] == "*"
+        @users = User.all
+      else
+        @users = User.find(:all, :attribute => 'cn', :value => "*#{params[:search]}*")
+      end
+#      @pages = paginate(users_per_page, @users.length, page)
+#      @users = @users.slice(users_per_page * page, users_per_page)
+      render :partial => "users", :layout => false
+    end
   end
 
   def new
