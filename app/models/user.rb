@@ -10,4 +10,7 @@ class User < ActiveLdap::Base
   validates :givenName, :presence => true, :allow_nil => false
   validates :sn, :presence => true, :allow_nil => false
   validates :mail, :presence => true, :allow_nil => false
+  validates :zarafaQuotaSoft, :presence => true, :numericality => {:only_integer => true}, :allow_nil => false
+  validates :zarafaQuotaHard, :presence => true, :numericality => {:only_integer => true}, :allow_nil => false
+
 end
