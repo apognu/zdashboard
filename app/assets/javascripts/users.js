@@ -20,16 +20,22 @@ $(function()
     }
   });
 
+  var xhr = null;
+
   $("#search_users input[name='search']").on('keyup', function() {
     console.log("pass => "+$(this).val());
     if ($(this).val().length > 0) {
       console.log("request");
-      $.ajax({
+      if (xhr != null)
+        xhr.abort();
+      xhr = $.ajax({
         url: '/users',
         type: 'POST',
+        async:true,
         data: $("#search_users").serialize(),
         success: function(res){
           $("#users_list tbody").empty().html(res);
+          xhr = null;
         },
         error: function(res) {
           console.log("ERROR");

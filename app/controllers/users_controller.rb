@@ -13,7 +13,7 @@ class UsersController < ApplicationController
       if params[:search] == "*"
         @users = User.all
       else
-        @users = User.find(:all, :attribute => 'cn', :value => "*#{params[:search]}*")
+        @users = User.find(:all, :filter => "(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))")
       end
 #      @pages = paginate(users_per_page, @users.length, page)
 #      @users = @users.slice(users_per_page * page, users_per_page)
@@ -116,7 +116,7 @@ class UsersController < ApplicationController
   end
 
   def list
-    users_list = User.find(:all, :attribute => 'cn', :value => "*#{params[:q]}*")
+    users_list = User.find(:all, :filter => "(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*))")
     list = []
     users_list.each do | user |
       tmp = {
