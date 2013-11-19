@@ -11,7 +11,7 @@
   <div class="tab-content active">
     <div class="row">
       <p class="field nine columns">
-        <%= form.label 'Username (read-only):' %>
+        <%= form.label :uid, 'Username (read-only):' %>
         <%= form.text_field :uid, :class => 'input', :readonly => true %>
       </p>
 
@@ -22,13 +22,13 @@
 
     <div class="row">
       <p class="field nine columns">
-        <%= form.label 'Email address:' %>
+        <%= form.label :mail, 'Email address:' %>
         <%= form.text_field :mail, :class => 'input' %>
       </p>
     </div>
 
     <div class="row">
-      <%= form.label 'Full name:' %>
+      <%= form.label :givenName, 'Full name:' %>
     </div>
 
     <div class="row">
@@ -42,13 +42,13 @@
 
     <div class="row">
       <p class="field nine columns">
-        <%= form.label 'New password:' %>
+        <%= form.label :userPassword, 'New password:' %>
         <%= form.password_field :userPassword, :class => 'input' %>
       </p>
     </div>
 
     <div class="row">
-      <%= form.label 'User quotas:' %>
+      <%= form.label :zarafaQuotaSoft, 'User quotas:' %>
     </div>
 
     <div class="row">
@@ -89,18 +89,18 @@
   <div class="tab-content">
     <div class="row">
       <p class="four columns">
-        <%= form.label 'Admin:', :class => 'inline' %>
+        <%= form.label :zarafaAdmin, 'Admin:', :class => 'inline' %>
         <%= form.check_box :zarafaAdmin %>
       </p>
 
       <p class="four columns push_one">
-        <%= form.label 'Hidden from addressbook:', :class => 'inline' %>
+        <%= form.label :zarafaHidden, 'Hidden from addressbook:', :class => 'inline' %>
         <%= form.check_box :zarafaHidden %>
       </p>
     </div>
 
     <div class="row">
-      <%= form.label '"Send as" privilege:', :class => 'eight columns' %>
+      <%= form.label :zarafaSendAsPrivilege, 'This user can send emails as:', :class => 'eight columns' %>
       <%= form.hidden_field :authenticity_token, :value => form_authenticity_token %>
     </div>
 
@@ -114,5 +114,5 @@
       </div>
     </div>
   </div>
-</div>
 <% end %>
+</section>

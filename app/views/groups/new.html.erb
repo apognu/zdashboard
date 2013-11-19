@@ -1,7 +1,7 @@
 <%= form_for @group, url: groups_new_path do | form | %>
 <div class="row">
   <p class="field nine columns">
-    <%= form.label 'Identifier:' %>
+    <%= form.label :cn, 'Identifier:' %>
     <%= form.text_field :cn, :class => 'input' %>
   </p>
 
@@ -12,13 +12,13 @@
 
 <div class="row">
   <p class="field nine columns">
-    <%= form.label 'Group email address:' %>
-    <%= form.text_field :mail, :class => 'input' %></p>
+    <%= form.label :mail, 'Group email address:' %>
+    <%= form.text_field :mail, :class => 'input' %>
   </p>
 </div>
 
 <div class="row">
-  <%= form.label 'Members:', :class => 'eight columns' %>
+  <%= form.label :members, 'Members:', :class => 'eight columns' %>
   <%= form.hidden_field :authenticity_token, :value => form_authenticity_token %>
 </div>
 

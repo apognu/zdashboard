@@ -1,7 +1,7 @@
 <%= form_for @resource, url: resources_update_path do | form | %>
 <div class="row">
   <div class="field nine columns">
-    <%= form.label 'Internal name (read-only):' %>
+    <%= form.label :uid, 'Internal name (read-only):' %>
     <%= form.text_field :uid, :class => 'input', :readonly => true %>
   </div>
 
@@ -12,13 +12,13 @@
 
 <div class="row">
   <p class="field nine columns">
-    <%= form.label 'Email address:' %>
+    <%= form.label :mail, 'Email address:' %>
     <%= form.text_field :mail, :class => 'input' %>
   </p>
 </div>
 
 <div class="row">
-  <%= form.label 'Resource name:' %>
+  <%= form.label :sn, 'Resource name:' %>
 </div>
 
 <div class="row">
@@ -29,10 +29,10 @@
 
 <div class="row">
   <p class="labels three columns">
-    <%= form.label 'Resource type:' %>
+    <%= form.label :zarafaResourceType, 'Resource type:' %>
   </p>
   <p class="labels two columns push_four">
-    <%= form.label 'Quantity:' %>
+    <%= form.label :zarafaResourceCapacity, 'Quantity:' %>
   </p>
 </div>
 

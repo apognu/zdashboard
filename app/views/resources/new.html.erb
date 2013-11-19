@@ -1,7 +1,7 @@
 <%= form_for @resource, url: resources_new_path do | form | %>
 <div class="row">
   <div class="field nine columns">
-    <%= form.label 'Resource name:' %>
+    <%= form.label :sn, 'Resource name:' %>
     <%= form.text_field :sn, :class => 'input' %>
   </div>
 
@@ -12,11 +12,11 @@
     
 <div class="row">
   <p class="labels three columns">
-    <%= form.label 'Resource type:' %>
+    <%= form.label :zarafaResourceType, 'Resource type:' %>
   </p>
 
   <p class="labels two columns push_four">
-    <%= form.label 'Quantity:' %>
+    <%= form.label :zarafaResourceCapacity, 'Quantity:' %>
   </p>
 </div>
 
@@ -31,8 +31,8 @@
 
 <div class="row">
   <p class="field nine columns">
-    <%= form.label 'Main email address:' %>
-    <%= form.text_field :mail, :class => 'input' %></p>
+    <%= form.label :mail, 'Main email address:' %>
+    <%= form.text_field :mail, :class => 'input' %>
   </p>
 </div>
 <% end %>

@@ -1,7 +1,7 @@
 <%= form_for @user, url: users_new_path do | form | %>
 <div class="row">
   <div class="field nine columns">
-    <%= form.label 'Username:' %>
+    <%= form.label :uid, 'Username:' %>
     <%= form.text_field :uid, :class => 'input' %>
   </div>
 
@@ -11,7 +11,7 @@
 </div>
 
 <div class="row">
-  <%= form.label 'Full name:' %>
+  <%= form.label :givenName, 'Full name:' %>
 </div>
     
 <div class="row">
@@ -26,13 +26,13 @@
     
 <div class="row">
   <div class="field nine columns">
-    <%= form.label 'Main email address:' %>
+    <%= form.label :mail, 'Main email address:' %>
     <%= form.text_field :mail, :class => 'input' %>
   </div>
 </div>
 
 <div class="row">
-    <%= form.label 'User quotas:' %>
+    <%= form.label :zarafaQuotaSoft, 'User quotas:' %>
 </div>
     
 <div class="row">
