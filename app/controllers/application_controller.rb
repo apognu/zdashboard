@@ -51,6 +51,8 @@ class ApplicationController < ActionController::Base
           if user.zarafaAdmin == 1
             session[:user] = user.uid
 
+            flash[:success] = 'You have successfully authenticated into Zarafa Dashboard.'
+
             redirect_to(session[:return_to]) and return
           else
             raise InvalidCredentialsException, 'You are not authorized to access this part of ZDashboard.'
