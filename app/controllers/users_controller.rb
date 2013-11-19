@@ -42,6 +42,8 @@ class UsersController < ApplicationController
     @user.gidNumber = 1000;
     @user.homeDirectory = '/dev/null'
     @user.uidNumber = next_uidnumber
+    @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft]
+    @user.zarafaQuotaHard = user_params[:zarafaQuotaHard]
 
     if @user.valid?
       defgroup = Group.find(:first, :attribute => "cn", :value => "all");
@@ -77,6 +79,8 @@ class UsersController < ApplicationController
     @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil?
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+    @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft]
+    @user.zarafaQuotaHard = user_params[:zarafaQuotaHard]
 
     if ! user_params[:userPassword].empty?
       require 'securerandom'
@@ -138,8 +142,10 @@ class UsersController < ApplicationController
                                  :userPassword,
                                  :zarafaAdmin,
                                  :zarafaHidden,
+                                 :zarafaQuotaSoft,
+                                 :zarafaQuotaHard,
                                  :zarafaAliases => [],
-                                 :zarafaSendAsPrivilege => []
+                                 :zarafaSendAsPrivilege => [],
     )
   end
 
