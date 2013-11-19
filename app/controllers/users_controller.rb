@@ -76,7 +76,7 @@ class UsersController < ApplicationController
     @user.sn = user_params[:sn]
     @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}"
     @user.commonName = @user.displayName
-    @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil?
+    @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil? 
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft]
@@ -167,7 +167,10 @@ class UsersController < ApplicationController
 
   def uid_to_dn data
     data.reject! { | x | x.nil? or x.empty? }
-    data = data[0].split(",")
+
+    unless data.empty?
+      data = data[0].split(",")
+    end
  
     data.map! { | uid |
       privilege_user = User.find(uid)
