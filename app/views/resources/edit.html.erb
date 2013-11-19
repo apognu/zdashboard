@@ -42,10 +42,14 @@
 
     <div class="row">
       <div class="picker two columns">
-        <%= form.select(:zarafaResourceType, options_for_select([['Room', 'room'], ['Equipment', 'equipment']])) %>
+        <%= form.select(:zarafaResourceType, options_for_select([['Room', 'room'], ['Equipment', 'equipment']], @resource.zarafaResourceType)) %>
       </div>
       <p class="field push_three three columns">
+        <% if @resource.zarafaResourceType == "room" %>
         <%= form.number_field :zarafaResourceCapacity, :class => 'input', :min => 1, :readonly => true %>
+        <% else %>
+        <%= form.number_field :zarafaResourceCapacity, :class => 'input', :min => 1 %>
+        <% end %>
       </p>
     </div>
   </div>

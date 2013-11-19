@@ -60,6 +60,7 @@ class ResourcesController < UsersController
       @resource.displayName = @resource.givenName = @resource.sn = @resource.cn = resource_params[:sn]
       @resource.zarafaResourceType = resource_params[:zarafaResourceType]
       @resource.zarafaResourceCapacity = resource_params[:zarafaResourceCapacity]
+      @resource.zarafaResourceCapacity = 1 if @resource.zarafaResourceType == "room" or @resource.zarafaResourceType.empty?
 
       if @resource.valid?
         if @resource.save
