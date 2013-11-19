@@ -32,6 +32,10 @@ class ApplicationController < ActionController::Base
       @title = 'Authentication'
       @breadcrumbs.concat([ 'Authentication' ])
 
+      if @current_user.kind_of?(User)
+        redirect_to :root and return
+      end
+
       if request.post?
         raise RuntimeError, 'Both fields are mandatory, here.' if params.has_key?(:username) and (
                                                                   params[:username].empty? or
