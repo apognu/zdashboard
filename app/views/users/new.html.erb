@@ -1,48 +1,47 @@
 <%= form_for @user, url: users_new_path do | form | %>
 <div class="row">
-  <p class="field ten columns">
+  <div class="field nine columns">
     <%= form.label 'Username:' %>
     <%= form.text_field :uid, :class => 'input' %>
-  </p>
+  </div>
+
+  <div class="field three columns">
+    <p class="medium primary btn"><%= form.submit "Save the user" %></p>
+  </div>
 </div>
 
 <div class="row">
-    <%= form.label 'Full name:' %>
+  <%= form.label 'Full name:' %>
 </div>
     
 <div class="row">
-  <p class="field five columns">
+  <div class="field four columns">
     <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
-  </p>
+  </div>
 
-  <p class="field five columns">
+  <div class="field four columns push_one">
     <%= form.text_field :sn, :class => 'input', :placeholder => 'Last name' %>
-  </p>
+  </div>
 </div>
     
 <div class="row">
-  <p class="field ten columns">
+  <div class="field nine columns">
     <%= form.label 'Main email address:' %>
-    <%= form.text_field :mail, :class => 'input' %></p>
-  </p>
+    <%= form.text_field :mail, :class => 'input' %>
+  </div>
 </div>
 
 <div class="row">
-  <p class="field ten columns">
-    <%= form.label 'Quota soft:' %>
-    <%= form.text_field :zarafaQuotaSoft, :class => 'input' %></p>
-  </p>
+    <%= form.label 'User quotas:' %>
 </div>
+    
+<div class="row">
+  <div class="field four columns">
+    <%= form.text_field :zarafaQuotaSoft, :class => 'input', :placeholder => 'Soft quota limit' %>
+  </div>
 
-<div class="row">
-  <p class="field ten columns">
-    <%= form.label 'Quota hard:' %>
-    <%= form.text_field :zarafaQuotaHard, :class => 'input' %></p>
-  </p>
-</div>
-   
-<div class="row">
-  <p class="medium primary btn"><%= form.submit "Save the new user" %>
+  <div class="field four columns push_one">
+    <%= form.text_field :zarafaQuotaHard, :class => 'input', :placeholder => 'Hard quota limit' %>
+  </div>
 </div>
 <% end %>
-</div>

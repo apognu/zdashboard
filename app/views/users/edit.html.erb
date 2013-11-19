@@ -10,14 +10,18 @@
   <%= form_for @user, url: users_update_path do | form | %>
   <div class="tab-content active">
     <div class="row">
-      <p class="field ten columns">
+      <p class="field nine columns">
         <%= form.label 'Username (read-only):' %>
         <%= form.text_field :uid, :class => 'input', :readonly => true %>
       </p>
+
+      <div class="field three columns">
+        <p class="medium primary btn"><%= form.submit "Save #{@user.uid}" %></p>
+      </div>
     </div>
 
     <div class="row">
-      <p class="field ten columns">
+      <p class="field nine columns">
         <%= form.label 'Email address:' %>
         <%= form.text_field :mail, :class => 'input' %>
       </p>
@@ -28,52 +32,53 @@
     </div>
 
     <div class="row">
-      <p class="field five columns">
+      <p class="field four columns">
         <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
       </p>
-      <p class="field five columns">
-      <%= form.text_field :sn, :class => 'input', :placeholder => 'Last name' %>
+      <p class="field four columns push_one">
+        <%= form.text_field :sn, :class => 'input', :placeholder => 'Last name' %>
       </p>
     </div>
 
     <div class="row">
-      <p class="field ten columns">
+      <p class="field nine columns">
         <%= form.label 'New password:' %>
         <%= form.password_field :userPassword, :class => 'input' %>
       </p>
     </div>
+
     <div class="row">
-      <p class="field ten columns">
-        <%= form.label 'Quota soft:' %>
-        <%= form.text_field :zarafaQuotaSoft, :class => 'input' %>
-      </p>
+      <%= form.label 'User quotas:' %>
     </div>
+
     <div class="row">
-      <p class="field ten columns">
-        <%= form.label 'Quota hard:' %>
-        <%= form.text_field :zarafaQuotaHard, :class => 'input' %>
+      <p class="field four columns">
+        <%= form.text_field :zarafaQuotaSoft, :class => 'input', :placeholder => 'Soft quota limit' %>
+      </p>
+
+      <p class="field four columns push_one">
+        <%= form.text_field :zarafaQuotaHard, :class => 'input', :placeholder => 'Hard quota limit' %>
       </p>
     </div>
   </div>
 
   <div class="tab-content">
     <div class="row">
-      <%= form.label 'Aliases:', :class => 'eight columns' %>
-      <p class="small default btn two columns"><a href="#" data-aliastoggle>Add an alias</a></p>
+      <p class="small default btn three columns"><a href="#" data-aliastoggle>Add an alias</a></p>
     </div>
       
     <div class="row">
-      <div class="twelve columns field">
+      <div class="nine columns field">
         <ul>
           <% @user.zarafaAliases(true).each do | mailalias | %>
             <li class="row">
-              <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input ten columns', 'data-aliasfield' => 'test' %>
+              <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input nine columns', 'data-aliasfield' => 'test' %>
               <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
             </li>
           <% end %>
 
           <li class="row">
-            <%= form.text_field :zarafaAliases, :multiple => true, :value => '', :class => 'input ten columns', 'data-aliasfield' => 'test' %>
+            <%= form.text_field :zarafaAliases, :multiple => true, :value => '', :class => 'input nine columns', 'data-aliasfield' => 'test' %>
             <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
           </li>
         </ul>
@@ -105,16 +110,11 @@
       <div class="twelve columns field">
         <ul>
           <li class="row">
-            <%= form.text_field :zarafaSendAsPrivilege, :multiple => true, :value => @user.zarafaSendAsPrivilege, :class => 'ten columns', 'data-sendasfield' => 'test' %>
+            <%= form.text_field :zarafaSendAsPrivilege, :multiple => true, :value => @user.zarafaSendAsPrivilege, :class => 'nine columns', 'data-sendasfield' => 'test' %>
           </li>
         </ul>
       </div>
     </div>
   </div>
-  </div>
-</div>
-
-<div class="row">
-  <p class="medium primary btn"><%= form.submit "Save #{@user.uid}" %>
 </div>
 <% end %>

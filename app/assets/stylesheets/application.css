@@ -59,3 +59,17 @@ footer.row {
 footer p {
   font-size: 0.9em;
 }
+
+div.field p.btn {
+  margin-bottom: 0;
+  margin-top: 23px;
+  width: 100% !important;
+}
+
+div.field p.btn input {
+  padding: 0 22px;
+}
+
+.btn.medium.icon-left a {
+  font-weight: 300;
+}

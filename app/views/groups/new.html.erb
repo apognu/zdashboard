@@ -1,13 +1,17 @@
 <%= form_for @group, url: groups_new_path do | form | %>
 <div class="row">
-  <p class="field ten columns">
+  <p class="field nine columns">
     <%= form.label 'Identifier:' %>
     <%= form.text_field :cn, :class => 'input' %>
   </p>
+
+  <div class="field three columns">
+    <p class="medium primary btn"><%= form.submit "Save the group" %></p>
+  </div>
 </div>
 
 <div class="row">
-  <p class="field ten columns">
+  <p class="field nine columns">
     <%= form.label 'Group email address:' %>
     <%= form.text_field :mail, :class => 'input' %></p>
   </p>
@@ -22,13 +26,9 @@
   <div class="twelve columns field">
     <ul>
         <li class="row">
-        <%= form.text_field :members, :multiple => true, :value => @group_members, :class => 'ten columns', 'data-memberfield' => 'true' %>
+          <%= form.text_field :members, :multiple => true, :value => @group_members, :class => 'nine columns', 'data-memberfield' => 'true' %>
         </li>
     </ul>
   </div>
-</div>
-
-<div class="row">
-  <p class="medium primary btn"><%= form.submit "Save the new group" %>
 </div>
 <% end %>
