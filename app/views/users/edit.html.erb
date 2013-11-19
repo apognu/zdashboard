@@ -82,21 +82,19 @@
     </div>
 
     <div class="row">
-      <div class="medium primary btn two columns icon-left icon-plus-circled"><a href="#" data-aliastoggle>Add</a></div>
+      <div class="medium info btn two columns icon-left icon-plus-circled"><a href="#" data-aliastoggle>Add</a></div>
     </div>
   </div>
 
   <div class="tab-content">
     <div class="row">
-      <p>
-      <%= form.label 'Admin:', :class => 'inline' %>
+      <p class="four columns">
+        <%= form.label 'Admin:', :class => 'inline' %>
         <%= form.check_box :zarafaAdmin %>
       </p>
-    </div>
 
-    <div class="row">
-      <p>
-      <%= form.label 'Hidden from addressbook:', :class => 'inline' %>
+      <p class="four columns push_one">
+        <%= form.label 'Hidden from addressbook:', :class => 'inline' %>
         <%= form.check_box :zarafaHidden %>
       </p>
     </div>
@@ -107,10 +105,10 @@
     </div>
 
     <div class="row">
-      <div class="twelve columns field">
+      <div class="nine columns field">
         <ul>
-          <li class="row">
-            <%= form.text_field :zarafaSendAsPrivilege, :multiple => true, :value => @user.zarafaSendAsPrivilege, :class => 'nine columns', 'data-sendasfield' => 'test' %>
+          <li>
+            <%= form.text_field :zarafaSendAsPrivilege, :multiple => true, :value => @user.zarafaSendAsPrivilege, 'data-sendasfield' => 'test' %>
           </li>
         </ul>
       </div>

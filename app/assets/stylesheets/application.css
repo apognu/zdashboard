@@ -73,3 +73,7 @@ div.field p.btn input {
 .btn.medium.icon-left a {
   font-weight: 300;
 }
+
+.select2-container {
+  display: block !important;
+}
