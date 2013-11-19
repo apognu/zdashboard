@@ -13,13 +13,10 @@
 </head>
 <body>
 
-  <header class="row">
-    <h1 class="ten columns columns">ZDashboard</h1>
-    <p class="two columns"><%= image_tag 'zarafa.jpg' %></p>
-  </header>
+  <nav class="navbar">
+    <h1 class="four columns logo"><%= image_tag 'zarafa.png' %></h1>
 
-  <nav class="row navbar">
-    <ul class="twelve columns">
+    <ul>
       <li><%= link_to('Home', root_path) %></li>
       <li><%= link_to('Users', users_path) %></li>
       <li><%= link_to('Groups', groups_path) %></li>
