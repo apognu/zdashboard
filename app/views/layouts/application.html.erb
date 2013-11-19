@@ -24,11 +24,13 @@
     </ul>
   </nav>
 
+  <div class="row" id="authbar">
   <% if ! @current_user.nil? %>
-    <div class="row" id="authbar">
-      <p>You are logged as <%= @current_user.displayName %> (<%= @current_user.uid %>) - <%= link_to 'Logout', logout_path %></p>
-    </div>
+    <p>You are logged as <%= @current_user.displayName %> (<%= @current_user.uid %>) - <%= link_to 'Logout', logout_path %></p>
+  <% else %>
+    <p>You are unauthenticated.</p>
   <% end %>
+  </div>
 
 <% if ! flash.empty? or ! @messages.nil? %>
   <div class="row">
@@ -48,7 +50,7 @@
 <%= yield %>
 
   <footer class="row">
-    <p>Zarafa Dashboard by Antoine POPINEAU</p>
+    <p>Zarafa Dashboard by <a href="http://www.smile.fr/">Smile, Open Source Solutions</a></p>
   </footer>
 
 </body>

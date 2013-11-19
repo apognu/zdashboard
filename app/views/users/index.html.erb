@@ -1,8 +1,8 @@
 <div class="row">
-  <form id="search_users"><p class="field six columns" style="margin-top:16px;">
+  <form id="search_users"><p class="field six columns">
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
-    <input type="text" name="search" placeholder="username" class="input" />
-  </p></form>
+    <input type="text" name="search" placeholder="Look for users..." class="input" />
+  </form>
   <p class="medium primary btn icon-left entypo icon-plus-circled right-button"><%= link_to 'Create a new user', users_new_path %></p>
 </div>
 

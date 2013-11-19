@@ -1,5 +1,5 @@
 class ZDashboardController < ApplicationController
   def index
-    @title = 'Home page'
+    @title = 'Zarafa Dashboard'
   end
 end

@@ -8,6 +8,14 @@ h1 {
   bottom: 6px;
 }
 
+p {
+  font-size: 1em;
+}
+
+form {
+  margin: 0;
+}
+
 header p {
   margin: 0;
 }
@@ -33,6 +41,7 @@ form li div.btn {
 }
 
 .navbar {
+  margin-bottom: 0;
   padding: 0 40px;
 }
 
