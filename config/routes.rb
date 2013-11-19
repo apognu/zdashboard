@@ -6,6 +6,7 @@ Zarafadashboard::Application.routes.draw do
   get '/logout', to: 'application#logout'
 
   get '/users', to: 'users#index'
+  post '/users', to: 'users#index'
 
   get '/users/new', to: 'users#new'
 
