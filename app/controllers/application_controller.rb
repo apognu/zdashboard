@@ -30,6 +30,7 @@ class ApplicationController < ActionController::Base
   def auth
     begin
       @title = 'Authentication'
+      @breadcrumbs.concat([ 'Authentication' ])
 
       if request.post?
         raise RuntimeError, 'Both fields are mandatory, here.' if params.has_key?(:username) and (
