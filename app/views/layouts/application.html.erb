@@ -28,7 +28,7 @@
   </nav>
 
   <% if ! @current_user.nil? %>
-    <div class="row">
+    <div class="row" id="authbar">
       <p>You are logged as <%= @current_user.displayName %> (<%= @current_user.uid %>) - <%= link_to 'Logout', logout_path %></p>
     </div>
   <% end %>
