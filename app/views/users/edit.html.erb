@@ -83,6 +83,7 @@
 
     <div class="row">
       <div class="medium info btn two columns icon-left icon-plus-circled"><a href="#" data-aliastoggle>Add</a></div>
+      <p class="medium primary btn"><%= form.submit "Save #{@user.uid}" %></p>
     </div>
   </div>
 
@@ -111,6 +112,12 @@
             <%= form.text_field :zarafaSendAsPrivilege, :multiple => true, :value => @user.zarafaSendAsPrivilege, 'data-sendasfield' => 'test' %>
           </li>
         </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field three columns">
+        <p class="medium primary btn"><%= form.submit "Save #{@user.uid}" %></p>
       </div>
     </div>
   </div>
