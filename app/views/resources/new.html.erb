@@ -1,11 +1,5 @@
 <%= form_for @resource, url: resources_new_path do | form | %>
-<div class="row">
-  <p class="field ten columns">
-    <%= form.label 'Uid:' %>
-    <%= form.text_field :uid, :class => 'input' %>
-  </p>
-</div>
-
+<p><%= @resource.errors.full_messages %></p>
 <div class="row">
     <%= form.label 'Resource name:' %>
 </div>
@@ -31,7 +25,7 @@
     <%= form.select(:zarafaResourceType, options_for_select([['Room', 'room'], ['Equipment', 'equipment']])) %>
   </div>
   <p class="field push_three three columns">
-    <%= form.number_field :zarafaResourceCapacity, :class => 'input', :value => 1, :min => 1 %>
+    <%= form.number_field :zarafaResourceCapacity, :class => 'input', :value => 1, :min => 1, :disabled => true %>
   </p>
 </div>
 

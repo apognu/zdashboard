@@ -45,7 +45,7 @@
         <%= form.select(:zarafaResourceType, options_for_select([['Room', 'room'], ['Equipment', 'equipment']])) %>
       </div>
       <p class="field push_three three columns">
-        <%= form.number_field :zarafaResourceCapacity, :class => 'input', :min => 1 %>
+        <%= form.number_field :zarafaResourceCapacity, :class => 'input', :min => 1, :disabled => true %>
       </p>
     </div>
   </div>

@@ -22,12 +22,14 @@ class ResourcesController < UsersController
   def save
     @title = 'Create a new resource'
 
+    params[:resource][:uid] = resource_params[:sn].parameterize('_')
     @resource = Resource.new(resource_params[:uid])
     @resource.zarafaSharedStoreOnly = 1
     @resource.userPassword = ""
     @resource.uidNumber = next_uidnumber
     @resource.zarafaResourceType = resource_params[:zarafaResourceType]
     @resource.zarafaResourceCapacity = resource_params[:zarafaResourceCapacity]
+    @resource.zarafaResourceCapacity = 1 if @resource.zarafaResourceType == "room"
     @resource.zarafaAdmin = 0
     @resource.zarafaAccount = 1
     @resource.zarafaHidden = 0
@@ -67,6 +69,15 @@ class ResourcesController < UsersController
       else
         @messages[:danger] = 'Some fields are in error, unable to save the resource'
       end
+    end
+  end
+
+  def delete
+    resource = Resource.find(params[:uid])
+
+    if resource.destroy
+      flash[:success] = "Resource '#{resource.uid}' was successfully deleted."
+      redirect_to resources_path
     end
   end
 
