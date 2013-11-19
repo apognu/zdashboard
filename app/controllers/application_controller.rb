@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
         ldap.bind user.dn, params[:password]
 
         if ldap.bound?
-          if user.zarafaAdmin
+          if user.zarafaAdmin == 1
             session[:user] = user.uid
 
             redirect_to(session[:return_to]) and return
