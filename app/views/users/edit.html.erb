@@ -64,25 +64,25 @@
 
   <div class="tab-content">
     <div class="row">
-      <p class="small default btn three columns"><a href="#" data-aliastoggle>Add an alias</a></p>
-    </div>
-      
-    <div class="row">
       <div class="nine columns field">
         <ul>
           <% @user.zarafaAliases(true).each do | mailalias | %>
             <li class="row">
               <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input nine columns', 'data-aliasfield' => 'test' %>
-              <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
+              <div class="small danger btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove</a></div>
             </li>
           <% end %>
 
           <li class="row">
             <%= form.text_field :zarafaAliases, :multiple => true, :value => '', :class => 'input nine columns', 'data-aliasfield' => 'test' %>
-            <div class="small default btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove alias</a></div>
+            <div class="small danger btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove</a></div>
           </li>
         </ul>
       </div>
+    </div>
+
+    <div class="row">
+      <div class="medium primary btn two columns icon-left icon-plus-circled"><a href="#" data-aliastoggle>Add</a></div>
     </div>
   </div>
 
