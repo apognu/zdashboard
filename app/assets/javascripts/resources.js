@@ -46,10 +46,10 @@ $(function()
 
   $("#resource_zarafaResourceType").on('change', function() {
     if ($(this).val() == "room") {
-      $('#resource_zarafaResourceCapacity').attr('disabled', true);
+      $('#resource_zarafaResourceCapacity').attr('readonly', true);
       $('#resource_zarafaResourceCapacity').val(1);
     } else {
-      $('#resource_zarafaResourceCapacity').attr('disabled', false);
+      $('#resource_zarafaResourceCapacity').attr('readonly', false);
     }
   });
 });
