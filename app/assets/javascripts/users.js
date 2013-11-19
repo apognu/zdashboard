@@ -23,7 +23,6 @@ $(function()
   var xhr = null;
 
   $("#search_users input[name='search']").on('keyup', function() {
-    console.log("pass => "+$(this).val());
     if ($(this).val().length > 0) {
       console.log("request");
       if (xhr != null)

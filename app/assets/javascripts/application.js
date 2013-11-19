@@ -12,3 +12,21 @@
 //
 //= require_directory .
 //= require_directory ./ui 
+
+$(function() {
+  $("input[name='search']").on("keypress", function() {
+    if(!event && window.event) {
+      event = window.event;
+    } 
+    // IE 
+    if(event.keyCode == 13) {  
+      event.returnValue = false;
+      event.cancelBubble = true;
+    } 
+    // DOM 
+    if(event.which == 13) { 
+      event.preventDefault();
+      event.stopPropagation();
+    } 
+  });
+});
