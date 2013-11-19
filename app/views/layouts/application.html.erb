@@ -23,6 +23,7 @@
       <li><%= link_to('Home', root_path) %></li>
       <li><%= link_to('Users', users_path) %></li>
       <li><%= link_to('Groups', groups_path) %></li>
+      <li><%= link_to('Resources', resources_path) %></li>
     </ul>
   </nav>
 
@@ -32,9 +33,12 @@
     </div>
   <% end %>
 
-<% if ! flash.empty? %>
+<% if ! flash.empty? or ! @messages.nil? %>
   <div class="row">
   <% flash.each do | type, message | %>
+    <div class="alert <%= type %>"><%= message %></div>
+  <% end %>
+  <% @messages.each do | type, message | %>
     <div class="alert <%= type %>"><%= message %></div>
   <% end %>
   </div>

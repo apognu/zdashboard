@@ -4,14 +4,21 @@ class UsersController < ApplicationController
   def index
     @title = 'User management'
 
-    page = 0
-    page = (params[:page].to_i - 1) if params[:page].present?
-    users_per_page = 5
+    if request.post?
+      page = 0
+      page = (params[:page].to_i - 1) if params[:page].present?
+      users_per_page = 5
 
-    # I DON'T WANT TO DO THIS
-    @users = User.all
-    @pages = paginate(users_per_page, @users.length, page)
-    @users = @users.slice(users_per_page * page, users_per_page)
+      # I DON'T WANT TO DO THIS
+      if params[:search] == "*"
+        @users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
+      else
+        @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))(!(zarafaResourceType=*)))")
+      end
+#      @pages = paginate(users_per_page, @users.length, page)
+#      @users = @users.slice(users_per_page * page, users_per_page)
+      render :partial => "users", :layout => false
+    end
   end
 
   def new
@@ -26,13 +33,17 @@ class UsersController < ApplicationController
     @user = User.new(user_params[:uid])
     @user.mail = user_params[:mail]
     @user.givenName = user_params[:givenName]
-    @user.surname = user_params[:surname]
-    @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
+    @user.sn = user_params[:sn]
+    @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}" unless user_params[:givenName].empty? and user_params[:sn].empty?
     @user.commonName = @user.displayName
+    @user.zarafaAccount = 1;
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
-    uidNumber = get_next_uidnumber
-    @user.uidNumber = uidNumber
+    @user.gidNumber = 1000;
+    @user.homeDirectory = '/dev/null'
+    @user.uidNumber = next_uidnumber
+    @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft]
+    @user.zarafaQuotaHard = user_params[:zarafaQuotaHard]
 
     if @user.valid?
       defgroup = Group.find(:first, :attribute => "cn", :value => "all");
@@ -42,6 +53,8 @@ class UsersController < ApplicationController
         flash[:success] = "User '#{@user.uid}' was successfully created."
         redirect_to users_path and return
       end
+    else
+      @messages[:danger] = 'Some fields are in error, unable to save the user'
     end
 
     render :new
@@ -52,6 +65,7 @@ class UsersController < ApplicationController
     users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
     @user.zarafaSendAsPrivilege = users_list.to_json
     @title = "Edit user #{@user.uid}"
+    @message = :message
   end
 
   def update
@@ -59,17 +73,32 @@ class UsersController < ApplicationController
     @user.mail = user_params[:mail]
     @user.zarafaAliases = user_params[:zarafaAliases]
     @user.givenName = user_params[:givenName]
-    @user.surname = user_params[:surname]
-    @user.displayName = "#{user_params[:givenName]} #{user_params[:surname]}"
-    @user.commonName = "#{user_params[:givenName]} #{user_params[:surname]}"
+    @user.sn = user_params[:sn]
+    @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}"
+    @user.commonName = @user.displayName
     @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil?
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+    @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft]
+    @user.zarafaQuotaHard = user_params[:zarafaQuotaHard]
+
+    if ! user_params[:userPassword].empty?
+      require 'securerandom'
+
+      # salt = SecureRandom.urlsage_base64(12)
+      salt = 'azerty'
+      digest = Base64.encode64(Digest::SHA1.digest(user_params[:userPassword] + salt) + salt).chomp
+      
+      @user.userPassword = '{SSHA}' + digest
+    end
+
     if @user.valid?
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully edited."
         redirect_to users_path and return
       end
+    else
+      @messages[:danger] = 'Some fields are in error, unable to save the user'
     end
 
     @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege unless @user.zarafaSendAsPrivilege.nil?
@@ -91,7 +120,7 @@ class UsersController < ApplicationController
   end
 
   def list
-    users_list = User.find(:all, :attributes => ['uid', 'cn'], :value => "*#{params[:q]}*")
+    users_list = User.find(:all, :filter => "(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*))")
     list = []
     users_list.each do | user |
       tmp = {
@@ -108,12 +137,15 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:uid,
                                  :givenName,
-                                 :surname,
+                                 :sn,
                                  :mail,
+                                 :userPassword,
                                  :zarafaAdmin,
                                  :zarafaHidden,
+                                 :zarafaQuotaSoft,
+                                 :zarafaQuotaHard,
                                  :zarafaAliases => [],
-                                 :zarafaSendAsPrivilege => []
+                                 :zarafaSendAsPrivilege => [],
     )
   end
 
@@ -144,7 +176,7 @@ class UsersController < ApplicationController
     }
   end
 
-  def get_next_uidnumber
+  def next_uidnumber
     users = User.find(:all, :attribute => 'uidNumber')
 
     max = 0
@@ -155,5 +187,4 @@ class UsersController < ApplicationController
     end
     return max+1
   end
-
 end

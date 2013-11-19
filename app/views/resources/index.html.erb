@@ -1,0 +1,25 @@
+<div class="row">
+  <form id="search_resources"><p class="field six columns" style="margin-top:16px;">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+    <input type="text" name="search" placeholder="resource name" class="input" />
+  </p></form>
+  <p class="medium primary btn icon-left entypo icon-plus-circled right-button"><%= link_to 'Create a new resource', resources_new_path %></p>
+</div>
+
+<div class="row" id="resources_list">
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>uid</th>
+        <th>Resource name</th>
+        <th>Resource type</th>
+        <th>E-mail address</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => "resources" %>
+    </tbody>
+  </table>
+
+</div>

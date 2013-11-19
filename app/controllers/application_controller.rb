@@ -3,33 +3,66 @@ class ApplicationController < ActionController::Base
 
   before_filter :authorize
 
-  def authorize
-    if session[:user]
-      if @current_user = User.find(session[:user])
-        return true
-      end
-    end
+  class InvalidCredentialsException < Exception
+  end
 
-    auth
+  def initialize
+    @messages = Hash.new
+    super
+  end
+
+  def authorize
+    begin
+      if session[:user]
+        if @current_user = User.find(session[:user])
+          return true
+        end
+      end
+
+      auth
+    rescue ActiveLdap::ConnectionError
+      @messages[:danger] = 'We could not connect to the backend directory, try again later.' 
+      render 'application/auth' and return
+    end
   end
 
   def auth
-    if ! params[:username].nil? and ! params[:password].nil?
-      user = User.find(params[:username])
+    begin
+      if request.post?
+        raise RuntimeError, 'Both fields are mandatory, here.' if params.has_key?(:username) and (
+                                                                  params[:username].empty? or
+                                                                  params[:password].empty?)
 
-      if '{sha256}' << Digest::SHA2.new.base64digest(params[:password]) == user.userPassword
-        if user.zarafaAdmin
-          session[:user] = user.uid
+        user = User.find(params[:username])
 
-          redirect_to(session[:return_to]) and return
-          return
+        ldap = LDAP::Conn.new YAML.load_file("#{Rails.root}/config/ldap.yml")[Rails.env]['host']
+        ldap.set_option(LDAP::LDAP_OPT_PROTOCOL_VERSION, 3)
+        ldap.bind user.dn, params[:password]
+
+        if ldap.bound?
+          if user.zarafaAdmin
+            session[:user] = user.uid
+
+            redirect_to(session[:return_to]) and return
+          else
+            raise InvalidCredentialsException, 'You are not authorized to access this part of ZDashboard.'
+          end
+        else
+          raise InvalidCredentialsException, 'The given credentials are incorrect.'
         end
       end
+
+      session[:return_to] = request.original_url
+      render 'application/auth' and return
+    rescue RuntimeError => error
+      @messages[:danger] = error
+    rescue ActiveLdap::EntryNotFound, LDAP::ResultError
+      @messages[:danger] = 'The given credentials are incorrect.'
+      render 'application/auth' and return
+    rescue InvalidCredentialsException => error
+      @messages[:danger] = error
+      render 'application/auth' and return
     end
-
-    session[:return_to] = request.original_url
-
-    render 'application/auth' and return
   end
 
   def logout

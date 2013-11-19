@@ -1,0 +1,42 @@
+<%= form_for @resource, url: resources_new_path do | form | %>
+<div class="row">
+    <%= form.label 'Resource name:' %>
+</div>
+    
+<div class="row">
+  <p class="field ten columns">
+    <%= form.text_field :sn, :class => 'input' %>
+  </p>
+</div>
+
+<div class="row">
+  <p class="labels five columns">
+    <%= form.label 'Resource type:' %>
+  </p>
+
+  <p class="labels five columns">
+    <%= form.label 'Quantity:' %>
+  </p>
+</div>
+
+<div class="row">
+  <div class="picker two columns">
+    <%= form.select(:zarafaResourceType, options_for_select([['Room', 'room'], ['Equipment', 'equipment']])) %>
+  </div>
+  <p class="field push_three three columns">
+    <%= form.number_field :zarafaResourceCapacity, :class => 'input', :value => 1, :min => 1, :readonly => true %>
+  </p>
+</div>
+
+<div class="row">
+  <p class="field ten columns">
+    <%= form.label 'Main email address:' %>
+    <%= form.text_field :mail, :class => 'input' %></p>
+  </p>
+</div>
+    
+<div class="row">
+  <p class="medium primary btn"><%= form.submit "Save the new resource" %>
+</div>
+<% end %>
+</div>

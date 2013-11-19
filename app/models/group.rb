@@ -6,7 +6,7 @@ class Group < ActiveLdap::Base
 
   has_many :members, :class => 'User', :wrap => 'memberUid', :primary_key => 'uid'
 
-  validates :cn, :presence => true, format: { with: /\A[a-zA-Z.-]+\z/, message: "only allows letters, numbers, dashes and dots" }
+  validates :cn, :presence => true, format: { with: /\A[0-9a-zA-Z._-]+\z/ }
   validates :mail, :presence => true
 #  validates :members, :presence => true
 end

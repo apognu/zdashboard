@@ -32,7 +32,26 @@
         <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
       </p>
       <p class="field five columns">
-      <%= form.text_field :surname, :class => 'input', :placeholder => 'Last name' %>
+      <%= form.text_field :sn, :class => 'input', :placeholder => 'Last name' %>
+      </p>
+    </div>
+
+    <div class="row">
+      <p class="field ten columns">
+        <%= form.label 'New password:' %>
+        <%= form.password_field :userPassword, :class => 'input' %>
+      </p>
+    </div>
+    <div class="row">
+      <p class="field ten columns">
+        <%= form.label 'Quota soft:' %>
+        <%= form.text_field :zarafaQuotaSoft, :class => 'input' %>
+      </p>
+    </div>
+    <div class="row">
+      <p class="field ten columns">
+        <%= form.label 'Quota hard:' %>
+        <%= form.text_field :zarafaQuotaHard, :class => 'input' %>
       </p>
     </div>
   </div>

@@ -16,7 +16,7 @@
   </p>
 
   <p class="field five columns">
-    <%= form.text_field :surname, :class => 'input', :placeholder => 'Last name' %>
+    <%= form.text_field :sn, :class => 'input', :placeholder => 'Last name' %>
   </p>
 </div>
     
@@ -26,7 +26,21 @@
     <%= form.text_field :mail, :class => 'input' %></p>
   </p>
 </div>
-    
+
+<div class="row">
+  <p class="field ten columns">
+    <%= form.label 'Quota soft:' %>
+    <%= form.text_field :zarafaQuotaSoft, :class => 'input' %></p>
+  </p>
+</div>
+
+<div class="row">
+  <p class="field ten columns">
+    <%= form.label 'Quota hard:' %>
+    <%= form.text_field :zarafaQuotaHard, :class => 'input' %></p>
+  </p>
+</div>
+   
 <div class="row">
   <p class="medium primary btn"><%= form.submit "Save the new user" %>
 </div>

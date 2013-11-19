@@ -6,6 +6,7 @@ Zarafadashboard::Application.routes.draw do
   get '/logout', to: 'application#logout'
 
   get '/users', to: 'users#index'
+  post '/users', to: 'users#index'
 
   get '/users/new', to: 'users#new'
 
@@ -47,4 +48,23 @@ Zarafadashboard::Application.routes.draw do
   get '/groups/:cn/delete', to: 'groups#delete',
                             as: :groups_delete,
                             constraints: { cn: /[^\/]+/ }
+
+  get '/resources', to: 'resources#index'
+  post '/resources', to: 'resources#index'
+
+  get '/resources/new', to: 'resources#new'
+  post '/resources/new', to: 'resources#save',
+                         as: :resources_save
+
+  get '/resources/:uid/edit', to: 'resources#edit',
+                              as: :resources_edit,
+                              constraints: { uid: /[^\/]+/ }
+
+  patch '/resources/:uid/edit', to: 'resources#edit',
+                                as: :resources_update,
+                                constraints: { uid: /[^\/]+/ }
+
+  get '/resources/:uid/delete', to: 'resources#delete',
+                                as: :resources_delete,
+                                constraints: { uid: /[^\/]+/ }
 end

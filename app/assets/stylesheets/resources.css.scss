@@ -1,0 +1,11 @@
+.picker {
+  margin: 0;
+}
+
+form {
+  p {
+    &.labels.five.columns {
+      margin-bottom: 0;
+    }
+  }
+}
