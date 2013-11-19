@@ -1,5 +1,6 @@
 body {
   font-size: 0.9em;
+  font-weight: 400;
 }
 
 h1 {
@@ -13,7 +14,7 @@ header p {
 
 h2 {
   font-size: 1.4em;
-  font-weight: normal;
+  font-weight: 300;
   margin-bottom: 20px;
   border-bottom: 5px solid #236bb0;
 }
