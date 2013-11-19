@@ -13,7 +13,7 @@ class UsersController < ApplicationController
       if params[:search] == "*"
         @users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
       else
-        @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))(!(zarafaResourceType=*))")
+        @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))(!(zarafaResourceType=*)))")
       end
 #      @pages = paginate(users_per_page, @users.length, page)
 #      @users = @users.slice(users_per_page * page, users_per_page)
