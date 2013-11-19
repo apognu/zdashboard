@@ -9,14 +9,12 @@ class UsersController < ApplicationController
       page = (params[:page].to_i - 1) if params[:page].present?
       users_per_page = 5
 
-      # I DON'T WANT TO DO THIS
       if params[:search] == "*"
         @users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
       else
         @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))(!(zarafaResourceType=*)))")
       end
-#      @pages = paginate(users_per_page, @users.length, page)
-#      @users = @users.slice(users_per_page * page, users_per_page)
+
       render :partial => "users", :layout => false
     end
   end
