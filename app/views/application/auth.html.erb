@@ -1,19 +1,19 @@
 <%= form_tag(auth_path, method: 'post') do %>
   <div class="row">
-    <p class="field ten columns">
+    <p class="field eight columns push_two">
         <%= label_tag(:username, 'Username:') %>
         <%= text_field_tag(:username, '', class: 'input') %>
     </p>
   </div>
 
   <div class="row">
-    <p class="field ten columns">
+    <p class="field eight columns push_two">
         <%= label_tag(:password, 'Password:') %>
         <%= password_field_tag(:password, '', class: 'input') %>
     </p>
   </div>
 
   <div class="row">
-    <p class="medium primary btn"><%= submit_tag "Authenticate" %>
+    <p class="medium primary btn push_two"><%= submit_tag "Authenticate" %>
   </div>
 <% end %>
