@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   def initialize
     @breadcrumbs = []
     @messages = Hash.new
+
     super
   end
 
@@ -23,6 +24,7 @@ class ApplicationController < ActionController::Base
       auth
     rescue ActiveLdap::ConnectionError
       @messages[:danger] = 'We could not connect to the backend directory, try again later.' 
+
       render 'application/auth' and return
     end
   end
@@ -68,9 +70,11 @@ class ApplicationController < ActionController::Base
       @messages[:danger] = error
     rescue ActiveLdap::EntryNotFound, LDAP::ResultError
       @messages[:danger] = 'The given credentials are incorrect.'
+
       render 'application/auth' and return
     rescue InvalidCredentialsException => error
       @messages[:danger] = error
+
       render 'application/auth' and return
     end
   end
