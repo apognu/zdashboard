@@ -67,4 +67,9 @@ Zarafadashboard::Application.routes.draw do
   get '/resources/:uid/delete', to: 'resources#delete',
                                 as: :resources_delete,
                                 constraints: { uid: /[^\/]+/ }
+
+  if Rails.env.production?
+    match '*not_found', to: 'z_dashboard#error_404',
+                        via: [ :get, :post ]
+  end
 end
