@@ -4,6 +4,7 @@ class GroupsController < ApplicationController
 
   def index
     @title = 'Group management'
+    @breadcrumbs.concat([ crumbs[:groups] ])
 
     page = 0
     page = (params[:page].to_i - 1) if params[:page].present?
@@ -16,6 +17,7 @@ class GroupsController < ApplicationController
 
   def new
     @title = 'Create a new group'
+    @breadcrumbs.concat([ crumbs[:groups], 'Create a new group' ])
 
     @group = Group.new
   end
@@ -57,11 +59,14 @@ class GroupsController < ApplicationController
   end
 
   def edit
-
     @group = Group.find(params[:cn])
+
     members_list = uid_to_select @group.members
+
     @group_members = members_list.to_json
+
     @title = "Edit group #{@group.cn}"
+    @breadcrumbs.concat([ crumbs[:groups], "Edit group #{@group.cn}" ])
   end
 
   def update
@@ -125,5 +130,11 @@ class GroupsController < ApplicationController
       end
     end
     return max+1
+  end
+
+  def crumbs
+    {
+      :groups   => { :title => 'Groups management', :link => :groups }
+    }
   end
 end

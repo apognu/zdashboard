@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   end
 
   def initialize
+    @breadcrumbs = []
     @messages = Hash.new
     super
   end

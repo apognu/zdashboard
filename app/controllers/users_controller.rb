@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def index
     @title = 'User management'
+    @breadcrumbs.concat([ crumbs[:users] ])
 
     if request.post?
       page = 0
@@ -21,6 +22,7 @@ class UsersController < ApplicationController
 
   def new
     @title = 'Create a new user'
+    @breadcrumbs.concat([ crumbs[:users], 'Create a new user' ])
 
     @user = User.new
   end
@@ -60,10 +62,13 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:uid])
+
     users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
+
     @user.zarafaSendAsPrivilege = users_list.to_json
+
     @title = "Edit user #{@user.uid}"
-    @message = :message
+    @breadcrumbs.concat([ crumbs[:users], "Edit user #{@user.uid}" ])
   end
 
   def update
@@ -187,5 +192,11 @@ class UsersController < ApplicationController
       end
     end
     return max+1
+  end
+
+  def crumbs
+    {
+      :users    => { :title => 'Users management', :link => :users }
+    }
   end
 end

@@ -2,6 +2,7 @@ class ResourcesController < UsersController
 
   def index
     @title = 'Resource management'
+    @breadcrumbs.concat([ crumbs[:resources] ])
 
     if request.post?
       if params[:search] == "*"
@@ -15,6 +16,7 @@ class ResourcesController < UsersController
 
   def new
     @title = 'Create a new resource'
+    @breadcrumbs.concat([ crumbs[:resources], 'Create a new resource' ])
 
     @resource = Resource.new
   end
@@ -52,8 +54,9 @@ class ResourcesController < UsersController
 
   def edit
     @resource = Resource.find(params[:uid])
+
     @title = "Edit resource #{@resource.uid}"
-    @message = :message
+    @breadcrumbs.concat([ crumbs[:resources], "Edit resource #{@resource.uid}" ])
 
     if request.patch?
       @resource.mail = resource_params[:mail]
@@ -91,5 +94,11 @@ class ResourcesController < UsersController
                                      :sn,
                                      :mail
     )
+  end
+
+  def crumbs
+    {
+      :resources    => { :title => 'Resources management', :link => :resources }
+    }
   end
 end

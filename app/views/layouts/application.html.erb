@@ -43,6 +43,18 @@
   </div>
 <% end %>
 
+  <p class="row" id="breadcrumbs">
+    You are here: <%= link_to('Zarafa Dashboard', root_path) %>
+
+    <% @breadcrumbs.each do | crumb | %>
+      <% if crumb.kind_of?(Hash) %>
+        <%== ' > ' + link_to(crumb[:title], crumb[:link]) %>
+      <% else %>
+        <%= ' > ' + crumb %>
+      <% end %>
+    <% end %>
+  </p>
+
   <header class="row">
     <h2><%= @title %></h2>
   </header>

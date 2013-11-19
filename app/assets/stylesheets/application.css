@@ -45,6 +45,10 @@ form li div.btn {
   padding: 0 40px;
 }
 
+#breadcrumbs {
+  margin-bottom: 10px;
+}
+
 #authbar p {
   text-align: right;
   font-size: 0.9em;
