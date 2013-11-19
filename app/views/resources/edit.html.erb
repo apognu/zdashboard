@@ -1,0 +1,59 @@
+<section class="tabs">
+  <div class="row">
+    <ul class="tab-nav">
+      <li class="active"><a href="#">Basic information</a></li>
+    </ul>
+  </div>
+
+  <%= form_for @resource, url: resources_update_path do | form | %>
+  <div class="tab-content active">
+    <div class="row">
+      <p class="field ten columns">
+        <%= form.label 'Uid (read-only):' %>
+        <%= form.text_field :uid, :class => 'input', :readonly => true %>
+      </p>
+    </div>
+
+    <div class="row">
+      <p class="field ten columns">
+        <%= form.label 'Email address:' %>
+        <%= form.text_field :mail, :class => 'input' %>
+      </p>
+    </div>
+
+    <div class="row">
+      <%= form.label 'Resource name:' %>
+    </div>
+
+    <div class="row">
+      <p class="field ten columns">
+      <%= form.text_field :sn, :class => 'input' %>
+      </p>
+    </div>
+
+    <div class="row">
+      <p class="labels five columns">
+        <%= form.label 'Resource type:' %>
+      </p>
+      <p class="labels five columns">
+        <%= form.label 'Quantity:' %>
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="picker two columns">
+        <%= form.select(:zarafaResourceType, options_for_select([['Room', 'room'], ['Equipment', 'equipment']])) %>
+      </div>
+      <p class="field push_three three columns">
+        <%= form.number_field :zarafaResourceCapacity, :class => 'input', :min => 1, :readonly => true %>
+      </p>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<div class="row">
+  <p class="medium primary btn"><%= form.submit "Save #{@resource.uid}" %>
+</div>
+<% end %>
