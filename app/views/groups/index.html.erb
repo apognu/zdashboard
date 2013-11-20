@@ -20,5 +20,10 @@
       </tr>
       <% end %>
     </tbody>
+    <p>Pages :
+      <% @pages.each do | page | %>
+        <%= link_to(page, groups_path({ :page => page })) %>
+      <% end %>
+    </p>
   </table>
 </div>
