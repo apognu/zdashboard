@@ -6,11 +6,9 @@ class UsersController < ApplicationController
     @breadcrumbs.concat([ crumbs[:users] ])
 
     if request.post?
-      if params[:search] == "*"
-        @users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
-      else
-        @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))(!(zarafaResourceType=*)))")
-      end
+      params[:search].gsub!("(", "\\(")
+      params[:search].gsub!(")", "\\)")
+      @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))(!(zarafaResourceType=*)))")
 
       render :partial => "users", :layout => false
     end

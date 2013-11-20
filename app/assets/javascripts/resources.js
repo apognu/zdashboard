@@ -3,7 +3,7 @@ $(function()
   $("#user_zarafaSendAsPrivilege").select2({
     multiple: true,
     tokenSeparators: [','],
-    minimumInputLength: 1,
+    minimumInputLength: 3,
     ajax: {
       url:'/users/list/',
       type: 'POST',
@@ -23,11 +23,11 @@ $(function()
   var xhr = null;
 
   $("#search_resources input[name='search']").on('keyup', function() {
-    console.log("pass => "+$(this).val());
-    if ($(this).val().length > 0) {
-      console.log("request");
+    var $input = $(this);
+    if ($(this).val().length >= 3) {
       if (xhr != null)
         xhr.abort();
+      $input.addClass('loading');
       xhr = $.ajax({
         url: '/resources',
         type: 'POST',
@@ -36,6 +36,7 @@ $(function()
         success: function(res){
           $("#resources_list tbody").empty().html(res);
           xhr = null;
+          $input.removeClass('loading');
         },
         error: function(res) {
           console.log("ERROR");
