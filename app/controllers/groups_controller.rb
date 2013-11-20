@@ -27,28 +27,29 @@ class GroupsController < ApplicationController
 
     @group = Group.new(group_params[:cn])
     @group.mail = group_params[:mail]
+    @group.members = []
 
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
 
       unless group_params[:members][0].nil?
-        group_members = group_params[:members][0].split(',')
-        @group.members = group_members.map! { | memberuid |
-          User.find(memberuid)
-        }  
+        group_params[:members] = group_params[:members][0].split(',')
 
-        @group_members = uid_to_select(@group.members).to_json
-      else
-        @group.members = []
+        @group.members = group_params[:members].map { | uid |
+          User.find(uid)
+        }
+
+       @members = uid_to_select(@group.members).to_json
       end
     end
 
     # What to do with those fuckers?
-    @group.gidNumber = get_next_gidnumber 
+    @group.gidNumber = next_gidnumber 
 
     if @group.valid?
       if @group.save
         flash[:success] = "Group '#{@group.cn}' was successfully created."
+
         redirect_to groups_path and return
       end
     else
@@ -61,9 +62,9 @@ class GroupsController < ApplicationController
   def edit
     @group = Group.find(params[:cn])
 
-    members_list = uid_to_select @group.members
+    members = uid_to_select @group.members
 
-    @group_members = members_list.to_json
+    @members = members.to_json
 
     @title = "Edit group #{@group.cn}"
     @breadcrumbs.concat([ crumbs[:groups], "Edit group #{@group.cn}" ])
@@ -72,26 +73,26 @@ class GroupsController < ApplicationController
   def update
     @group = Group.find(params[:cn])
     @group.mail = group_params[:mail]
+    @group.members = []
 
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
 
       unless group_params[:members][0].nil?
-        group_members = group_params[:members][0].split(',')
+        members = group_params[:members][0].split(',')
 
-        @group.members = group_members.map! { | memberuid |
-          User.find(memberuid)
+        @group.members = members.map! { | uid |
+          User.find(uid)
         }
 
-        @group_members = uid_to_select(@group.members).to_json
-      else
-        @group.members = []
+        @members = uid_to_select(@group.members).to_json
       end
     end
 
     if @group.valid?
       if @group.save
         flash[:success] = "Group '#{@group.cn}' was successfully edited."
+
         redirect_to groups_path and return
       end
     else
@@ -106,6 +107,7 @@ class GroupsController < ApplicationController
 
     if group.destroy
       flash[:success] = "Group '#{group.cn}' was successfully deleted."
+
       redirect_to groups_path
     end
   end
@@ -120,16 +122,10 @@ class GroupsController < ApplicationController
     )
   end
 
-  def get_next_gidnumber
+  def next_gidnumber
     groups = Group.find(:all, :attribute => 'gidNumber')
 
-    max = 0
-    groups.each do | g |
-      if g.gidNumber > max
-        max = g.gidNumber
-      end
-    end
-    return max+1
+    groups.max_by { | group | group.gidNumber }.gidNumber
   end
 
   def crumbs

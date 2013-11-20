@@ -111,12 +111,13 @@ class UsersController < ApplicationController
   def delete
     user = User.find(params[:uid])
 
+    # Only one group?
     group = user.groups
+    group[0].members = group[0].members.reject { |u| u == user }
 
-    tmp = group[0].members.reject { |u| u == user }
-    group[0].members = tmp
     if group[0].save and user.destroy
       flash[:success] = "User '#{user.uid}' was successfully deleted."
+
       redirect_to users_path
     end
   end
@@ -131,7 +132,7 @@ class UsersController < ApplicationController
       }
     end
 
-    render :json => list
+    render :json => users
   end
 
   private
@@ -179,7 +180,7 @@ class UsersController < ApplicationController
   def next_uidnumber
     users = User.find(:all, :attribute => 'uidNumber')
 
-    users.max_by { | user | user.uidNumber }
+    users.max_by { | user | user.uidNumber }.uidNumber
   end
 
   def crumbs
