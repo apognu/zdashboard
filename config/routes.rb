@@ -72,7 +72,7 @@ Zarafadashboard::Application.routes.draw do
                                 constraints: { uid: /[^\/]+/ }
 
   if Rails.env.production?
-    match '*not_found', to: 'z_dashboard#error_404',
+    match '*not_found', to: 'application#error_404',
                         via: [ :get, :post ]
   end
 end

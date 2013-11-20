@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def error_404
+    render :error_404, :status => :not_found and return
+  end
+
   def paginate(items_per_page, item_count, current_page = 1)
     page_count = (item_count / items_per_page).to_i
     page_count += 1 if (item_count % items_per_page) > 0
