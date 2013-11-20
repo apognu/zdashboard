@@ -69,4 +69,8 @@ $(function()
       $(this).closest('li').remove();
     }
   });
+
+  $(document).on('click', 'a.delete_user', function(event) {
+    return confirm("Are you sure you want to delete user '"+$(this).closest('tr').find('td:first').text()+"'");
+  });
 });

@@ -53,4 +53,8 @@ $(function()
       $('#resource_zarafaResourceCapacity').attr('readonly', false);
     }
   });
+
+  $(document).on('click', 'a.delete_resource', function(event) {
+    return confirm("Are you sure you want to delete resource '"+$(this).closest('tr').find('td:first').text()+"'");
+  });
 });

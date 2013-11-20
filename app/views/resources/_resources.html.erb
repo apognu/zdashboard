@@ -5,7 +5,7 @@
       <td><%= resource.displayName %></td>
       <td><%= resource.zarafaResourceType %></td>
       <td><%= resource.mail %></td>
-      <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', resources_delete_path(:uid => resource.uid)) %></div></td>
+      <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', resources_delete_path(:uid => resource.uid), :class => 'delete_resource') %></div></td>
     </tr>
   <% end
   else %>
