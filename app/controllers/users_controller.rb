@@ -24,7 +24,7 @@ class UsersController < ApplicationController
   def save
     @title = 'Create a new user'
 
-    @user = User.new(user_params[:uid])
+    @user = User.new(sanitize_dn(user_params[:uid]))
     @user.mail = user_params[:mail]
     @user.givenName = user_params[:givenName]
     @user.sn = user_params[:sn]

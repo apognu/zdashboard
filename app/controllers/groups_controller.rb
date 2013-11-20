@@ -25,7 +25,7 @@ class GroupsController < ApplicationController
   def save
     @title = 'Create a new group'
 
-    @group = Group.new(group_params[:cn])
+    @group = Group.new(sanitize_dn(group_params[:cn]))
     @group.mail = group_params[:mail]
     @group.members = []
 
