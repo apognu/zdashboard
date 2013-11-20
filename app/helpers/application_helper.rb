@@ -22,4 +22,8 @@ module ApplicationHelper
 
     return pages
   end
+
+  def sanitize_dn dn
+    dn.delete ',=+<>#;\"'
+  end
 end
