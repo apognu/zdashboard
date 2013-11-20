@@ -14,10 +14,7 @@
 //= require_directory ./ui 
 
 $(function() {
-  $("input[name='search']").on("keypress", function() {
-    if(!event && window.event) {
-      event = window.event;
-    } 
+  $("input[name='search']").on("keypress", function(event) {
     // IE 
     if(event.keyCode == 13) {  
       event.returnValue = false;

@@ -42,4 +42,8 @@ $(function()
       $(this).closest('li').remove();
     }
   });
+
+  $(document).on('click', 'a.delete_group', function(event) {
+    return confirm("Are you sure you want to delete group '"+$(this).closest('tr').find('td:first').text()+"'");
+  });
 });

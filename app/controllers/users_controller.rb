@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     if request.post?
       params[:search].gsub!("(", "\\(")
       params[:search].gsub!(")", "\\)")
-      @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))(!(zarafaResourceType=*)))")
+      @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*@*))(!(zarafaResourceType=*)))")
 
       render :partial => "users", :layout => false
     end
@@ -121,7 +121,7 @@ class UsersController < ApplicationController
   end
 
   def list
-    users = User.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*))(!(zarafaResourceType=*)))")
+    users = User.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*))(!(zarafaResourceType=*)))")
 
     users.map! do | user |
       {
