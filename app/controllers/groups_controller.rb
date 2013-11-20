@@ -13,6 +13,10 @@ class GroupsController < ApplicationController
     @groups = Group.all
     @pages = paginate(groups_per_page, @groups.length, page)
     @groups = @groups.slice(groups_per_page * page, groups_per_page)
+
+    if @groups.nil? or @groups.empty?
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 
   def new
