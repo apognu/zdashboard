@@ -23,10 +23,11 @@ $(function()
   var xhr = null;
 
   $("#search_users input[name='search']").on('keyup', function() {
+    var $input = $(this);
     if ($(this).val().length >= 3) {
-      console.log("request");
       if (xhr != null)
         xhr.abort();
+      $input.addClass('loading');
       xhr = $.ajax({
         url: '/users',
         type: 'POST',
@@ -35,6 +36,7 @@ $(function()
         success: function(res){
           $("#users_list tbody").empty().html(res);
           xhr = null;
+          $input.removeClass('loading');
         },
         error: function(res) {
           console.log("ERROR");

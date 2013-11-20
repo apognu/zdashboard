@@ -90,3 +90,7 @@ div.field p.btn input {
 .select2-container {
   display: block !important;
 }
+
+input[name='search'].loading {
+  background: #fff url('select2-spinner.gif') no-repeat 98%;
+}
