@@ -20,5 +20,11 @@
       </tr>
       <% end %>
     </tbody>
+    <p>Pages :
+      <% params[:page] = "1" if params[:page].nil? %>
+      <% @pages.each do | page | %>
+        <%= link_to(page, groups_page_path({ :page => page }), :class => params[:page] == page.to_s ? "primary label" : "default label") %>
+      <% end %>
+    </p>
   </table>
 </div>

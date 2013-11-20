@@ -49,6 +49,9 @@ Zarafadashboard::Application.routes.draw do
                             as: :groups_delete,
                             constraints: { cn: /[^\/]+/ }
 
+  get '/groups/page/:page', to: 'groups#index',
+                           as: :groups_page
+
   get '/resources', to: 'resources#index'
   post '/resources', to: 'resources#index'
 
