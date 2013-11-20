@@ -3,7 +3,7 @@ $(function()
   $("#user_zarafaSendAsPrivilege").select2({
     multiple: true,
     tokenSeparators: [','],
-    minimumInputLength: 1,
+    minimumInputLength: 3,
     ajax: {
       url:'/users/list/',
       type: 'POST',
@@ -24,7 +24,7 @@ $(function()
 
   $("#search_resources input[name='search']").on('keyup', function() {
     console.log("pass => "+$(this).val());
-    if ($(this).val().length > 0) {
+    if ($(this).val().length >= 3) {
       console.log("request");
       if (xhr != null)
         xhr.abort();

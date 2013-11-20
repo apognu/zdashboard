@@ -3,7 +3,7 @@ $(function()
   $("#user_zarafaSendAsPrivilege").select2({
     multiple: true,
     tokenSeparators: [','],
-    minimumInputLength: 1,
+    minimumInputLength: 3,
     ajax: {
       url:'/users/list/',
       type: 'POST',
@@ -23,7 +23,7 @@ $(function()
   var xhr = null;
 
   $("#search_users input[name='search']").on('keyup', function() {
-    if ($(this).val().length > 0) {
+    if ($(this).val().length >= 3) {
       console.log("request");
       if (xhr != null)
         xhr.abort();
@@ -59,27 +59,6 @@ $(function()
   });
 
   $(document).on('click', 'a.aliasremove', function(event)
-  {
-    event.preventDefault();
-
-    if ($(this).closest('ul').find('li').length > 1)
-    {
-      $(this).closest('li').remove();
-    }
-  });
-
-  $('a[data-sendastoggle]').click(function(event)
-  {
-    event.preventDefault();
-
-    var input = $($('input[data-sendasfield]')[0]);
-    var newInput = input.parent('li').clone();
-    newInput.find('input').val('');
-
-    input.closest('ul').append(newInput);
-  });
-
-  $(document).on('click', 'a.sendasremove', function(event)
   {
     event.preventDefault();
 
