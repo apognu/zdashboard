@@ -5,6 +5,8 @@ class ResourcesController < UsersController
     @breadcrumbs.concat([ crumbs[:resources] ])
 
     if request.post?
+      params[:search].gsub!("(", "\\(")
+      params[:search].gsub!(")", "\\)")
       @resources = Resource.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*))(zarafaResourceType=*))")
 
       render :partial => 'resources', :layout => false
