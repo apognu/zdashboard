@@ -123,7 +123,7 @@ class UsersController < ApplicationController
   end
 
   def list
-    users = User.find(:all, :filter => "(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*))")
+    users = User.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*))(!(zarafaResourceType=*)))")
 
     users.map! do | user |
       {
