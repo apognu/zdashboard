@@ -6,10 +6,6 @@ class UsersController < ApplicationController
     @breadcrumbs.concat([ crumbs[:users] ])
 
     if request.post?
-      page = 0
-      page = (params[:page].to_i - 1) if params[:page].present?
-      users_per_page = 5
-
       if params[:search] == "*"
         @users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
       else
@@ -39,6 +35,8 @@ class UsersController < ApplicationController
     @user.zarafaAccount = 1;
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+
+    # Is this used?
     @user.gidNumber = 1000;
     @user.homeDirectory = '/dev/null'
     @user.uidNumber = next_uidnumber
@@ -46,11 +44,12 @@ class UsersController < ApplicationController
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard]
 
     if @user.valid?
-      defgroup = Group.find(:first, :attribute => "cn", :value => "all");
-      defgroup.members << @user
+      group = Group.find(:first, :attribute => "cn", :value => "all");
+      group.members << @user
 
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully created."
+
         redirect_to users_path and return
       end
     else
@@ -88,8 +87,7 @@ class UsersController < ApplicationController
     if ! user_params[:userPassword].empty?
       require 'securerandom'
 
-      # salt = SecureRandom.urlsage_base64(12)
-      salt = 'azerty'
+      salt = SecureRandom.urlsafe_base64(12)
       digest = Base64.encode64(Digest::SHA1.digest(user_params[:userPassword] + salt) + salt).chomp
       
       @user.userPassword = '{SSHA}' + digest
@@ -98,6 +96,7 @@ class UsersController < ApplicationController
     if @user.valid?
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully edited."
+
         redirect_to users_path and return
       end
     else
@@ -112,27 +111,28 @@ class UsersController < ApplicationController
   def delete
     user = User.find(params[:uid])
 
+    # Only one group?
     group = user.groups
+    group[0].members = group[0].members.reject { |u| u == user }
 
-    tmp = group[0].members.reject { |u| u == user }
-    group[0].members = tmp
     if group[0].save and user.destroy
       flash[:success] = "User '#{user.uid}' was successfully deleted."
+
       redirect_to users_path
     end
   end
 
   def list
-    users_list = User.find(:all, :filter => "(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*))")
-    list = []
-    users_list.each do | user |
-      tmp = {
+    users = User.find(:all, :filter => "(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*))")
+
+    users.map! do | user |
+      {
         'text' => user.cn,
         'id' => user.uid
       }
-      list.push(tmp)
     end
-    render :json => list
+
+    render :json => users
   end
 
   private
@@ -155,26 +155,21 @@ class UsersController < ApplicationController
   def dn_to_uid data
     data.reject! { | x | x.nil? or x.empty? }
 
-    list = []
     data.map! { | dn |
-      u = User.find(dn)
+      user = User.find(dn)
 
-      tmp = {
-        "text" => u.cn,
-        "id" => u.uid
+      {
+        "text" => user.cn,
+        "id"   => user.uid
       }
-      list.push(tmp)
     }
-    data = list
   end
 
   def uid_to_dn data
     data.reject! { | x | x.nil? or x.empty? }
+    
+    data = data[0].split(',') unless data.empty?
 
-    unless data.empty?
-      data = data[0].split(",")
-    end
- 
     data.map! { | uid |
       privilege_user = User.find(uid)
 
@@ -185,13 +180,7 @@ class UsersController < ApplicationController
   def next_uidnumber
     users = User.find(:all, :attribute => 'uidNumber')
 
-    max = 0
-    users.each do | u |
-      if u.uidNumber > max
-        max = u.uidNumber
-      end
-    end
-    return max+1
+    users.max_by { | user | user.uidNumber }.uidNumber
   end
 
   def crumbs

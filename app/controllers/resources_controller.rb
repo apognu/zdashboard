@@ -43,6 +43,7 @@ class ResourcesController < UsersController
     if @resource.valid?
       if @resource.save
         flash[:success] = "Resource '#{@resource.uid}' was successfully created."
+
         redirect_to resources_path and return
       end
     else
@@ -63,11 +64,15 @@ class ResourcesController < UsersController
       @resource.displayName = @resource.givenName = @resource.sn = @resource.cn = resource_params[:sn]
       @resource.zarafaResourceType = resource_params[:zarafaResourceType]
       @resource.zarafaResourceCapacity = resource_params[:zarafaResourceCapacity]
-      @resource.zarafaResourceCapacity = 1 if @resource.zarafaResourceType == "room" or @resource.zarafaResourceType.empty?
+
+      if @resource.zarafaResourceType == "room" or @resource.zarafaResourceType.empty?
+        @resource.zarafaResourceCapacity = 1
+      end
 
       if @resource.valid?
         if @resource.save
           flash[:success] = "Resource '#{@resource.uid}' was successfully updated."
+
           redirect_to resources_path and return
         end
       else
@@ -81,6 +86,7 @@ class ResourcesController < UsersController
 
     if resource.destroy
       flash[:success] = "Resource '#{resource.uid}' was successfully deleted."
+
       redirect_to resources_path
     end
   end
