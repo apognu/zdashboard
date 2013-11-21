@@ -29,6 +29,13 @@
   </div>
 
   <div class="row">
+    <p class="four columns">
+        <%= form.label :zarafaHidden, 'Hidden from addressbook:', :class => 'inline' %>
+        <%= form.check_box :zarafaHidden %>
+    </p>
+  </div>
+
+  <div class="row">
     <p class="medium primary btn"><%= form.submit "Save #{@group.cn}", tabindex: 1000 %>
   </div>
 <% end %>

@@ -30,6 +30,7 @@ class GroupsController < ApplicationController
     @group = Group.new(sanitize_dn(group_params[:cn]))
     @group.mail = group_params[:mail]
     @group.members = []
+    @group.zarafaHidden = group_params[:zarafaHidden]
 
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
@@ -76,6 +77,7 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:cn])
     @group.mail = group_params[:mail]
     @group.members = []
+    @group.zarafaHidden = group_params[:zarafaHidden]
 
     if ! group_params[:members].nil?
       group_params[:members].reject! { | x | x.nil? or x.empty? }
@@ -120,6 +122,7 @@ class GroupsController < ApplicationController
     params.require(:group).permit(:cn,
                                   :displayName,
                                   :mail,
+                                  :zarafaHidden,
                                   :members => []
     )
   end
