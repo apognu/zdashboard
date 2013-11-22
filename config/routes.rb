@@ -37,6 +37,8 @@ Zarafadashboard::Application.routes.draw do
   post '/groups/new', to: 'groups#save',
                      as: :groups_save
 
+  post '/groups/list', to: 'groups#list'
+
   get '/groups/:cn/edit', to: 'groups#edit',
                           as: :groups_edit,
                           constraints: { cn: /[^\/]+/ }
