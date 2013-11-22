@@ -116,6 +116,18 @@ class GroupsController < ApplicationController
     end
   end
 
+  def list
+    groups = Group.find(:all, :filter => "(&(|(gidNumber=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*))(!(zarafaResourceType=*)))")
+
+    groups.map! do | group |
+      {
+        'text' => group.cn,
+        'id' => group.cn
+      }
+    end
+    render :json => groups
+  end
+
   private
 
   def group_params
@@ -138,4 +150,5 @@ class GroupsController < ApplicationController
       :groups   => { :title => 'Groups management', :link => :groups }
     }
   end
+
 end
