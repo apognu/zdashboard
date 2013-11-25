@@ -4,15 +4,12 @@ module GroupsHelper
     data.nil? { return nil}
     data.reject! { | x | x.nil? }
 
-    list = []
-    data.map! { | group |
-      tmp = {
+    data.map! do | group |
+      {
         "text" => group.cn,
         "id" => group.cn
       }
-      list.push(tmp)
-    }
-    data = list
+    end
   end
 
 end

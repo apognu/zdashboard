@@ -36,9 +36,9 @@ class GroupsController < ApplicationController
       group_params[:members].reject! { | x | x.nil? or x.empty? }
 
       unless group_params[:members][0].nil?
-        group_params[:members] = group_params[:members][0].split(',')
+        members = group_params[:members][0].split(',')
 
-        @group.members = group_params[:members].map { | uid |
+        @group.members = members.map { | uid |
           User.find(uid)
         }
 

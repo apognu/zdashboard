@@ -48,16 +48,13 @@ class UsersController < ApplicationController
         user_params[:groups].reject! { | x | x.nil? or x.empty? or x == "all" }
 
         unless user_params[:groups][0].nil?
-          user_params[:groups] = user_params[:groups][0].split(',')
-
-          @user.groups = user_params[:groups].map { | current_group |
+          groups_list = user_params[:groups][0].split(',')
+          @user.groups = groups_list.map { | current_group |
             group = Group.find(current_group)
             group.members << @user          
           }
-          add_to_group_all
-        else
-          add_to_group_all
         end
+        add_to_group_all
       end
 
       if @user.save
