@@ -77,6 +77,7 @@ $(function()
   $('#user_groups').select2({
     multiple: true,
     tokenSeparators: [','],
+    minimumInputLength: 3,
     ajax: {
       url:'/groups/list/',
       type: 'POST',
