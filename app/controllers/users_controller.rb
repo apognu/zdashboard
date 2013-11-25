@@ -97,6 +97,7 @@ class UsersController < ApplicationController
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft].to_i
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
     @user.groups = []
+    @user.zarafaSharedStoreOnly = user_params[:zarafaSharedStoreOnly]
 
     if ! user_params[:userPassword].empty?
       require 'securerandom'
@@ -175,6 +176,7 @@ class UsersController < ApplicationController
                                  :zarafaHidden,
                                  :zarafaQuotaSoft,
                                  :zarafaQuotaHard,
+                                 :zarafaSharedStoreOnly,
                                  :zarafaAliases => [],
                                  :zarafaSendAsPrivilege => [],
                                  :groups => [],
