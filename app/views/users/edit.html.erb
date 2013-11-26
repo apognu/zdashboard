@@ -4,6 +4,7 @@
       <li class="active"><a href="#">Basic information</a></li>
       <li><a href="#">Mail aliases</a></li>
       <li><a href="#">Privileges</a></li>
+      <li><a href="#">Out of Office Message</a></li>
     </ul>
   </div>
 
@@ -119,6 +120,30 @@
       <div class="field three columns">
         <p class="medium primary btn"><%= form.submit "Save #{@user.uid}", tabindex: 1000 %></p>
       </div>
+    </div>
+  </div>
+  <div class="tab-content">
+    <div class="row">
+      <p class="four columns">
+        <%= form.label :out_of_office, 'Out of Office', :class => 'inline' %>
+        <%= form.hidden_field :before_save_oof, :value => @user.out_of_office %>
+        <%= form.check_box :out_of_office %>
+      </p>
+    </div>
+    <div class="row">
+      <p class="nine columns field">
+        <%= form.label :out_subject, 'Subject:' %>
+        <%= form.text_field :out_subject, :class => 'input' %>
+      </p>
+    </div>
+    <div class="row">
+      <p class="nine columns field">
+        <%= form.label :out_message, 'Message:' %>
+        <%= form.text_area :out_message, :class => 'input textarea', cols: 20, rows: 8 %>
+      </p>
+    </div>
+    <div class="row">
+      <p class="medium primary btn"><%= form.submit "Save #{@user.uid}", tabindex: 1000 %></p>
     </div>
   </div>
 <% end %>

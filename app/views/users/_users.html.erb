@@ -4,6 +4,7 @@
       <td><%= link_to(user.uid, users_edit_path(:uid => user.uid)) %></td>
       <td><%= user.displayName %></td>
       <td><%= user.mail %></td>
+      <td><%= user.current_quota %></td>
       <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', users_delete_path(:uid => user.uid), :class => "delete_user") %></div></td>
     </tr>
   <% end

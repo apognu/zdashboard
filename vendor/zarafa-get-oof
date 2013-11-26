@@ -1,0 +1,26 @@
+#!/usr/bin/python -u
+
+import sys
+import json
+from MAPI import *
+from MAPI.Util import *
+
+PR_EC_OUTOFOFFICE               = PROP_TAG(PT_BOOLEAN, PR_EC_BASE+0x60)
+PR_EC_OUTOFOFFICE_MSG           = PROP_TAG(PT_TSTRING, PR_EC_BASE+0x61)
+PR_EC_OUTOFOFFICE_SUBJECT       = PROP_TAG(PT_TSTRING, PR_EC_BASE+0x62)
+
+try:
+  session = OpenECSession(sys.argv[1], '', 'file:///var/run/zarafa')
+  st = GetDefaultStore(session)
+except MAPIError, e:
+  print "Unable to open store for user"
+  exit(1)
+
+stream = st.GetProps([PR_EC_OUTOFOFFICE, PR_EC_OUTOFOFFICE_SUBJECT, PR_EC_OUTOFOFFICE_MSG], 1)
+
+d = {
+  'out_of_office' : stream[0].Value if type(stream[0].Value) == type(bool()) else False,
+  'subject' : stream[1].Value if type(stream[1].Value) == type(str()) else None,
+  'message' : stream[2].Value if type(stream[2].Value) == type(str()) else None
+}
+print json.dumps(d)

@@ -9,7 +9,9 @@ class UsersController < ApplicationController
       params[:search].gsub!("(", "\\(")
       params[:search].gsub!(")", "\\)")
       @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*@*))(!(zarafaResourceType=*)))")
-
+      @users.each do | u |
+        u.current_quota = %x{ zarafa-admin --detail #{u.uid} | grep 'Current store size:' }.split("\t")[1].strip.chomp 
+      end
       render :partial => "users", :layout => false
     end
   end
@@ -64,6 +66,15 @@ class UsersController < ApplicationController
 
     @user.zarafaSendAsPrivilege = users_list.to_json
 
+    oof = ActiveSupport::JSON.decode(%x{ #{Rails.root}/vendor/zarafa-get-oof #{@user.uid} })
+    
+    @user.out_of_office = oof['out_of_office']
+    @user.out_message = oof['message']
+    @user.out_subject = oof['subject']
+   
+    logger.debug oof[:out_of_office]
+    logger.debug @user
+ 
     @title = "Edit user #{@user.uid}"
     @breadcrumbs.concat([ crumbs[:users], "Edit user #{@user.uid}" ])
   end
@@ -81,6 +92,11 @@ class UsersController < ApplicationController
     @user.zarafaHidden = user_params[:zarafaHidden]
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft].to_i
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
+    @user.out_of_office = user_params[:out_of_office]
+    @user.out_message = user_params[:out_message]
+    @user.out_subject = user_params[:out_subject]
+    file = Tempfile.new("#{@user.uid}_message", Dir.tmpdir, 0777)
+    file.write("#{@user.out_message}")
 
     if ! user_params[:userPassword].empty?
       require 'securerandom'
@@ -93,6 +109,13 @@ class UsersController < ApplicationController
 
     if @user.valid?
       if @user.save
+        logger.debug "OUT (#{@user.out_of_office}) OF OFFICE => zarafa-set-oof -u #{@user.uid} -m #{@user.out_of_office} -t \"#{@user.out_subject}\" -n \"#{file.path    }\""
+        if @user.out_of_office == "1"
+          %x{ zarafa-set-oof -u #{@user.uid} -m #{@user.out_of_office} -t "#{@user.out_subject}" -n "#{file.path}" }
+        else
+          %x{ zarafa-set-oof -u #{@user.uid} -m #{@user.out_of_office} }
+        end
+        file.close
         flash[:success] = "User '#{@user.uid}' was successfully edited."
 
         redirect_to users_path and return
@@ -141,6 +164,10 @@ class UsersController < ApplicationController
                                  :sn,
                                  :mail,
                                  :userPassword,
+                                 :before_save_oof,
+                                 :out_of_office,
+                                 :out_message,
+                                 :out_subject,
                                  :zarafaAdmin,
                                  :zarafaHidden,
                                  :zarafaQuotaSoft,
