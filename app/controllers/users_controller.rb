@@ -72,9 +72,6 @@ class UsersController < ApplicationController
     @user.out_message = oof['message']
     @user.out_subject = oof['subject']
    
-    logger.debug oof[:out_of_office]
-    logger.debug @user
- 
     @title = "Edit user #{@user.uid}"
     @breadcrumbs.concat([ crumbs[:users], "Edit user #{@user.uid}" ])
   end
@@ -95,8 +92,9 @@ class UsersController < ApplicationController
     @user.out_of_office = user_params[:out_of_office]
     @user.out_message = user_params[:out_message]
     @user.out_subject = user_params[:out_subject]
-    file = Tempfile.new("#{@user.uid}_message", Dir.tmpdir, 0777)
+    file = File.new("#{Dir.tmpdir}/#{@user.uid}_message", "w", 0777)
     file.write("#{@user.out_message}")
+    file.close
 
     if ! user_params[:userPassword].empty?
       require 'securerandom'
@@ -109,15 +107,14 @@ class UsersController < ApplicationController
 
     if @user.valid?
       if @user.save
-        logger.debug "OUT (#{@user.out_of_office}) OF OFFICE => zarafa-set-oof -u #{@user.uid} -m #{@user.out_of_office} -t \"#{@user.out_subject}\" -n \"#{file.path    }\""
         if @user.out_of_office == "1"
-          %x{ zarafa-set-oof -u #{@user.uid} -m #{@user.out_of_office} -t "#{@user.out_subject}" -n "#{file.path}" }
+          %x{ #{Rails.root}/vendor/zarafa-set-oof #{@user.uid} #{@user.out_of_office} "#{@user.out_subject}" "#{file.path}" }
         else
-          %x{ zarafa-set-oof -u #{@user.uid} -m #{@user.out_of_office} }
+          %x{ #{Rails.root}/vendor/zarafa-set-oof #{@user.uid} #{@user.out_of_office} }
         end
-        file.close
         flash[:success] = "User '#{@user.uid}' was successfully edited."
-
+        File.unlink("#{Dir.tmpdir}/#{@user.uid}_message")
+  
         redirect_to users_path and return
       end
     else

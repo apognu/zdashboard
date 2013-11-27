@@ -1,5 +1,5 @@
 class User < ActiveLdap::Base
-  attr_accessor :current_quota, :out_of_office, :out_message, :out_subject  
+  attr_accessor :current_quota, :out_of_office, :out_message, :out_subject, :authenticity_token
 
   ldap_mapping :dn_attribute => 'uid',
                :prefix => YAML.load_file("#{Rails.root}/config/ldap.yml")['bases'][Rails.env]['users'],
