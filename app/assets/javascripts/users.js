@@ -80,6 +80,24 @@ $(function()
     }
   });
 
+  $(document).on('click', 'a#update_quota', function(event){
+    var $update_btn = $(this);
+    $update_btn.parent('p').css('display', 'none');
+    $.ajax({
+      url: $update_btn.attr('href'),
+      type: 'GET',
+      success: function(res) {
+        $update_btn.parent('p').css('display', 'block');
+        $('p#current_quota span').empty().text(res);
+      },
+      error: function(res) {
+        console.log("An error has occured.");
+        $update_btn.parent('p').css('display', 'block');
+      }
+    });
+    return false;
+  });
+
   $(document).on('click', 'a.delete_user', function(event) {
     return confirm("Are you sure you want to delete user '"+$(this).closest('tr').find('td:first').text()+"'");
   });

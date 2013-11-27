@@ -26,6 +26,10 @@
         <%= form.label :mail, 'Email address:' %>
         <%= form.text_field :mail, :class => 'input' %>
       </p>
+
+      <div class="field three columns">
+        <p class="medium info btn"><%= link_to "Update quota", user_update_quota_path(:uid => @user.uid), :id => :update_quota %></p>
+      </div>
     </div>
 
     <div class="row">
@@ -39,6 +43,12 @@
       <p class="field four columns push_one">
         <%= form.text_field :sn, :class => 'input', :placeholder => 'Last name' %>
       </p>
+
+      <div class="field three columns">
+        <p id="current_quota">
+          Current quota : <span><%= @user.current_quota %></span>
+        </p>
+      </div>
     </div>
 
     <div class="row">

@@ -10,7 +10,12 @@ class UsersController < ApplicationController
       params[:search].gsub!(")", "\\)")
       @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*@*))(!(zarafaResourceType=*)))")
       @users.each do | u |
-        u.current_quota = %x{ zarafa-admin --detail #{u.uid} | grep 'Current store size:' }.split("\t")[1].strip.chomp 
+        begin
+          quota = Quota.find_by uid: u.uid
+          u.current_quota = quota.value
+        rescue
+          u.current_quota = "N.C."
+        end
       end
       render :partial => "users", :layout => false
     end
@@ -62,6 +67,12 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:uid])
 
+    begin
+      quota = Quota.find_by uid: @user.uid
+      @user.current_quota = quota.value
+    rescue
+      @user.current_quota = "N.C."
+    end
     users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
 
     @user.zarafaSendAsPrivilege = users_list.to_json
@@ -153,7 +164,32 @@ class UsersController < ApplicationController
     render :json => users
   end
 
+  def update_quota
+    unless params[:uid].nil?
+      user = User.find(params[:uid])
+      value = update_db_quota user
+      render :text => "#{value}", :layout => false
+    else
+      users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
+      users.each do | u |
+        update_db_quota u
+      end
+      render :text => "All done !", :layout => false
+    end
+  end
+
   private
+
+  def update_db_quota user
+    begin
+      quota = Quota.find_by uid: user.uid
+    rescue
+      quota = Quota.new(:uid => user.uid)
+    end
+    quota.value = %x{ zarafa-admin --detail #{user.uid} | grep 'Current store size:' }.split("\t")[1].strip.chomp 
+    quota.save
+    return quota.value
+  end
 
   def user_params
     params.require(:user).permit(:uid,
