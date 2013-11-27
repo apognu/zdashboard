@@ -70,6 +70,16 @@ $(function()
     }
   });
 
+  $("#user_out_of_office").on('change', function() {
+    if ($(this).is(':checked')) {
+      $('#user_out_subject').attr('readonly', false);
+      $('#user_out_message').attr('readonly', false);
+    } else {
+      $('#user_out_subject').attr('readonly', true);
+      $('#user_out_message').attr('readonly', true);
+    }
+  });
+
   $(document).on('click', 'a.delete_user', function(event) {
     return confirm("Are you sure you want to delete user '"+$(this).closest('tr').find('td:first').text()+"'");
   });

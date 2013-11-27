@@ -126,20 +126,27 @@
     <div class="row">
       <p class="four columns">
         <%= form.label :out_of_office, 'Out of Office', :class => 'inline' %>
-        <%= form.hidden_field :before_save_oof, :value => @user.out_of_office %>
         <%= form.check_box :out_of_office %>
       </p>
     </div>
     <div class="row">
       <p class="nine columns field">
         <%= form.label :out_subject, 'Subject:' %>
-        <%= form.text_field :out_subject, :class => 'input' %>
+        <% unless @user.out_of_office == true %>
+          <%= form.text_field :out_subject, :class => 'input', :readonly => true %>
+        <% else %>
+          <%= form.text_field :out_subject, :class => 'input' %>
+        <% end %>
       </p>
     </div>
     <div class="row">
       <p class="nine columns field">
         <%= form.label :out_message, 'Message:' %>
-        <%= form.text_area :out_message, :class => 'input textarea', cols: 20, rows: 8 %>
+        <% unless @user.out_of_office == true %>
+          <%= form.text_area :out_message, :class => 'input textarea', cols: 20, rows: 8, :readonly => true %>
+        <% else %>
+          <%= form.text_area :out_message, :class => 'input textarea', cols: 20, rows: 8 %>
+        <% end %>
       </p>
     </div>
     <div class="row">

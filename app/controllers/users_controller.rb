@@ -161,7 +161,6 @@ class UsersController < ApplicationController
                                  :sn,
                                  :mail,
                                  :userPassword,
-                                 :before_save_oof,
                                  :out_of_office,
                                  :out_message,
                                  :out_subject,
