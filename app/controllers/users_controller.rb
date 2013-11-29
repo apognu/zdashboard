@@ -131,7 +131,8 @@ class UsersController < ApplicationController
       @messages[:danger] = 'Some fields are in error, unable to save the user'
     end
 
-    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege unless @user.zarafaSendAsPrivilege.nil?
+    users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
+    @user.zarafaSendAsPrivilege = users_list.to_json
 
     render :edit
   end
