@@ -11,7 +11,7 @@ class User < ActiveLdap::Base
   validates :uid, :presence => true, format: { with: /\A[0-9a-zA-Z._-]+\z/ }
   validates :givenName, :presence => true, :allow_nil => false
   validates :sn, :presence => true, :allow_nil => false
-  validates :mail, :presence => true, :allow_nil => false
+  validates :mail, :presence => true, :allow_nil => false, format: { with: /\A[0-9a-zA-Z._-]+\z/ }
   validates :zarafaQuotaSoft, :presence => true, :unless => Proc.new { |u| u.is_a?(Resource) }, :numericality => {:only_integer => true, :less_than_or_equal_to => :zarafaQuotaHard}, :allow_nil => false 
   validates :zarafaQuotaHard, :presence => true, :unless => Proc.new { |u| u.is_a?(Resource) }, :numericality => {:only_integer => true, :greater_than_or_equal_to => :zarafaQuotaSoft}, :allow_nil => false
 
