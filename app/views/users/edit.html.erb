@@ -41,9 +41,13 @@
     </div>
 
     <div class="row">
-      <p class="field nine columns">
+      <p class="field four columns">
         <%= form.label :userPassword, 'New password:' %>
         <%= form.password_field :userPassword, :class => 'input' %>
+      </p>
+      <p class="field four columns push_one">
+        <%= form.label :userPassword_confirmation, 'Confirm password:' %>
+        <%= form.password_field :userPassword_confirmation, :class => 'input' %>
       </p>
     </div>
 

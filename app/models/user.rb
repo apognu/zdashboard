@@ -1,4 +1,5 @@
 class User < ActiveLdap::Base
+  attr_accessor :userPassword_confirmation
   ldap_mapping :dn_attribute => 'uid',
                :prefix => YAML.load_file("#{Rails.root}/config/ldap.yml")['bases'][Rails.env]['users'],
                :classes => [ 'inetorgperson', 'zarafa-user', 'posixaccount' ],

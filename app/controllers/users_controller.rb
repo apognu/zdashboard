@@ -99,13 +99,17 @@ class UsersController < ApplicationController
     @user.groups = []
     @user.zarafaSharedStoreOnly = user_params[:zarafaSharedStoreOnly]
 
-    if ! user_params[:userPassword].empty?
+    passwords_ok = true
+
+    if (! user_params[:userPassword].empty? or ! user_params[:userPassword_confirmation].empty?) and user_params[:userPassword_confirmation] == user_params[:userPassword]
       require 'securerandom'
 
       salt = SecureRandom.urlsafe_base64(12)
       digest = Base64.encode64(Digest::SHA1.digest(user_params[:userPassword] + salt) + salt).chomp
       
       @user.userPassword = '{SSHA}' + digest
+    elsif (! user_params[:userPassword].empty? or ! user_params[:userPassword_confirmation].empty?) and user_params[:userPassword_confirmation] != user_params[:userPassword]
+      passwords_ok = false
     end
 
     if ! user_params[:groups].nil?
@@ -122,13 +126,17 @@ class UsersController < ApplicationController
       end
     end
 
-    if @user.valid?
+    if @user.valid? && passwords_ok
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully edited."
 
         redirect_to users_path and return
       end
     else
+      if !passwords_ok
+        @user.errors.add(:userPassword, "Passwords don't match.")
+        @user.errors.add(:userPassword_confirmation)
+      end
       @messages[:danger] = 'Some fields are in error, unable to save the user'
     end
 
@@ -177,6 +185,7 @@ class UsersController < ApplicationController
                                  :zarafaQuotaSoft,
                                  :zarafaQuotaHard,
                                  :zarafaSharedStoreOnly,
+                                 :userPassword_confirmation,
                                  :zarafaAliases => [],
                                  :zarafaSendAsPrivilege => [],
                                  :groups => [],
