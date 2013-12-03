@@ -44,4 +44,20 @@
     <%= form.text_field :zarafaQuotaHard, :class => 'input', :placeholder => 'Hard quota limit' %>
   </div>
 </div>
+
+<div class="row">
+  <%= form.label :groups, 'Groups:', :class => 'eight columns' %>
+  <%= form.hidden_field :authenticity_token, :value => form_authenticity_token %>
+</div>
+
+<div class="row">
+  <div class="twelve columns field">
+    <ul>
+      <li class="row">
+        <%= form.text_field :groups, :multiple => true, :value => @groups, :class => 'nine columns', 'data-memberfield' => 'true' %>
+      </li>
+    </ul>
+  </div>
+</div>
+
 <% end %>

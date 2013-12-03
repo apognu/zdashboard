@@ -60,6 +60,20 @@
         <%= form.text_field :zarafaQuotaHard, :class => 'input', :placeholder => 'Hard quota limit' %>
       </p>
     </div>
+
+    <div class="row">
+      <%= form.label :groups, 'Groups:', :class => 'eight columns' %>
+    </div>
+
+    <div class="row">
+      <div class="twelve columns field">
+        <ul>
+          <li class="row">
+            <%= form.text_field :groups, :multiple => true, :value => @groups, :class => 'nine columns', 'data-memberfield' => 'true' %>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <div class="tab-content">

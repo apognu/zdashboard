@@ -73,4 +73,38 @@ $(function()
   $(document).on('click', 'a.delete_user', function(event) {
     return confirm("Are you sure you want to delete user '"+$(this).closest('tr').find('td:first').text()+"'");
   });
+
+  $('#user_groups').select2({
+    multiple: true,
+    tokenSeparators: [','],
+    minimumInputLength: 3,
+    ajax: {
+      url:'/groups/list/',
+      type: 'POST',
+      dataType: 'json',
+      data: function(term, page) {
+        return {
+          q: term,
+          authenticity_token: $('#user_authenticity_token').val()
+        };
+      },
+      results: function(data, page) {
+        return { results: data };
+      }
+    }
+  });
+  if ($('#user_groups').val() != null) {
+    $('#user_groups').select2('data', $.parseJSON($('#user_groups').val()));
+  }
+
+  $('a[data-membertoggle]').click(function(event)
+  {
+    event.preventDefault();
+
+    var input = $($('input[data-memberfield]')[0]);
+    var newInput = input.parent('li').clone();
+    newInput.find('input').val('');
+
+    input.closest('ul').append(newInput);
+  });
 });

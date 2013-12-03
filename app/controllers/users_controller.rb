@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   include ApplicationHelper
+  include GroupsHelper
 
   def index
     @title = 'User management'
@@ -33,6 +34,7 @@ class UsersController < ApplicationController
     @user.zarafaAccount = 1;
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+    @user.groups = []
 
     # Is this used?
     @user.gidNumber = 1000;
@@ -42,8 +44,18 @@ class UsersController < ApplicationController
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
 
     if @user.valid?
-      group = Group.find(:first, :attribute => "cn", :value => "all");
-      group.members << @user
+      if ! user_params[:groups].nil?
+        user_params[:groups].reject! { | x | x.nil? or x.empty? or x == "all" }
+
+        unless user_params[:groups][0].nil?
+          groups_list = user_params[:groups][0].split(',')
+          @user.groups = groups_list.map { | current_group |
+            group = Group.find(current_group)
+            group.members << @user          
+          }
+        end
+        add_to_group_all
+      end
 
       if @user.save
         flash[:success] = "User '#{@user.uid}' was successfully created."
@@ -64,6 +76,9 @@ class UsersController < ApplicationController
 
     @user.zarafaSendAsPrivilege = users_list.to_json
 
+    groups = gid_to_select @user.groups
+    @groups = groups.to_json
+
     @title = "Edit user #{@user.uid}"
     @breadcrumbs.concat([ crumbs[:users], "Edit user #{@user.uid}" ])
   end
@@ -81,6 +96,7 @@ class UsersController < ApplicationController
     @user.zarafaHidden = user_params[:zarafaHidden]
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft].to_i
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
+    @user.groups = []
 
     if ! user_params[:userPassword].empty?
       require 'securerandom'
@@ -89,6 +105,20 @@ class UsersController < ApplicationController
       digest = Base64.encode64(Digest::SHA1.digest(user_params[:userPassword] + salt) + salt).chomp
       
       @user.userPassword = '{SSHA}' + digest
+    end
+
+    if ! user_params[:groups].nil?
+      user_params[:groups].reject! { | x | x.nil? or x.empty? }
+
+      unless user_params[:groups][0].nil?
+        groups = user_params[:groups][0].split(',')
+
+        @user.groups = groups.map! { | group |
+          Group.find(group)
+        }
+
+        @groups = gid_to_select(@user.groups).to_json
+      end
     end
 
     if @user.valid?
@@ -101,7 +131,8 @@ class UsersController < ApplicationController
       @messages[:danger] = 'Some fields are in error, unable to save the user'
     end
 
-    @user.zarafaSendAsPrivilege = dn_to_uid @user.zarafaSendAsPrivilege unless @user.zarafaSendAsPrivilege.nil?
+    users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
+    @user.zarafaSendAsPrivilege = users_list.to_json
 
     render :edit
   end
@@ -147,6 +178,7 @@ class UsersController < ApplicationController
                                  :zarafaQuotaHard,
                                  :zarafaAliases => [],
                                  :zarafaSendAsPrivilege => [],
+                                 :groups => [],
     )
   end
 
@@ -185,5 +217,13 @@ class UsersController < ApplicationController
     {
       :users    => { :title => 'Users management', :link => :users }
     }
+  end
+
+  def add_to_group_all
+    group = Group.find(:first, :attribute => "cn", :value => "all");
+    group.members << @user
+
+    @user.groups.push group
+    @groups = gid_to_select(@user.groups).to_json
   end
 end

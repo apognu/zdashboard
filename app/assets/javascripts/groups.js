@@ -3,6 +3,7 @@ $(function()
   $('#group_members').select2({
     multiple: true,
     tokenSeparators: [','],
+    minimumInputLength: 3,
     ajax: {
       url:'/users/list/',
       type: 'POST',

@@ -36,9 +36,9 @@ class GroupsController < ApplicationController
       group_params[:members].reject! { | x | x.nil? or x.empty? }
 
       unless group_params[:members][0].nil?
-        group_params[:members] = group_params[:members][0].split(',')
+        members = group_params[:members][0].split(',')
 
-        @group.members = group_params[:members].map { | uid |
+        @group.members = members.map { | uid |
           User.find(uid)
         }
 
@@ -116,6 +116,18 @@ class GroupsController < ApplicationController
     end
   end
 
+  def list
+    groups = Group.find(:all, :filter => "(&(|(gidNumber=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*))(!(zarafaResourceType=*)))")
+
+    groups.map! do | group |
+      {
+        'text' => group.cn,
+        'id' => group.cn
+      }
+    end
+    render :json => groups
+  end
+
   private
 
   def group_params
@@ -138,4 +150,5 @@ class GroupsController < ApplicationController
       :groups   => { :title => 'Groups management', :link => :groups }
     }
   end
+
 end
