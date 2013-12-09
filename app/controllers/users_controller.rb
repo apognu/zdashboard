@@ -10,7 +10,14 @@ class UsersController < ApplicationController
       params[:search].gsub!("(", "\\(")
       params[:search].gsub!(")", "\\)")
       @users = User.find(:all, :filter => "(&(|(uid=*#{params[:search]}*)(cn=*#{params[:search]}*)(mail=*#{params[:search]}*@*)(zarafaAliases=*#{params[:search]}*))(!(zarafaResourceType=*)))")
-
+      @users.each do | u |
+        begin
+          quota = Quota.find_by uid: u.uid
+          u.current_quota = quota.value
+        rescue
+          u.current_quota = "N.C."
+        end
+      end
       render :partial => "users", :layout => false
     end
   end
@@ -72,6 +79,12 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:uid])
 
+    begin
+      quota = Quota.find_by uid: @user.uid
+      @user.current_quota = quota.value
+    rescue
+      @user.current_quota = "N.C."
+    end
     users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
 
     @user.zarafaSendAsPrivilege = users_list.to_json
@@ -79,6 +92,12 @@ class UsersController < ApplicationController
     groups = gid_to_select @user.groups
     @groups = groups.to_json
 
+    oof = ActiveSupport::JSON.decode(%x{ #{Rails.root}/vendor/zarafa-get-oof #{@user.uid} })
+    
+    @user.out_of_office = oof['out_of_office']
+    @user.out_message = oof['message']
+    @user.out_subject = oof['subject']
+   
     @title = "Edit user #{@user.uid}"
     @breadcrumbs.concat([ crumbs[:users], "Edit user #{@user.uid}" ])
   end
@@ -97,6 +116,12 @@ class UsersController < ApplicationController
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft].to_i
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
     @user.groups = []
+    @user.out_of_office = user_params[:out_of_office]
+    @user.out_message = user_params[:out_message]
+    @user.out_subject = user_params[:out_subject]
+    file = File.new("#{Dir.tmpdir}/#{@user.uid}_message", "w", 0777)
+    file.write("#{@user.out_message}")
+    file.close
 
     if ! user_params[:userPassword].empty?
       require 'securerandom'
@@ -123,8 +148,14 @@ class UsersController < ApplicationController
 
     if @user.valid?
       if @user.save
+        if @user.out_of_office == "1"
+          %x{ #{Rails.root}/vendor/zarafa-set-oof #{@user.uid} #{@user.out_of_office} "#{@user.out_subject}" "#{file.path}" }
+        else
+          %x{ #{Rails.root}/vendor/zarafa-set-oof #{@user.uid} #{@user.out_of_office} }
+        end
         flash[:success] = "User '#{@user.uid}' was successfully edited."
-
+        File.unlink("#{Dir.tmpdir}/#{@user.uid}_message")
+  
         redirect_to users_path and return
       end
     else
@@ -164,7 +195,32 @@ class UsersController < ApplicationController
     render :json => users
   end
 
+  def update_quota
+    unless params[:uid].nil?
+      user = User.find(params[:uid])
+      value = update_db_quota user
+      render :text => "#{value}", :layout => false
+    else
+      users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
+      users.each do | u |
+        update_db_quota u
+      end
+      render :text => "All done !", :layout => false
+    end
+  end
+
   private
+
+  def update_db_quota user
+    begin
+      quota = Quota.find_by uid: user.uid
+    rescue
+      quota = Quota.new(:uid => user.uid)
+    end
+    quota.value = %x{ zarafa-admin --detail #{user.uid} | grep 'Current store size:' }.split("\t")[1].strip.chomp 
+    quota.save
+    return quota.value
+  end
 
   def user_params
     params.require(:user).permit(:uid,
@@ -172,6 +228,9 @@ class UsersController < ApplicationController
                                  :sn,
                                  :mail,
                                  :userPassword,
+                                 :out_of_office,
+                                 :out_message,
+                                 :out_subject,
                                  :zarafaAdmin,
                                  :zarafaHidden,
                                  :zarafaQuotaSoft,

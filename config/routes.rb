@@ -30,6 +30,12 @@ Zarafadashboard::Application.routes.draw do
                             as: :users_delete,
                             constraints: { uid: /[^\/]+/ }
 
+  get '/users/update_quota', to: 'users#update_quota'
+  
+  get '/users/:uid/update_quota', to: 'users#update_quota',
+                                  as: :user_update_quota,
+                                  constraints: { uid: /[^\/]+/ }
+
   get '/groups', to: 'groups#index'
 
   get '/groups/new', to: 'groups#new'

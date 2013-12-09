@@ -70,6 +70,34 @@ $(function()
     }
   });
 
+  $("#user_out_of_office").on('change', function() {
+    if ($(this).is(':checked')) {
+      $('#user_out_subject').attr('readonly', false);
+      $('#user_out_message').attr('readonly', false);
+    } else {
+      $('#user_out_subject').attr('readonly', true);
+      $('#user_out_message').attr('readonly', true);
+    }
+  });
+
+  $(document).on('click', 'a#update_quota', function(event){
+    var $update_btn = $(this);
+    $update_btn.parent('p').css('display', 'none');
+    $.ajax({
+      url: $update_btn.attr('href'),
+      type: 'GET',
+      success: function(res) {
+        $update_btn.parent('p').css('display', 'block');
+        $('p#current_quota span').empty().text(res);
+      },
+      error: function(res) {
+        console.log("An error has occured.");
+        $update_btn.parent('p').css('display', 'block');
+      }
+    });
+    return false;
+  });
+
   $(document).on('click', 'a.delete_user', function(event) {
     return confirm("Are you sure you want to delete user '"+$(this).closest('tr').find('td:first').text()+"'");
   });
