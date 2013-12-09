@@ -115,6 +115,7 @@ class UsersController < ApplicationController
     @user.zarafaHidden = user_params[:zarafaHidden]
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft].to_i
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
+    @user.zarafaSharedStoreOnly = user_params[:zarafaSharedStoreOnly]
     @user.groups = []
     @user.out_of_office = user_params[:out_of_office]
     @user.out_message = user_params[:out_message]
@@ -235,6 +236,7 @@ class UsersController < ApplicationController
                                  :zarafaHidden,
                                  :zarafaQuotaSoft,
                                  :zarafaQuotaHard,
+                                 :zarafaSharedStoreOnly,
                                  :zarafaAliases => [],
                                  :zarafaSendAsPrivilege => [],
                                  :groups => [],

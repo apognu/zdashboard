@@ -119,10 +119,16 @@
         <%= form.check_box :zarafaAdmin %>
       </p>
 
-      <p class="four columns push_one">
+      <p class="four columns">
         <%= form.label :zarafaHidden, 'Hidden from addressbook:', :class => 'inline' %>
         <%= form.check_box :zarafaHidden %>
       </p>
+      
+      <p class="four columns">
+        <%= form.label :zarafaSharedStoreOnly, 'Shared store only:', :class => 'inline' %>
+        <%= form.check_box :zarafaSharedStoreOnly %>
+      </p>
+
     </div>
 
     <div class="row">
