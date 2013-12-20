@@ -1,0 +1,10 @@
+production:
+  host: localhost
+  base: dc=zarafa,dc=com
+  bind_dn: cn=admin,dc=zarafa,dc=com
+  password: password
+
+bases:
+  production:
+    users: ou=users
+    groups: ou=groups
