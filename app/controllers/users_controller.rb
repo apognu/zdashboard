@@ -113,10 +113,13 @@ class UsersController < ApplicationController
     group = user.groups
 
     unless group.empty?
-      group[0].members = group[0].members.reject { |u| u == user }
+      group.each do | g |
+        g.members = g.members.reject { |u| u == user }
+        g.save
+      end
     end
 
-    if (group.empty? or group[0].save) and user.destroy
+    if user.destroy
       flash[:success] = "User '#{user.uid}' was successfully deleted."
 
       redirect_to users_path
