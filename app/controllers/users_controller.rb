@@ -111,9 +111,12 @@ class UsersController < ApplicationController
 
     # Only one group?
     group = user.groups
-    group[0].members = group[0].members.reject { |u| u == user }
 
-    if group[0].save and user.destroy
+    unless group.empty?
+      group[0].members = group[0].members.reject { |u| u == user }
+    end
+
+    if (group.empty? or group[0].save) and user.destroy
       flash[:success] = "User '#{user.uid}' was successfully deleted."
 
       redirect_to users_path
@@ -122,12 +125,22 @@ class UsersController < ApplicationController
 
   def list
     users = User.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*))(!(zarafaResourceType=*)))")
+    groups = Group.find(:all, :filter => "(&(cn=*#{params[:q]}*))")
+
+    users.concat(groups)
 
     users.map! do | user |
-      {
-        'text' => user.cn,
-        'id' => user.uid
-      }
+      if user.is_a? User
+        {
+          'text' => user.cn,
+          'id' => user.uid
+        }
+      else
+        {
+          'text' => user.cn,
+          'id' => user.cn
+        }
+      end
     end
 
     render :json => users
@@ -154,12 +167,22 @@ class UsersController < ApplicationController
     data.reject! { | x | x.nil? or x.empty? }
 
     data.map! { | dn |
-      user = User.find(dn)
-
-      {
-        "text" => user.cn,
-        "id"   => user.uid
-      }
+      begin
+        user = User.find(dn)
+      rescue
+        user = Group.find(dn)
+      end
+      if user.is_a? User
+        {
+          "text" => user.cn,
+          "id"   => user.uid
+        }
+      else
+        {
+          "text" => user.cn,
+          "id" => user.cn
+        }
+      end
     }
   end
 
@@ -169,9 +192,15 @@ class UsersController < ApplicationController
     data = data[0].split(',') unless data.empty?
 
     data.map! { | uid |
-      privilege_user = User.find(uid)
+      begin
+        privilege_user = User.find(uid)
 
-      'uid=' << privilege_user.uid << ',' << privilege_user.base
+        'uid=' << privilege_user.uid << ',' << privilege_user.base
+      rescue
+        privilege_user = Group.find(uid)
+
+        'cn=' << privilege_user.cn << ',' << privilege_user.base
+      end
     }
   end
 
