@@ -210,7 +210,7 @@ class UsersController < ApplicationController
   def next_uidnumber
     users = User.find(:all, :attribute => 'uidNumber')
 
-    users.max_by { | user | user.uidNumber }.uidNumber
+    users.max_by { | user | user.uidNumber }.uidNumber + 1
   end
 
   def crumbs
