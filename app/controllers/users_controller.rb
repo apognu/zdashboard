@@ -182,9 +182,14 @@ class UsersController < ApplicationController
 
     # Only one group?
     group = user.groups
-    group[0].members = group[0].members.reject { |u| u == user }
+    unless group.empty?
+      group.each do | g |
+        g.members = g.members.reject { |u| u == user }
+        g.save
+      end
+    end
 
-    if group[0].save and user.destroy
+    if user.destroy
       flash[:success] = "User '#{user.uid}' was successfully deleted."
 
       redirect_to users_path
@@ -193,12 +198,22 @@ class UsersController < ApplicationController
 
   def list
     users = User.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*))(!(zarafaResourceType=*)))")
+    groups = Group.find(:all, :filter => "(&(cn=*#{params[:q]}*))")
+
+    users.concat(groups)
 
     users.map! do | user |
-      {
-        'text' => user.cn,
-        'id' => user.uid
-      }
+      if user.is_a? User
+        {
+          'text' => user.cn,
+          'id' => user.uid
+        }
+      else
+        {
+          'text' => user.cn,
+          'id' => user.cn
+        }
+      end
     end
 
     render :json => users
@@ -222,11 +237,11 @@ class UsersController < ApplicationController
 
   def update_db_quota user
     begin
-      quota = Quota.find_by uid: user.uid
+      quota = Quota.find_by! uid: user.uid
     rescue
       quota = Quota.new(:uid => user.uid)
     end
-    quota.value = %x{ zarafa-admin --detail #{user.uid} | grep 'Current store size:' }.split("\t")[1].strip.chomp 
+    quota.value = %x{ zarafa-admin --detail #{user.uid} | grep 'Current store size:' }.split("\t")[1].strip.chomp
     quota.save
     return quota.value
   end
@@ -256,12 +271,22 @@ class UsersController < ApplicationController
     data.reject! { | x | x.nil? or x.empty? }
 
     data.map! { | dn |
-      user = User.find(dn)
-
-      {
-        "text" => user.cn,
-        "id"   => user.uid
-      }
+      begin
+        user = User.find(dn)
+      rescue
+        user = Group.find(dn)
+      end
+      if user.is_a? User
+        {
+          "text" => user.cn,
+          "id"   => user.uid
+        }
+      else
+        {
+          "text" => user.cn,
+          "id" => user.cn
+        }
+      end
     }
   end
 
@@ -271,16 +296,22 @@ class UsersController < ApplicationController
     data = data[0].split(',') unless data.empty?
 
     data.map! { | uid |
-      privilege_user = User.find(uid)
+      begin
+        privilege_user = User.find(uid)
 
-      'uid=' << privilege_user.uid << ',' << privilege_user.base
+        'uid=' << privilege_user.uid << ',' << privilege_user.base
+      rescue
+        privilege_user = Group.find(uid)
+
+        'cn=' << privilege_user.cn << ',' << privilege_user.base
+      end
     }
   end
 
   def next_uidnumber
     users = User.find(:all, :attribute => 'uidNumber')
 
-    users.max_by { | user | user.uidNumber }.uidNumber
+    users.max_by { | user | user.uidNumber }.uidNumber + 1
   end
 
   def crumbs

@@ -47,7 +47,7 @@ class GroupsController < ApplicationController
     end
 
     # What to do with those fuckers?
-    @group.gidNumber = next_gidnumber 
+    @group.gidNumber = next_gidnumber
 
     if @group.valid?
       if @group.save
@@ -142,7 +142,7 @@ class GroupsController < ApplicationController
   def next_gidnumber
     groups = Group.find(:all, :attribute => 'gidNumber')
 
-    groups.max_by { | group | group.gidNumber }.gidNumber
+    groups.max_by { | group | group.gidNumber }.gidNumber + 1
   end
 
   def crumbs
