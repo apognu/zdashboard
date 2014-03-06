@@ -3,6 +3,10 @@ body {
   font-weight: 400;
 }
 
+span.red {
+  color: #FF0000;
+}
+
 h1 {
   position: relative;
   bottom: 6px;

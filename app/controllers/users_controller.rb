@@ -27,6 +27,7 @@ class UsersController < ApplicationController
     @breadcrumbs.concat([ crumbs[:users], 'Create a new user' ])
 
     @user = User.new
+    @groups = ""
   end
 
   def save
@@ -34,6 +35,7 @@ class UsersController < ApplicationController
 
     @user = User.new(sanitize_dn(user_params[:uid]))
     @user.mail = user_params[:mail]
+    @user.zarafaAliases = user_params[:zarafaAliases]
     @user.givenName = user_params[:givenName]
     @user.sn = user_params[:sn]
     @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}" unless user_params[:givenName].empty? and user_params[:sn].empty?
@@ -41,6 +43,7 @@ class UsersController < ApplicationController
     @user.zarafaAccount = 1;
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+    @user.zarafaSharedStoreOnly = user_params[:zarafaSharedStoreOnly]
     @user.groups = []
 
     # Is this used?
@@ -50,15 +53,29 @@ class UsersController < ApplicationController
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft].to_i
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
 
-    if @user.valid?
+    passwords_ok = true
+
+    if !user_params[:userPassword].empty? and !user_params[:userPassword_confirmation].empty? and user_params[:userPassword_confirmation] == user_params[:userPassword]
+      require 'securerandom'
+
+      salt = SecureRandom.urlsafe_base64(12)
+      digest = Base64.encode64(Digest::SHA1.digest(user_params[:userPassword] + salt) + salt).chomp
+
+      @user.userPassword = '{SSHA}' + digest
+    else
+      passwords_ok = false
+      @user.errors.add(:userPassword, "The password can't be empty")
+      @user.errors.add(:userPassword_confirmation, "The password can't be empty")
+    end
+
+    if @user.valid? and passwords_ok
       if ! user_params[:groups].nil?
         user_params[:groups].reject! { | x | x.nil? or x.empty? or x == "all" }
 
         unless user_params[:groups][0].nil?
-          groups_list = user_params[:groups][0].split(',')
-          @user.groups = groups_list.map { | current_group |
-            group = Group.find(current_group)
-            group.members << @user          
+          groups = user_params[:groups][0].split(',')
+          @user.groups = groups.map! { | group |
+            Group.find(group)
           }
         end
         add_to_group_all
@@ -71,6 +88,17 @@ class UsersController < ApplicationController
       end
     else
       @messages[:danger] = 'Some fields are in error, unable to save the user'
+      if user_params[:userPassword].empty?
+        @user.errors.add(:userPassword, "can't be empty")
+      end
+      if user_params[:userPassword_confirmation].empty?
+        @user.errors.add(:userPassword_confirmation, "can't be empty")
+      end
+      if !user_params[:userPassword].empty? and !user_params[:userPassword_confirmation].empty? and user_params[:userPassword] != user_params[:userPassword_confirmation]
+        @user.errors.add(:userPassword)
+        @user.errors.add(:userPassword_confirmation)
+      end
+      @messages[:danger] = @user.errors.full_messages
     end
 
     render :new

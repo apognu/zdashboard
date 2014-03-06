@@ -45,7 +45,7 @@ $(function()
     }
   });
 
-  if ($("#user_zarafaSendAsPrivilege").val() != null) {
+  if ($("#user_zarafaSendAsPrivilege").val() != null && $("#user_zarafaSendAsPrivilege").val() != "") {
     $("#user_zarafaSendAsPrivilege").select2('data', $.parseJSON($("#user_zarafaSendAsPrivilege").val()));
   }
 
@@ -121,7 +121,7 @@ $(function()
       }
     }
   });
-  if ($('#user_groups').val() != null) {
+  if ($('#user_groups').val() != null && $('#user_groups').val() != "") {
     $('#user_groups').select2('data', $.parseJSON($('#user_groups').val()));
   }
 

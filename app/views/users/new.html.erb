@@ -1,63 +1,156 @@
-<%= form_for @user, url: users_new_path do | form | %>
-<div class="row">
-  <div class="field nine columns">
-    <%= form.label :uid, 'Username:' %>
-    <%= form.text_field :uid, :class => 'input', autofocus: :autofocus %>
-  </div>
-
-  <div class="field three columns">
-    <p class="medium primary btn"><%= form.submit "Save the user", tabindex: 1000 %></p>
-  </div>
-</div>
-
-<div class="row">
-  <%= form.label :givenName, 'Full name:' %>
-</div>
-    
-<div class="row">
-  <div class="field four columns">
-    <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
-  </div>
-
-  <div class="field four columns push_one">
-    <%= form.text_field :sn, :class => 'input', :placeholder => 'Last name' %>
-  </div>
-</div>
-    
-<div class="row">
-  <div class="field nine columns">
-    <%= form.label :mail, 'Main email address:' %>
-    <%= form.text_field :mail, :class => 'input' %>
-  </div>
-</div>
-
-<div class="row">
-    <%= form.label :zarafaQuotaSoft, 'User quotas:' %>
-</div>
-    
-<div class="row">
-  <div class="field four columns">
-    <%= form.text_field :zarafaQuotaSoft, :class => 'input', :placeholder => 'Soft quota limit' %>
-  </div>
-
-  <div class="field four columns push_one">
-    <%= form.text_field :zarafaQuotaHard, :class => 'input', :placeholder => 'Hard quota limit' %>
-  </div>
-</div>
-
-<div class="row">
-  <%= form.label :groups, 'Groups:', :class => 'eight columns' %>
-  <%= form.hidden_field :authenticity_token, :value => form_authenticity_token %>
-</div>
-
-<div class="row">
-  <div class="twelve columns field">
-    <ul>
-      <li class="row">
-        <%= form.text_field :groups, :multiple => true, :value => @groups, :class => 'nine columns', 'data-memberfield' => 'true' %>
-      </li>
+<section class="tabs">
+  <div class="row">
+    <ul class="tab-nav">
+      <li class="active"><a href="#">Basic information</a></li>
+      <li><a href="#">Mail aliases</a></li>
+      <li><a href="#">Privileges</a></li>
     </ul>
   </div>
-</div>
+
+  <%= form_for @user, url: users_new_path do | form | %>
+  <div class="tab-content active">
+    <div class="row">
+      <p class="nine columns">
+        <span class="red">*</span> mandatory fields
+      </p>
+    </div>
+    <div class="row">
+      <div class="field nine columns">
+        <%= form.label :uid, 'Username: <span class="red">*</span>'.html_safe %>
+        <%= form.text_field :uid, :class => 'input', autofocus: :autofocus %>
+      </div>
+
+      <div class="field three columns">
+        <p class="medium primary btn"><%= form.submit "Save the user", tabindex: 1000 %></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <%= form.label :sn, 'Full name: <span class="red">(Last name is mandatory)</span>'.html_safe %>
+    </div>
+    
+    <div class="row">
+      <div class="field four columns">
+        <%= form.text_field :sn, :class => 'input', :placeholder => 'Last name' %>
+      </div>
+
+      <div class="field four columns push_one">
+        <%= form.text_field :givenName, :class => 'input', :placeholder => 'First name' %>
+      </div>
+    </div>
+
+    <div class="row">
+      <p class="field four columns">
+        <%= form.label :userPassword, 'New password:<span class="red">*</span>'.html_safe %>
+        <%= form.password_field :userPassword, :class => 'input' %>
+      </p>
+      <p class="field four columns push_one">
+        <%= form.label :userPassword_confirmation, 'Confirm password:<span class="red">*</span>'.html_safe %>
+        <%= form.password_field :userPassword_confirmation, :class => 'input' %>
+      </p>
+    </div>
+    
+    <div class="row">
+      <div class="field nine columns">
+        <%= form.label :mail, 'Main email address: <span class="red">*</span>'.html_safe %>
+        <%= form.text_field :mail, :class => 'input' %>
+      </div>
+    </div>
+
+    <div class="row">
+        <%= form.label :zarafaQuotaSoft, 'User quotas: (in MB)' %>
+    </div>
+    
+    <div class="row">
+      <div class="field four columns">
+        <%= form.text_field :zarafaQuotaSoft, :class => 'input', :placeholder => 'Soft quota limit' %>
+      </div>
+
+      <div class="field four columns push_one">
+        <%= form.text_field :zarafaQuotaHard, :class => 'input', :placeholder => 'Hard quota limit' %>
+      </div>
+    </div>
+
+    <div class="row">
+      <%= form.label :groups, 'Groups:', :class => 'eight columns' %>
+    </div>
+
+    <div class="row">
+      <div class="twelve columns field">
+        <ul>
+          <li class="row">
+            <%= form.text_field :groups, :multiple => true, :value => @groups, :class => 'nine columns', 'data-memberfield' => 'true' %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content">
+    <div class="row">
+      <div class="nine columns field">
+        <ul>
+          <% @user.zarafaAliases(true).each do | mailalias | %>
+            <li class="row">
+              <%= form.text_field :zarafaAliases, :multiple => true, :value => mailalias, :class => 'input nine columns', 'data-aliasfield' => 'test' %>
+              <div class="small danger btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove</a></div>
+            </li>
+          <% end %>
+
+          <li class="row">
+            <%= form.text_field :zarafaAliases, :multiple => true, :value => '', :class => 'input nine columns', 'data-aliasfield' => 'test' %>
+            <div class="small danger btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="aliasremove">Remove</a></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="medium info btn two columns icon-left icon-plus-circled"><a href="#" data-aliastoggle>Add</a></div>
+      <p class="medium primary btn"><%= form.submit "Save user", tabindex: 1000 %></p>
+    </div>
+  </div>
+
+  <div class="tab-content">
+    <div class="row">
+      <p class="four columns">
+        <%= form.label :zarafaAdmin, 'Admin:', :class => 'inline' %>
+        <%= form.check_box :zarafaAdmin %>
+      </p>
+
+      <p class="four columns">
+        <%= form.label :zarafaHidden, 'Hidden from addressbook:', :class => 'inline' %>
+        <%= form.check_box :zarafaHidden %>
+      </p>
+
+      <p class="four columns">
+        <%= form.label :zarafaSharedStoreOnly, 'Shared store only:', :class => 'inline' %>
+        <%= form.check_box :zarafaSharedStoreOnly %>
+      </p>
+
+    </div>
+
+    <div class="row">
+      <%= form.label :zarafaSendAsPrivilege, 'Those users can use this identity to send emails:', :class => 'eight columns' %>
+      <%= form.hidden_field :authenticity_token, :value => form_authenticity_token %>
+    </div>
+
+    <div class="row">
+      <div class="nine columns field">
+        <ul>
+          <li>
+            <%= form.text_field :zarafaSendAsPrivilege, :multiple => true, :value => @user.zarafaSendAsPrivilege, 'data-sendasfield' => 'test' %>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field three columns">
+        <p class="medium primary btn"><%= form.submit "Save user", tabindex: 1000 %></p>
+      </div>
+    </div>
+  </div>
 
 <% end %>
+</section>

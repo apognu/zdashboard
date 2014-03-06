@@ -9,7 +9,6 @@ class User < ActiveLdap::Base
   belongs_to :groups, :class => 'Group', :many => 'memberUid', :foreign_key => 'uid'
 
   validates :uid, :presence => true, format: { with: /\A[0-9a-zA-Z._-]+\z/ }
-  validates :givenName, :presence => true, :allow_nil => false
   validates :sn, :presence => true, :allow_nil => false
   validates :mail, :presence => true, :allow_nil => false, format: { with: /\A[\w+@.-]+\z/ }
   validates :zarafaQuotaSoft, :presence => true, :unless => Proc.new { |u| u.is_a?(Resource) }, :numericality => {:only_integer => true, :less_than_or_equal_to => :zarafaQuotaHard}, :allow_nil => false 
