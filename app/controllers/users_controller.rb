@@ -128,6 +128,8 @@ class UsersController < ApplicationController
    
     @title = "Edit user #{@user.uid}"
     @breadcrumbs.concat([ crumbs[:users], "Edit user #{@user.uid}" ])
+
+    @last_logon = %x{ zarafa-admin --detail #{@user.uid} | grep 'Last logon:' }.split("\t").reject!{ |c| c.empty? }[1].strip.chomp
   end
 
   def update

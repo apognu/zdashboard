@@ -65,10 +65,15 @@
         <%= form.label :userPassword_confirmation, 'Confirm password:' %>
         <%= form.password_field :userPassword_confirmation, :class => 'input' %>
       </p>
+
+      <p class="field three columns">
+        Used space : <span><%= "%.2f" % (@user.current_quota.to_f * 100 / @user.zarafaQuotaHard.to_f) %> %</span><br />
+        Last Logon : <%= @last_logon %>
+      </p>
     </div>
 
     <div class="row">
-      <%= form.label :zarafaQuotaSoft, 'User quotas:' %>
+      <%= form.label :zarafaQuotaSoft, 'User quotas: (in MB)' %>
     </div>
 
     <div class="row">
