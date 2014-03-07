@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131127144742) do
+ActiveRecord::Schema.define(version: 20140307131930) do
 
   create_table "quota", force: true do |t|
     t.string "uid"
@@ -19,5 +19,12 @@ ActiveRecord::Schema.define(version: 20131127144742) do
   end
 
   add_index "quota", ["uid"], name: "index_quota_on_uid", unique: true
+
+  create_table "settings", force: true do |t|
+    t.string "key"
+    t.string "value"
+  end
+
+  add_index "settings", ["key"], name: "index_settings_on_key", unique: true
 
 end

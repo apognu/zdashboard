@@ -1,0 +1,55 @@
+<%= form_for @settings, url: settings_save_path do | form | %>
+<div class="row">
+  <div class="nine columns field">
+    <ul>
+      <% unless @domains.nil? 
+          @domains.value.each do | domain | %>
+      <li class="row">
+        <%= form.text_field :domains, :multiple => true, :value => domain, :class => 'input nine columns', 'data-domainfield' => true %>
+        <div class="small danger btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="domainremove">Remove</a></div>
+      </li>
+      <%  end
+        end %>
+      <li class="row">
+        <%= form.text_field :domains, :multiple => true, :value => '', :class => 'input nine columns', 'data-domainfield' => true %>
+        <div class="small danger btn two columns icon-left entypo icon-cancel-circled"><a href="#" class="domainremove">Remove</a></div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <div class="medium info btn two columns icon-left icon-plus-circled">
+      <a href="#" data-domaintoggle>Add</a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <p class="field nine columns">
+    <%= form.label :defaultDomain, "Default domain:" %>
+    <%= form.text_field :defaultDomain, :class => 'input', :value => @defaultDomain %>
+  </p>
+</div>
+
+<div class="row">
+    <%= form.label :defaultQuotaSoft, "Default quotas: (in MB)" %>
+</div>
+
+<div class="row">
+  <p class="field four columns">
+    <%= form.text_field :defaultQuotaSoft, :class => 'input', :value => @defaultQuotaSoft, :placeholder => 'Default soft quota limit' %>
+  </p>
+  <p class="field four columns push_one">
+    <%= form.text_field :defaultQuotaHard, :class => 'input', :value => @defaultQuotaHard, :placeholder => 'Default hard quota limit' %>
+  </p>
+</div>
+
+<div class="row">
+  <div class="field two columns">
+    <p class="medium primary btn"><%= form.submit "Save", tabindex: 1000 %></p>
+  </div>
+</div>
+
+<% end %>

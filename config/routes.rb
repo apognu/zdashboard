@@ -79,6 +79,11 @@ Zarafadashboard::Application.routes.draw do
                                 as: :resources_delete,
                                 constraints: { uid: /[^\/]+/ }
 
+  get '/settings', to: 'settings#index'
+
+  post '/settings/save', to: 'settings#save',
+                         as: :settings_save
+
   if Rails.env.production?
     match '*not_found', to: 'application#error_404',
                         via: [ :get, :post ]
