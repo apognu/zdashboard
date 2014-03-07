@@ -51,7 +51,8 @@
 
       <div class="field three columns">
         <p id="current_quota">
-          Current quota : <span><%= @user.current_quota %></span>
+          Current quota : <span><%= @user.current_quota %></span><br />
+          Used space : <span><%= "%.2f" % (@user.current_quota.to_f * 100 / @user.zarafaQuotaHard.to_f) %> %</span>
         </p>
       </div>
     </div>
@@ -66,9 +67,10 @@
         <%= form.password_field :userPassword_confirmation, :class => 'input' %>
       </p>
 
-      <p class="field three columns">
-        Used space : <span><%= "%.2f" % (@user.current_quota.to_f * 100 / @user.zarafaQuotaHard.to_f) %> %</span><br />
-        Last Logon : <%= @last_logon %>
+      <p class="field three columns timeinfos">
+        Last Logon: <%= @last_logon %><br />
+        Created on: <%= @user.createTimestamp.strftime("%m/%d/%Y %I:%M:%S %p") %><br />
+        Modified on: <%= @user.modifyTimestamp.strftime("%m/%d/%Y %I:%M:%S %p") %>
       </p>
     </div>
 

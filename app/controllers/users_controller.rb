@@ -105,7 +105,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:uid])
+    @user = User.find(params[:uid], :attributes => ["+", "*"])
 
     begin
       quota = Quota.find_by uid: @user.uid
