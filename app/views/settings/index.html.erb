@@ -29,7 +29,9 @@
 <div class="row">
   <p class="field nine columns">
     <%= form.label :defaultDomain, "Default domain:" %>
-    <%= form.text_field :defaultDomain, :class => 'input', :value => @defaultDomain %>
+    <div class="picker nine columns">
+      <%= form.select :defaultDomain, @domains.value, :selected => @defaultDomain %>
+    </div>
   </p>
 </div>
 

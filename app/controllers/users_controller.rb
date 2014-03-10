@@ -28,13 +28,18 @@ class UsersController < ApplicationController
 
     @user = User.new
     @groups = ""
+
+    @domains = Setting.find_by_key("domains").value
+    @user.domain = Setting.find_by_key("defaultDomain").value
+    @user.zarafaQuotaSoft = Setting.find_by_key("defaultQuotaSoft").value
+    @user.zarafaQuotaHard = Setting.find_by_key("defaultQuotaHard").value
   end
 
   def save
     @title = 'Create a new user'
 
     @user = User.new(sanitize_dn(user_params[:uid]))
-    @user.mail = user_params[:mail]
+    @user.mail = user_params[:mail] + "@" + user_params[:domain]
     @user.zarafaAliases = user_params[:zarafaAliases]
     @user.givenName = user_params[:givenName]
     @user.sn = user_params[:sn]
@@ -64,11 +69,15 @@ class UsersController < ApplicationController
       @user.userPassword = '{SSHA}' + digest
     else
       passwords_ok = false
-      @user.errors.add(:userPassword, "The password can't be empty")
-      @user.errors.add(:userPassword_confirmation, "The password can't be empty")
     end
 
-    if @user.valid? and passwords_ok
+    @domains = Setting.find_by_key("domains").value
+    mail_ok = true
+    unless @domains.include?(@user.mail.split("@")[1])
+      mail_ok = false
+    end
+
+    if @user.valid? and passwords_ok and mail_ok
       if ! user_params[:groups].nil?
         user_params[:groups].reject! { | x | x.nil? or x.empty? or x == "all" }
 
@@ -87,7 +96,6 @@ class UsersController < ApplicationController
         redirect_to users_path and return
       end
     else
-      @messages[:danger] = 'Some fields are in error, unable to save the user'
       if user_params[:userPassword].empty?
         @user.errors.add(:userPassword, "can't be empty")
       end
@@ -98,7 +106,11 @@ class UsersController < ApplicationController
         @user.errors.add(:userPassword)
         @user.errors.add(:userPassword_confirmation)
       end
-      @messages[:danger] = @user.errors.full_messages
+      unless mail_ok
+        @user.errors.add(:mail, "is not in authorized list")
+      end
+      @messages[:danger] = 'Some fields are in error, unable to save the user'
+      @user.mail = @user.mail.split("@")[0]
     end
 
     render :new
@@ -129,12 +141,21 @@ class UsersController < ApplicationController
     @title = "Edit user #{@user.uid}"
     @breadcrumbs.concat([ crumbs[:users], "Edit user #{@user.uid}" ])
 
-    @last_logon = %x{ zarafa-admin --detail #{@user.uid} | grep 'Last logon:' }.split("\t").reject!{ |c| c.empty? }[1].strip.chomp
+    begin
+      @last_logon = %x{ zarafa-admin --detail #{@user.uid} | grep 'Last logon:' }.split("\t").reject!{ |c| c.empty? }[1].strip.chomp
+    rescue
+      @last_logon = "never"
+    end
+
+    @domains = Setting.find_by_key("domains").value
+    tmp = @user.mail.split("@")
+    @user.mail = tmp[0]
+    @user.domain = tmp[1]
   end
 
   def update
     @user = User.find(params[:uid])
-    @user.mail = user_params[:mail]
+    @user.mail = user_params[:mail] + "@" + user_params[:domain]
     @user.zarafaAliases = user_params[:zarafaAliases]
     @user.givenName = user_params[:givenName]
     @user.sn = user_params[:sn]
@@ -181,7 +202,13 @@ class UsersController < ApplicationController
       end
     end
 
-    if @user.valid? && passwords_ok
+    @domains = Setting.find_by_key("domains").value
+    mail_ok = true
+    unless @domains.include?(@user.mail.split("@")[1])
+      mail_ok = false
+    end
+
+    if @user.valid? and passwords_ok and mail_ok
       if @user.save
         if @user.out_of_office == "1"
           %x{ #{Rails.root}/vendor/zarafa-set-oof #{@user.uid} #{@user.out_of_office} "#{@user.out_subject}" "#{file.path}" }
@@ -198,7 +225,11 @@ class UsersController < ApplicationController
         @user.errors.add(:userPassword, "Passwords don't match.")
         @user.errors.add(:userPassword_confirmation)
       end
+      unless mail_ok
+        @user.errors.add(:mail, "is not in authorized list")
+      end
       @messages[:danger] = 'Some fields are in error, unable to save the user'
+      @user.mail = @user.mail.split("@")[0]
     end
 
     users_list = dn_to_uid @user.zarafaSendAsPrivilege(true) unless @user.zarafaSendAsPrivilege.nil?
@@ -281,6 +312,7 @@ class UsersController < ApplicationController
                                  :givenName,
                                  :sn,
                                  :mail,
+                                 :domain,
                                  :userPassword,
                                  :out_of_office,
                                  :out_message,

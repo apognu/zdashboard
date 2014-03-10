@@ -27,10 +27,15 @@
     </div>
 
     <div class="row">
-      <p class="field nine columns">
+      <p class="field four columns">
         <%= form.label :mail, 'Email address: <span class="red">*</span>'.html_safe %>
         <%= form.text_field :mail, :class => 'input' %>
       </p>
+      <p class="field one columns text-center"><br />@</p>
+      <div class="field four columns">
+        <br />
+        <div class="picker twelve columns"><%= form.select :domain, @domains, :selected => @user.domain %></div>
+      </div>
 
       <div class="field three columns">
         <p class="medium info btn"><%= link_to "Update quota", user_update_quota_path(:uid => @user.uid), :id => :update_quota %></p>

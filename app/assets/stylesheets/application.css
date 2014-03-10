@@ -98,3 +98,16 @@ div.field p.btn input {
 input[name='search'].loading {
   background: #fff url('select2-spinner.gif') no-repeat 98%;
 }
+
+.picker {
+  margin: 0 0 2px 0;
+}
+
+.picker select {
+  width: 100%;
+  padding: 0 10px;
+}
+
+.picker:after {
+  right: 15px;
+}

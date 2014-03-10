@@ -26,6 +26,20 @@
     </div>
 
     <div class="row">
+      <div class="field four columns">
+        <%= form.label :mail, 'Main email address: <span class="red">*</span>'.html_safe %>
+        <%= form.text_field :mail, :class => 'input' %>
+      </div>
+      <div class="field one columns">
+        <p class="text-center"><br />@</p> 
+      </div>
+      <div class="field four columns">
+          <br />
+          <div class="picker twelve columns"><%= form.select :domain, @domains, :selected => @user.domain %></div>
+      </div>
+    </div>
+
+    <div class="row">
       <%= form.label :sn, 'Full name: <span class="red">(Last name is mandatory)</span>'.html_safe %>
     </div>
     
@@ -50,13 +64,6 @@
       </p>
     </div>
     
-    <div class="row">
-      <div class="field nine columns">
-        <%= form.label :mail, 'Main email address: <span class="red">*</span>'.html_safe %>
-        <%= form.text_field :mail, :class => 'input' %>
-      </div>
-    </div>
-
     <div class="row">
         <%= form.label :zarafaQuotaSoft, 'User quotas: (in MB)' %>
     </div>
