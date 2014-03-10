@@ -88,7 +88,8 @@ $(function()
       type: 'GET',
       success: function(res) {
         $update_btn.parent('p').css('display', 'block');
-        $('p#current_quota span').empty().text(res);
+        $('p#current_quota span:first').empty().text(res);
+        $('p#current_quota span:last').empty().text((parseInt(res) * 100 / $('#user_zarafaQuotaHard').val()).toFixed(2) + " %");
       },
       error: function(res) {
         console.log("An error has occured.");
