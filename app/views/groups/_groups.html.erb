@@ -1,0 +1,13 @@
+<% unless @groups.nil? or @groups.empty? 
+   @groups.each do | group | %>
+      <tr>
+        <td><%= link_to(group.cn, groups_edit_path(:cn => group.cn)) %></td>
+        <td><%= group.mail %></td>
+        <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', groups_delete_path(:cn => group.cn), :class => 'delete_group') %></div></td>
+      </tr>
+    <% end
+  else %>
+    <tr>
+      <td colspan="4">No result, try with another search</td>
+    </tr>
+<% end %>

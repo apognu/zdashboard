@@ -6,15 +6,12 @@ class GroupsController < ApplicationController
     @title = 'Group management'
     @breadcrumbs.concat([ crumbs[:groups] ])
 
-    page = 0
-    page = (params[:page].to_i - 1) if params[:page].present?
-    groups_per_page = 5
-
-    @groups = Group.all
-    @pages = paginate(groups_per_page, @groups.length, page)
-    @groups = @groups.slice(groups_per_page * page, groups_per_page)
-
-    error_404 if @groups.nil? or @groups.empty?
+    if request.post?
+      params[:search].gsub!("(", "\\(")
+      params[:search].gsub!(")", "\\)")
+      @groups = Group.find(:all, :filter => "(&(cn=*#{params[:search]}*))")
+      render :partial => "groups", :layout => false
+    end
   end
 
   def new
