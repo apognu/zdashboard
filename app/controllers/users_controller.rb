@@ -132,12 +132,15 @@ class UsersController < ApplicationController
     groups = gid_to_select @user.groups
     @groups = groups.to_json
 
-    oof = ActiveSupport::JSON.decode(%x{ #{Rails.root}/vendor/zarafa-get-oof #{@user.uid} })
+    begin
+      oof = ActiveSupport::JSON.decode(%x{ #{Rails.root}/vendor/zarafa-get-oof #{@user.uid} })
+      @user.out_of_office = oof['out_of_office']
+      @user.out_message = oof['message']
+      @user.out_subject = oof['subject']
+    rescue
+      @messages[:danger] = "WARNING : zarafa server is offline, some features could not work"
+    end
     
-    @user.out_of_office = oof['out_of_office']
-    @user.out_message = oof['message']
-    @user.out_subject = oof['subject']
-   
     @title = "Edit user #{@user.uid}"
     @breadcrumbs.concat([ crumbs[:users], "Edit user #{@user.uid}" ])
 
