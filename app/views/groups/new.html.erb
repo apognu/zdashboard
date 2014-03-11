@@ -1,7 +1,7 @@
 <%= form_for @group, url: groups_new_path do | form | %>
 <div class="row">
   <p class="field nine columns">
-    <%= form.label :cn, 'Identifier:' %>
+    <%= form.label :cn, 'Identifier:<span class="red">*</span>'.html_safe %>
     <%= form.text_field :cn, :class => 'input', autofocus: :autofocus %>
   </p>
 
