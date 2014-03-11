@@ -73,7 +73,7 @@ class UsersController < ApplicationController
 
     @domains = Setting.find_by_key("domains").value
     mail_ok = true
-    unless @domains.include?(@user.mail.split("@")[1])
+    if user_params[:mail].empty? or !@domains.include?(@user.mail.split("@")[1])
       mail_ok = false
     end
 
@@ -107,7 +107,11 @@ class UsersController < ApplicationController
         @user.errors.add(:userPassword_confirmation)
       end
       unless mail_ok
-        @user.errors.add(:mail, "is not in authorized list")
+        if user_params[:mail].empty?
+          @user.errors.add(:mail, "can't be empty")
+        else
+          @user.errors.add(:domain, "is not in authorized list")
+        end
       end
       @messages[:danger] = 'Some fields are in error, unable to save the user'
       @user.mail = @user.mail.split("@")[0]
@@ -154,7 +158,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:uid])
+    @user = User.find(params[:uid], :attributes => ["+", "*"])
     @user.mail = user_params[:mail] + "@" + user_params[:domain]
     @user.zarafaAliases = user_params[:zarafaAliases]
     @user.givenName = user_params[:givenName]
@@ -204,7 +208,7 @@ class UsersController < ApplicationController
 
     @domains = Setting.find_by_key("domains").value
     mail_ok = true
-    unless @domains.include?(@user.mail.split("@")[1])
+    if user_params[:mail].empty? or !@domains.include?(@user.mail.split("@")[1])
       mail_ok = false
     end
 
@@ -226,7 +230,11 @@ class UsersController < ApplicationController
         @user.errors.add(:userPassword_confirmation)
       end
       unless mail_ok
-        @user.errors.add(:mail, "is not in authorized list")
+        if user_params[:mail].empty?
+          @user.errors.add(:mail, "can't be empty")
+        else
+          @user.errors.add(:domain, "is not in authorized list")
+        end
       end
       @messages[:danger] = 'Some fields are in error, unable to save the user'
       @user.mail = @user.mail.split("@")[0]
