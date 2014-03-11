@@ -84,6 +84,10 @@ Zarafadashboard::Application.routes.draw do
   post '/settings/save', to: 'settings#save',
                          as: :settings_save
 
+  get '/statistics', to: 'statistics#index'
+
+  get '/statistics/export_csv', to: 'statistics#export_csv'
+
   if Rails.env.production?
     match '*not_found', to: 'application#error_404',
                         via: [ :get, :post ]
