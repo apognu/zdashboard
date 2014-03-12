@@ -6,10 +6,10 @@ class SettingsController < ApplicationController
 
     @domains = Setting.find_by_key("domains")
 
-    @defaultDomain = Setting.find_by_key("defaultDomain").value
+    @defaultDomain = Setting.find_by_key("defaultDomain")
 
-    @defaultQuotaSoft = Setting.find_by_key("defaultQuotaSoft").value
-    @defaultQuotaHard = Setting.find_by_key("defaultQuotaHard").value
+    @defaultQuotaSoft = Setting.find_by_key("defaultQuotaSoft")
+    @defaultQuotaHard = Setting.find_by_key("defaultQuotaHard")
 
     @settings = Setting.new
   end
@@ -18,19 +18,20 @@ class SettingsController < ApplicationController
 
     success = true
 
+    setting_params[:domains].reject!{ |c| c.empty?}
     unless setting_params[:domains].empty?
       begin
         domains = Setting.find_by! key: :domains
       rescue
         domains = Setting.new(:key => :domains)
       end
-      domains.value = setting_params[:domains].reject{ |c| c.empty? }
+      domains.value = setting_params[:domains]
       unless domains.save
         success = false
       end
     end
 
-    unless setting_params[:defaultDomain].empty?
+    unless setting_params[:defaultDomain].nil?
       begin 
         defaultDomain = Setting.find_by! key: :defaultDomain
       rescue

@@ -29,9 +29,15 @@
 <div class="row">
   <p class="field nine columns">
     <%= form.label :defaultDomain, "Default domain:" %>
+    <% unless @domains.nil? %>
     <div class="picker nine columns">
-      <%= form.select :defaultDomain, @domains.value, :selected => @defaultDomain %>
+      <%= form.select :defaultDomain, @domains.value, :selected => @defaultDomain.nil? ? '':@defaultDomain.value %>
     </div>
+    <% else %>
+    <div class="nine columns">
+      <span class="red">No domain defined (define at least one in the field above)</span>
+    </div>
+    <% end %>
   </p>
 </div>
 
@@ -41,10 +47,10 @@
 
 <div class="row">
   <p class="field four columns">
-    <%= form.text_field :defaultQuotaSoft, :class => 'input', :value => @defaultQuotaSoft, :placeholder => 'Default soft quota limit' %>
+    <%= form.text_field :defaultQuotaSoft, :class => 'input', :value => @defaultQuotaSoft.nil? ? '':@defaultQuotaSoft.value, :placeholder => 'Default soft quota limit' %>
   </p>
   <p class="field four columns push_one">
-    <%= form.text_field :defaultQuotaHard, :class => 'input', :value => @defaultQuotaHard, :placeholder => 'Default hard quota limit' %>
+    <%= form.text_field :defaultQuotaHard, :class => 'input', :value => @defaultQuotaHard.nil? ? '':@defaultQuotaHard.value, :placeholder => 'Default hard quota limit' %>
   </p>
 </div>
 

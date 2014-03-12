@@ -35,7 +35,11 @@
       </div>
       <div class="field four columns">
           <br />
-          <div class="picker twelve columns"><%= form.select :domain, @domains, :selected => @user.domain %></div>
+          <% unless @domains.nil? %>
+            <div class="picker twelve columns"><%= form.select :domain, @domains, :selected => @user.domain %></div>
+          <% else %>
+            <div class="twelve columns"><span class="red">No domain defined (go to settings to define domains)</span></div>
+          <% end %>
       </div>
     </div>
 

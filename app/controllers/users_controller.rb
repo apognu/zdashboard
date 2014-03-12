@@ -29,10 +29,23 @@ class UsersController < ApplicationController
     @user = User.new
     @groups = ""
 
-    @domains = Setting.find_by_key("domains").value
-    @user.domain = Setting.find_by_key("defaultDomain").value
-    @user.zarafaQuotaSoft = Setting.find_by_key("defaultQuotaSoft").value
-    @user.zarafaQuotaHard = Setting.find_by_key("defaultQuotaHard").value
+    @domains = Setting.find_by_key("domains")
+    @user.domain = Setting.find_by_key("defaultDomain")
+    @user.zarafaQuotaSoft = Setting.find_by_key("defaultQuotaSoft")
+    @user.zarafaQuotaHard = Setting.find_by_key("defaultQuotaHard")
+
+    unless @domains.nil?
+      @domains = @domains.value
+    end
+    unless @user.domain.nil?
+      @user.domain = @user.domain.value
+    end
+    unless @user.zarafaQuotaSoft.nil?
+      @user.zarafaQuotaSoft = @user.zarafaQuotaSoft.value
+    end
+    unless @user.zarafaQuotaHard.nil?
+      @user.zarafaQuotaHard = @user.zarafaQuotaHard.value
+    end
   end
 
   def save
@@ -151,7 +164,10 @@ class UsersController < ApplicationController
       @last_logon = "never"
     end
 
-    @domains = Setting.find_by_key("domains").value
+    @domains = Setting.find_by_key("domains")
+    unless @domains.nil?
+      @domains = @domains.value
+    end
     tmp = @user.mail.split("@")
     @user.mail = tmp[0]
     @user.domain = tmp[1]
