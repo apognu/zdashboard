@@ -283,29 +283,18 @@ class UsersController < ApplicationController
   def update_quota
     unless params[:uid].nil?
       user = User.find(params[:uid])
-      value = update_db_quota user
-      render :text => "#{value}", :layout => false
-    else
-      users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
-      users.each do | u |
-        update_db_quota u
+      begin
+        quota = Quota.find_by! uid: user.uid
+      rescue
+        quota = Quota.new(:uid => user.uid)
       end
-      render :text => "All done !", :layout => false
+      quota.value = %x{ zarafa-admin --detail #{user.uid} | grep 'Current store size:' }.split("\t")[1].strip.chomp
+      quota.save
+      render :text => "#{quota.value}", :layout => false
     end
   end
 
   private
-
-  def update_db_quota user
-    begin
-      quota = Quota.find_by! uid: user.uid
-    rescue
-      quota = Quota.new(:uid => user.uid)
-    end
-    quota.value = %x{ zarafa-admin --detail #{user.uid} | grep 'Current store size:' }.split("\t")[1].strip.chomp
-    quota.save
-    return quota.value
-  end
 
   def user_params
     params.require(:user).permit(:uid,
