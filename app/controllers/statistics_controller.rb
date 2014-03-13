@@ -3,6 +3,10 @@ class StatisticsController < ApplicationController
   def index
     @title = "Statistics"
 
+    @disk = get_disk_space
+
+    @license = get_license_information
+  
   end
 
   def export_csv
@@ -41,6 +45,27 @@ class StatisticsController < ApplicationController
     end
     
     send_data content, :filename => Time.new.strftime("%Y%m%d%H%M%S") + "_export_users.csv"
+  end
+
+  private
+
+  def get_disk_space
+    disk_used = %x{ grep "attachment_path" /etc/zarafa/server.cfg }.split("=")[1].strip.chomp
+
+    disk_status = %x{ df -h #{disk_used} | tail -1 }.split
+
+    disk_status = { "value" => disk_status[2].to_f, "max" => disk_status[1].to_f, "unit" => disk_status[3].scan(/[^\d\.]+/)}
+    return disk_status
+  end
+
+  def get_license_information
+    informations = %x{ zarafa-admin --user-count | head -4 | tail -1 }.split("\t").reject!{|c| c.empty?}
+    if informations[1] == "no limit"
+      informations[1] = "unlimited"
+    end
+    informations = { "value" => informations[2].to_i, "max" => informations[1] }
+
+    return informations
   end
 
 end

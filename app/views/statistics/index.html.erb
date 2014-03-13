@@ -2,4 +2,12 @@
   <p>
     <%= link_to "Exporter les contacts", :statistics_export_csv %>
   </p>
+  <div class="row">
+    <div class="three columns">
+      <div id="disk_gauge" class="gauge" data-value="<%= @disk["value"] %>" data-max="<%= @disk["max"] %>" data-unit="<%= @disk["unit"] %>"></div>
+    </div>
+    <div class="three columns">
+      <div id="license_gauge" class="gauge" data-value="<%= @license["value"] %>" data-max="<%= @license["max"] %>"></div>
+    </div>
+  </div>
 </div>
