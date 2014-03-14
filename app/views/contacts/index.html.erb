@@ -1,0 +1,24 @@
+<div class="row">
+  <form id="search_contacts"><p class="field six columns">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+    <input type="text" name="search" placeholder="Look for contacts..." class="input" autofocus autocomplete="off" />
+  </form>
+  <p class="medium primary btn icon-left entypo icon-plus-circled right-button"><%= link_to 'Create a new contact', contacts_new_path %></p>
+</div>
+
+<div class="row" id="contacts_list">
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Full name</th>
+        <th>E-mail address</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => "contacts" %>
+    </tbody>
+  </table>
+
+</div>

@@ -4,15 +4,24 @@ module UsersHelper
     data.nil? { return nil}
     data.reject! { | x | x.nil? }
 
-    list = []
     data.map! { | u |
-      tmp = {
-        "text" => u.cn,
-        "id" => u.uid
-      }
-      list.push(tmp)
+      if u.is_a? User
+        {
+          "text" => u.cn,
+          "id" => "u:"+u.uid
+        }
+      elsif u.is_a? Contact
+        {
+          "text" => u.cn,
+          "id" => "c:"+u.uid
+        }
+      else
+        {
+          "text" => u.cn,
+          "id" => "g:"+u.cn
+        }
+      end
     }
-    data = list
   end
 
   def select_to_uid data
