@@ -93,7 +93,6 @@ class GroupsController < ApplicationController
         members = group_params[:members][0].split(',')
 
         @group.members = members.map { | uid |
-          logger.debug("UID =>>>>>> " + uid)
           uid = uid.split(":")
           if uid[0] == "u"
             User.find(uid[1])
