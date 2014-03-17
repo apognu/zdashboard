@@ -4,7 +4,7 @@ class Group < ActiveLdap::Base
                :classes => [ 'posixGroup', 'zarafa-group' ],
                :scope => :one
 
-  has_many :members, :class => 'User', :wrap => 'memberUid', :primary_key => 'uid'
+  has_many :members, :class => 'User', :wrap => 'memberUid', :primary_key => 'dn'
 
   validates :cn, :presence => true, format: { with: /\A[0-9a-zA-Z._-]+\z/ }
   validates :mail, :presence => true, format: { with: /\A[\w+@.-]+\z/ }

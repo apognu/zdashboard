@@ -4,7 +4,7 @@ class Contact < ActiveLdap::Base
                :classes => [ 'inetorgperson', 'zarafa-contact', 'posixaccount' ],
                :scope => :one
 
-  belongs_to :groups, :class => 'Group', :many => 'memberUid', :foreign_key => 'uid'
+  belongs_to :groups, :class => 'Group', :many => 'memberUid', :foreign_key => 'dn'
 
   validates :uid, :presence => true, format: { with: /\A[0-9a-zA-Z._-]+\z/ }
   validates :sn, :presence => true, :allow_nil => false
