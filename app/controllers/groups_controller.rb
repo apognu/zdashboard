@@ -44,6 +44,8 @@ class GroupsController < ApplicationController
             User.find(uid[1])
           elsif uid[0] == "c"
             Contact.find(uid[1])
+          elsif uid[0] == "g"
+            Group.find(uid[1])
           end
         }
 
@@ -98,6 +100,8 @@ class GroupsController < ApplicationController
             User.find(uid[1])
           elsif uid[0] == "c"
             Contact.find(uid[1])
+          elsif uid[0] == "g"
+            Group.find(uid[1])
           end
         }
 
@@ -170,6 +174,9 @@ class GroupsController < ApplicationController
       tmp = User.find(:first, :value => uid)
       if tmp.nil?
         tmp = Contact.find(:first, :value => uid)
+      end
+      if tmp.nil?
+        tmp = Group.find(:first, :value => uid)
       end
       group.members.push tmp
     }

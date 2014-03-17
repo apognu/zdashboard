@@ -260,13 +260,12 @@ class UsersController < ApplicationController
 
   def list
     users = User.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*))(!(zarafaResourceType=*)))")
+    groups = Group.find(:all, :filter => "(&(cn=*#{params[:q]}*))")
+    users.concat(groups)
     
     if params[:contacts].present?
       contacts = Contact.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*)))")
       users.concat(contacts)
-    else
-      groups = Group.find(:all, :filter => "(&(cn=*#{params[:q]}*))")
-      users.concat(groups)
     end
 
     users.map! do | user |
