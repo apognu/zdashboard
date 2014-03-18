@@ -36,7 +36,12 @@ class GroupsController < ApplicationController
         members = group_params[:members][0].split(',')
 
         @group.members = members.map { | uid |
-          User.find(uid)
+          uid = uid.split(":")
+          if uid[0] == "u"
+            User.find(uid[1])
+          elsif uid[0] == "c"
+            Contact.find(uid[1])
+          end
         }
 
        @members = uid_to_select(@group.members).to_json
@@ -62,6 +67,7 @@ class GroupsController < ApplicationController
   def edit
     @group = Group.find(params[:cn])
 
+    retrieve_members @group
     members = uid_to_select @group.members
 
     @members = members.to_json
@@ -74,6 +80,7 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:cn])
     @group.mail = group_params[:mail]
     @group.members = []
+    @group.memberUid = []
     @group.zarafaHidden = group_params[:zarafaHidden]
 
     if ! group_params[:members].nil?
@@ -82,8 +89,13 @@ class GroupsController < ApplicationController
       unless group_params[:members][0].nil?
         members = group_params[:members][0].split(',')
 
-        @group.members = members.map! { | uid |
-          User.find(uid)
+        @group.members = members.map { | uid |
+          uid = uid.split(":")
+          if uid[0] == "u"
+            User.find(uid[1])
+          elsif uid[0] == "c"
+            Contact.find(uid[1])
+          end
         }
 
         @members = uid_to_select(@group.members).to_json
@@ -145,6 +157,18 @@ class GroupsController < ApplicationController
   def crumbs
     {
       :groups   => { :title => 'Groups management', :link => :groups }
+    }
+  end
+
+  def retrieve_members group
+    group.members.clear
+
+    group.memberUid(true).each { |uid|
+      tmp = User.find(:first, :value => uid)
+      if tmp.nil?
+        tmp = Contact.find(:first, :value => uid)
+      end
+      group.members.push tmp
     }
   end
 

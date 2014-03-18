@@ -89,6 +89,26 @@ Zarafadashboard::Application.routes.draw do
 
   get '/statistics/export_csv', to: 'statistics#export_csv'
 
+  get '/contacts', to: 'contacts#index'
+  post '/contacts', to: 'contacts#index'
+
+  get '/contacts/new', to: 'contacts#new'
+
+  post '/contacts/new', to: 'contacts#save',
+                        as: :contacts_save
+
+  get '/contacts/:uid/edit', to: 'contacts#edit',
+                             as: :contacts_edit,
+                             constraints: { uid: /[^\/]+/ }
+
+  patch '/contacts/:uid/edit', to: 'contacts#update',
+                               as: :contacts_update,
+                               constraints: { uid: /[^\/]+/ }
+
+  get '/contacts/:uid/delete', to: 'contacts#delete',
+                               as: :contacts_delete,
+                               constraints: { uid: /[^\/]+/ }
+
   if Rails.env.production?
     match '*not_found', to: 'application#error_404',
                         via: [ :get, :post ]

@@ -97,7 +97,8 @@ class UsersController < ApplicationController
         unless user_params[:groups][0].nil?
           groups = user_params[:groups][0].split(',')
           @user.groups = groups.map! { | group |
-            Group.find(group)
+            group = Group.find(group)
+            group.members << @user
           }
         end
         add_to_group_all
@@ -286,20 +287,30 @@ class UsersController < ApplicationController
 
   def list
     users = User.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*))(!(zarafaResourceType=*)))")
-    groups = Group.find(:all, :filter => "(&(cn=*#{params[:q]}*))")
-
-    users.concat(groups)
+    
+    if params[:contacts].present?
+      contacts = Contact.find(:all, :filter => "(&(|(uid=*#{params[:q]}*)(cn=*#{params[:q]}*)(mail=*#{params[:q]}*@*)))")
+      users.concat(contacts)
+    else
+      groups = Group.find(:all, :filter => "(&(cn=*#{params[:q]}*))")
+      users.concat(groups)
+    end
 
     users.map! do | user |
       if user.is_a? User
         {
           'text' => user.cn,
-          'id' => user.uid
+          'id' => "u:"+user.uid
+        }
+      elsif user.is_a? Contact
+        {
+          'text' => user.cn,
+          'id' => "c:"+user.uid
         }
       else
         {
           'text' => user.cn,
-          'id' => user.cn
+          'id' => "g:"+user.cn
         }
       end
     end
@@ -357,12 +368,12 @@ class UsersController < ApplicationController
       if user.is_a? User
         {
           "text" => user.cn,
-          "id"   => user.uid
+          "id"   => "u:"+user.uid
         }
       else
         {
           "text" => user.cn,
-          "id" => user.cn
+          "id" => "g:"+user.cn
         }
       end
     }
@@ -374,12 +385,13 @@ class UsersController < ApplicationController
     data = data[0].split(',') unless data.empty?
 
     data.map! { | uid |
-      begin
-        privilege_user = User.find(uid)
+      uid = uid.split(":")
+      if uid[0] == "u"
+        privilege_user = User.find(uid[1])
 
         'uid=' << privilege_user.uid << ',' << privilege_user.base
-      rescue
-        privilege_user = Group.find(uid)
+      else
+        privilege_user = Group.find(uid[1])
 
         'cn=' << privilege_user.cn << ',' << privilege_user.base
       end

@@ -11,6 +11,7 @@ $(function()
       data: function(term, page) {
         return {
           q: term,
+          contacts:true,
           authenticity_token: $('#group_authenticity_token').val()
         };
       },
