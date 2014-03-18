@@ -29,10 +29,23 @@ class UsersController < ApplicationController
     @user = User.new
     @groups = ""
 
-    @domains = Setting.find_by_key("domains").value
-    @user.domain = Setting.find_by_key("defaultDomain").value
-    @user.zarafaQuotaSoft = Setting.find_by_key("defaultQuotaSoft").value
-    @user.zarafaQuotaHard = Setting.find_by_key("defaultQuotaHard").value
+    @domains = Setting.find_by_key("domains")
+    @user.domain = Setting.find_by_key("defaultDomain")
+    @user.zarafaQuotaSoft = Setting.find_by_key("defaultQuotaSoft")
+    @user.zarafaQuotaHard = Setting.find_by_key("defaultQuotaHard")
+
+    unless @domains.nil?
+      @domains = @domains.value
+    end
+    unless @user.domain.nil?
+      @user.domain = @user.domain.value
+    end
+    unless @user.zarafaQuotaSoft.nil?
+      @user.zarafaQuotaSoft = @user.zarafaQuotaSoft.value
+    end
+    unless @user.zarafaQuotaHard.nil?
+      @user.zarafaQuotaHard = @user.zarafaQuotaHard.value
+    end
   end
 
   def save
@@ -73,7 +86,7 @@ class UsersController < ApplicationController
 
     @domains = Setting.find_by_key("domains").value
     mail_ok = true
-    unless @domains.include?(@user.mail.split("@")[1])
+    if user_params[:mail].empty? or !@domains.include?(@user.mail.split("@")[1])
       mail_ok = false
     end
 
@@ -107,7 +120,11 @@ class UsersController < ApplicationController
         @user.errors.add(:userPassword_confirmation)
       end
       unless mail_ok
-        @user.errors.add(:mail, "is not in authorized list")
+        if user_params[:mail].empty?
+          @user.errors.add(:mail, "can't be empty")
+        else
+          @user.errors.add(:domain, "is not in authorized list")
+        end
       end
       @messages[:danger] = 'Some fields are in error, unable to save the user'
       @user.mail = @user.mail.split("@")[0]
@@ -150,14 +167,17 @@ class UsersController < ApplicationController
       @last_logon = "never"
     end
 
-    @domains = Setting.find_by_key("domains").value
+    @domains = Setting.find_by_key("domains")
+    unless @domains.nil?
+      @domains = @domains.value
+    end
     tmp = @user.mail.split("@")
     @user.mail = tmp[0]
     @user.domain = tmp[1]
   end
 
   def update
-    @user = User.find(params[:uid])
+    @user = User.find(params[:uid], :attributes => ["+", "*"])
     @user.mail = user_params[:mail] + "@" + user_params[:domain]
     @user.zarafaAliases = user_params[:zarafaAliases]
     @user.givenName = user_params[:givenName]
@@ -207,7 +227,7 @@ class UsersController < ApplicationController
 
     @domains = Setting.find_by_key("domains").value
     mail_ok = true
-    unless @domains.include?(@user.mail.split("@")[1])
+    if user_params[:mail].empty? or !@domains.include?(@user.mail.split("@")[1])
       mail_ok = false
     end
 
@@ -229,7 +249,11 @@ class UsersController < ApplicationController
         @user.errors.add(:userPassword_confirmation)
       end
       unless mail_ok
-        @user.errors.add(:mail, "is not in authorized list")
+        if user_params[:mail].empty?
+          @user.errors.add(:mail, "can't be empty")
+        else
+          @user.errors.add(:domain, "is not in authorized list")
+        end
       end
       @messages[:danger] = 'Some fields are in error, unable to save the user'
       @user.mail = @user.mail.split("@")[0]

@@ -103,6 +103,15 @@ input[name='search'].loading {
   margin: 0 0 2px 0;
 }
 
+.picker .field_with_errors select {
+  border: 1px solid red;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+}
+
 .picker select {
   width: 100%;
   padding: 0 10px;
