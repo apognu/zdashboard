@@ -21,6 +21,59 @@ namespace :zdashboard do
     colorize :green, 'zdashboard:init completed. :)'
   end
 
+  desc "Convert memberUid field from uid of members to their dn"
+  task uid_to_dn: :environment do
+
+    puts "Beginning conversion"
+    group = Group.all
+
+    puts "#{group.length} Groups found"
+
+    group.each { |g|
+      puts "-" * 60
+      puts "\033[36mGROUP #{g.cn}\033[0m"
+      members = []
+      g.memberUid(true).each_index { |i|
+        puts "uid => #{g.memberUid[i]}"
+        unless g.memberUid[i].match(/^(uid|cn)=.+$/)
+          tmp = User.find(:first, :filter => "(&(uid=#{g.memberUid[i]}))")
+          if tmp.nil?
+            tmp = Contact.find(:first, :filter => "(&(uid=#{g.memberUid[i]}))")
+          end
+          if tmp.nil?
+            tmp = Group.find(:first, :filter => "(&(cn=#{g.memberUid[i]}))")
+          end
+        else
+          tmp = User.find(:first, :value => g.memberUid[i])
+          if tmp.nil?
+            tmp = Contact.find(:first, :value => g.memberUid[i])
+          end
+          if tmp.nil?
+            tmp = Group.find(:first, :value => g.memberUid[i])
+          end
+        end
+        unless tmp.nil?
+          members << tmp
+        end
+      }
+      puts "RECAP:"
+      g.memberUid = []
+      g.members = members
+      unless g.members.empty?
+        g.members.each { |member|
+          unless member.nil?
+            puts "MEMBRE : #{member.dn}"
+          end
+        }
+      end
+      if g.save
+        puts "\033[32mGroup saved successfully\033[0m"
+      else
+        puts "\033[31mAn error has occured\033[0m"
+      end
+    }
+  end
+
   private
 
   def colorize(color, text)
