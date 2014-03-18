@@ -36,8 +36,6 @@ class ContactsController < ApplicationController
     @contact.groups = []
 
     # Is this used?
-    @contact.gidNumber = 1000;
-    @contact.homeDirectory = '/dev/null'
     @contact.uidNumber = next_uidnumber
 
     if @contact.valid?

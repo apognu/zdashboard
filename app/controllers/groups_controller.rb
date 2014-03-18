@@ -175,7 +175,9 @@ class GroupsController < ApplicationController
       if tmp.nil?
         tmp = Group.find(:first, :value => uid)
       end
-      group.members.push tmp
+      unless tmp.nil?
+        group.members.push tmp
+      end
     }
   end
 

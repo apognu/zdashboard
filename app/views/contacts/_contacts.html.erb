@@ -2,9 +2,9 @@
   @contacts.each do | contact | %>
     <tr>
       <td><%= link_to(contact.uid, contacts_edit_path(:uid => contact.uid)) %></td>
-      <td><%= contact.displayName %></td>
+      <td><%= contact.cn %></td>
       <td><%= contact.mail %></td>
-      <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', contacts_delete_path(:uid => contact.uid), :class => "delete_user") %></div></td>
+      <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', contacts_delete_path(:uid => contact.uid), :class => "delete_contact") %></div></td>
     </tr>
   <% end
   else %>

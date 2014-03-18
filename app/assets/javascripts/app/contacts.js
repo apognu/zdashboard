@@ -25,6 +25,10 @@ $(function()
     }
   });
 
+  $(document).on('click', 'a.delete_contact', function(event) {
+    return confirm("Are you sure you want to delete contact '"+$(this).closest('tr').find('td:first').text()+"'");
+  });
+
   $('#contact_groups').select2({
     multiple: true,
     tokenSeparators: [','],

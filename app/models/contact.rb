@@ -1,7 +1,7 @@
 class Contact < ActiveLdap::Base
   ldap_mapping :dn_attribute => 'uid',
                :prefix => YAML.load_file("#{Rails.root}/config/ldap.yml")['bases'][Rails.env]['users'],
-               :classes => [ 'inetorgperson', 'zarafa-contact', 'posixaccount' ],
+               :classes => [ 'inetorgperson', 'zarafa-contact'],
                :scope => :one
 
   belongs_to :groups, :class => 'Group', :many => 'memberUid', :foreign_key => 'dn'
