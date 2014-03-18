@@ -31,8 +31,8 @@ class UsersController < ApplicationController
 
     @domains = Setting.find_by_key("domains")
     @user.domain = Setting.find_by_key("defaultDomain")
-    @user.zarafaQuotaSoft = Setting.find_by_key("defaultQuotaSoft")
-    @user.zarafaQuotaHard = Setting.find_by_key("defaultQuotaHard")
+    defaultQuotaSoft = Setting.find_by_key("defaultQuotaSoft")
+    defaultQuotaHard = Setting.find_by_key("defaultQuotaHard")
 
     unless @domains.nil?
       @domains = @domains.value
@@ -40,11 +40,11 @@ class UsersController < ApplicationController
     unless @user.domain.nil?
       @user.domain = @user.domain.value
     end
-    unless @user.zarafaQuotaSoft.nil?
-      @user.zarafaQuotaSoft = @user.zarafaQuotaSoft.value
+    unless defaultQuotaSoft.nil?
+      @user.zarafaQuotaSoft = defaultQuotaSoft.value
     end
-    unless @user.zarafaQuotaHard.nil?
-      @user.zarafaQuotaHard = @user.zarafaQuotaHard.value
+    unless defaultQuotaHard.nil?
+      @user.zarafaQuotaHard = defaultQuotaHard.value
     end
   end
 
