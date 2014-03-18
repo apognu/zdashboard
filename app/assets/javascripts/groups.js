@@ -47,4 +47,29 @@ $(function()
   $(document).on('click', 'a.delete_group', function(event) {
     return confirm("Are you sure you want to delete group '"+$(this).closest('tr').find('td:first').text()+"'");
   });
+
+  var xhr = null;
+
+  $("#search_groups input[name='search']").on('keyup', function() {
+    var $input = $(this);
+    if ($(this).val().length >= 3) {
+      if (xhr != null)
+        xhr.abort();
+        $input.addClass('loading');
+        xhr = $.ajax({
+        url: '/groups',
+        type: 'POST',
+        async:true,
+        data: $("#search_groups").serialize(),
+        success: function(res){
+          $("#groups_list tbody").empty().html(res);
+          xhr = null;
+          $input.removeClass('loading');
+        },
+        error: function(res) {
+          console.log("ERROR");
+        }
+      });
+    }
+  });
 });

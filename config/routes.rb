@@ -37,6 +37,7 @@ Zarafadashboard::Application.routes.draw do
                                   constraints: { uid: /[^\/]+/ }
 
   get '/groups', to: 'groups#index'
+  post '/groups', to: 'groups#index'
 
   get '/groups/new', to: 'groups#new'
 

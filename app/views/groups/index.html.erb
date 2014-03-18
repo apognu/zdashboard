@@ -1,8 +1,12 @@
 <div class="row">
+  <form id="search_groups"><p class="field six columns">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+    <input type="text" name="search" placeholder="Look for groups..." class="input" autofocus autocomplete="off" />
+  </form>
   <p class="medium primary btn icon-left entypo icon-plus-circled right-button"><%= link_to 'Create a new group', groups_new_path %></p>
 </div>
 
-<div class="row">
+<div class="row" id="groups_list">
   <table class="striped">
     <thead>
       <tr>
@@ -12,19 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @groups.each do | group | %>
-      <tr>
-        <td><%= link_to(group.cn, groups_edit_path(:cn => group.cn)) %></td>
-        <td><%= group.mail %></td>
-        <td><div class="small danger btn icon-left entypo icon-cancel-circled"><%= link_to('Delete', groups_delete_path(:cn => group.cn), :class => 'delete_group') %></div></td>
-      </tr>
-      <% end %>
+      <%= render :partial => "groups" %>
     </tbody>
-    <p>Pages :
-      <% params[:page] = "1" if params[:page].nil? %>
-      <% @pages.each do | page | %>
-        <%= link_to(page, groups_page_path({ :page => page }), :class => params[:page] == page.to_s ? "primary label" : "default label") %>
-      <% end %>
-    </p>
   </table>
 </div>
