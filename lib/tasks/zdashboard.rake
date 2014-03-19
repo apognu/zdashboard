@@ -27,9 +27,12 @@ namespace :zdashboard do
     puts "Updating users' quota ..."
     puts
     users = User.find(:all, :filter => "(!(zarafaResourceType=*))")
+    len = users.length
+    i = 1
     users.each do | u |
       update_db_quota u
-      puts "[\033[32mOK\033[0m] #{u.uid}"
+      puts "[\033[33m#{i}\033[0m/\033[32m#{len}\033[0m] #{u.uid}"
+      i += 1
     end
     puts
     puts "Update finished"
