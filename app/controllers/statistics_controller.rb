@@ -52,9 +52,9 @@ class StatisticsController < ApplicationController
   def get_disk_space
     disk_used = %x{ grep "attachment_path" /etc/zarafa/server.cfg }.split("=")[1].strip.chomp
 
-    disk_status = %x{ df -h #{disk_used} | tail -1 }.split
+    disk_status = %x{ df #{disk_used} | tail -1 }.split
 
-    disk_status = { "value" => disk_status[2].to_f, "max" => disk_status[1].to_f, "unit" => disk_status[3].scan(/[^\d\.]+/)}
+    disk_status = { "value" => disk_status[2].to_i, "max" => disk_status[1].to_i}
     return disk_status
   end
 
