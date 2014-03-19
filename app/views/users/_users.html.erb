@@ -4,7 +4,7 @@
       <td><%= link_to(user.uid, users_edit_path(:uid => user.uid)) %></td>
       <td><%= user.displayName %></td>
       <td><%= user.mail %></td>
-      <td><%= "%.2f / %.2f Mb" % [user.current_quota.to_f, user.zarafaQuotaHard] %></td>
+      <td><%= "%.2f / %.2f MB" % [user.current_quota.to_f, user.zarafaQuotaHard] %></td>
       <td>
         <% if user.zarafaSharedStoreOnly == 1 %>
           <i class="icon-archive" title="Archive"></i>
