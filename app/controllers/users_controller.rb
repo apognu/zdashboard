@@ -58,7 +58,7 @@ class UsersController < ApplicationController
     @user.sn = user_params[:sn]
     @user.displayName = "#{user_params[:givenName]} #{user_params[:sn]}" unless user_params[:givenName].empty? and user_params[:sn].empty?
     @user.commonName = @user.displayName
-    @user.zarafaAccount = 1;
+    @user.zarafaAccount = 1
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
     @user.zarafaSharedStoreOnly = user_params[:zarafaSharedStoreOnly]
@@ -68,6 +68,7 @@ class UsersController < ApplicationController
     @user.gidNumber = 1000;
     @user.homeDirectory = '/dev/null'
     @user.uidNumber = next_uidnumber
+    @user.zarafaQuotaOverride = 1
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft].to_i
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
 
@@ -188,6 +189,7 @@ class UsersController < ApplicationController
     @user.zarafaSendAsPrivilege = uid_to_dn user_params[:zarafaSendAsPrivilege] unless user_params[:zarafaSendAsPrivilege].nil? 
     @user.zarafaAdmin = user_params[:zarafaAdmin]
     @user.zarafaHidden = user_params[:zarafaHidden]
+    @user.zarafaQuotaOverride = 1
     @user.zarafaQuotaSoft = user_params[:zarafaQuotaSoft].to_i
     @user.zarafaQuotaHard = user_params[:zarafaQuotaHard].to_i
     @user.zarafaSharedStoreOnly = user_params[:zarafaSharedStoreOnly]
