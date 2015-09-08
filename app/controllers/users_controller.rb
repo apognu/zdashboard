@@ -170,9 +170,9 @@ class UsersController < ApplicationController
     data.reject! { | x | x.nil? or x.empty? }
 
     data.map! { | dn |
-      begin
+      if User.exists?(dn)
         user = User.find(dn)
-      rescue
+      elsif Group.exists?(dn)
         user = Group.find(dn)
       end
       if user.is_a? User
@@ -180,11 +180,16 @@ class UsersController < ApplicationController
           "text" => user.cn,
           "id"   => user.uid
         }
-      else
+      elsif user.is_a? Group
         {
           "text" => user.cn,
           "id" => user.cn
         }
+      else 
+        {
+          "text" => "deleted user",
+          "id" => "deleted user",
+        } 
       end
     }
   end
@@ -195,15 +200,15 @@ class UsersController < ApplicationController
     data = data[0].split(',') unless data.empty?
 
     data.map! { | uid |
-      begin
-        privilege_user = User.find(uid)
+     if User.exists?(uid)
+       privilege_user = User.find(uid)
 
-        'uid=' << privilege_user.uid << ',' << privilege_user.base
-      rescue
-        privilege_user = Group.find(uid)
+       'uid=' << privilege_user.uid << ',' << privilege_user.base
+     elsif Group.exists?(uid) 
+       privilege_user = Group.find(uid)
 
-        'cn=' << privilege_user.cn << ',' << privilege_user.base
-      end
+       'cn=' << privilege_user.cn << ',' << privilege_user.base
+     end
     }
   end
 
